@@ -1,0 +1,9 @@
+{
+  "dependencies": {},
+  "devDependencies": {
+    "@types/bun": "^1.2.11"
+  },
+  "scripts": {
+    "db:seed": "sqlite3 ./database/data.db < ./database/seed.sql"
+  }
+}

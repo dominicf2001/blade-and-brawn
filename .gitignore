@@ -1,1 +1,4 @@
 api
+node_modules/
+.env.*
+./database/data.db
