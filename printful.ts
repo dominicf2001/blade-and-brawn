@@ -1,5 +1,5 @@
 export namespace Printful {
-    const API_ROUTE = "https://api.printful.com/store";
+    export const API_URL = "https://api.printful.com/store";
 
     export namespace Webhook {
         // meta
@@ -78,37 +78,49 @@ export namespace Printful {
         }
 
         interface SyncProductData {
-            id: number;
-            external_id: string;
-            sync_product_id: number;
-            name: string;
-            synced: boolean;
-            variant_id: number;
-            retail_price: string;
-            currency: string;
-            is_ignored: boolean;
-            sku: string;
-            product: {
-                variant_id: number;
-                product_id: number;
-                image: string;
+            sync_product: {
+                id: number;
+                external_id: string;
                 name: string;
-            };
-            files: File[];
-            options: Option[];
-            main_category_id: number;
-            warehouse_product_id: number;
-            warehouse_product_variant_id: number;
-            size: string;
-            color: string;
-            availability_status: string;
+                variants: number;
+                synced: number;
+                thumbnail_url: string;
+                is_ignored: boolean;
+            },
+            sync_variants: {
+                id: number;
+                external_id: string;
+                sync_product_id: number;
+                name: string;
+                synced: boolean;
+                variant_id: number;
+                retail_price: string;
+                currency: string;
+                is_ignored: boolean;
+                sku: string;
+                product: {
+                    variant_id: number;
+                    product_id: number;
+                    image: string;
+                    name: string;
+                };
+                files: File[];
+                options: Option[];
+                main_category_id: number;
+                warehouse_product_id: number;
+                warehouse_product_variant_id: number;
+                size: string;
+                color: string;
+                availability_status: string;
+
+            }[]
         }
         export type SyncProduct = MetaData<SyncProductData>;
     }
 
-    export async function getSyncProduct(syncProductId: String): Promise<Products.SyncProduct> {
+    export async function getSyncProduct(syncProductId: number): Promise<Products.SyncProduct> {
         const payload: Products.SyncProduct = await (
-            await fetch(`${API_ROUTE}/products/${syncProductId}`, {
+            await fetch(`${API_URL}/products/${syncProductId}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${Bun.env.PRINTFUL_AUTH}`,

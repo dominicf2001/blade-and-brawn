@@ -1,6 +1,6 @@
 import { Database } from "bun:sqlite";
 
-interface ProductsRecord {
+interface ProductRecord {
     webflowProductId: number;
     printfulProductId: number;
 }
@@ -12,31 +12,31 @@ export class ProductRecords {
         this.db = new Database("./database/data.db");
     }
 
-    findFromWebflow(webflowProductId: number): ProductsRecord | undefined {
+    findFromWebflow(webflowProductId: number): ProductRecord | undefined {
         const row = this.db.query(`
           SELECT * FROM product_records WHERE webflowProductId = ?
         `).get(webflowProductId);
 
-        return row as ProductsRecord | undefined;
+        return row as ProductRecord | undefined;
     }
 
-    findFromPrintful(printfulProductId: number): ProductsRecord | undefined {
+    findFromPrintful(printfulProductId: number): ProductRecord | undefined {
         const row = this.db.query(`
           SELECT * FROM product_records WHERE printfulProductId = ?
         `).get(printfulProductId);
 
-        return row as ProductsRecord | undefined;
+        return row as ProductRecord | undefined;
     }
 
-    add(record: ProductsRecord): void {
+    add(record: ProductRecord): void {
         this.db.run(`
           INSERT OR IGNORE INTO product_records (webflowProductId, printfulProductId)
           VALUES (?, ?)
         `, [record.webflowProductId, record.printfulProductId]);
     }
 
-    all(): ProductsRecord[] {
-        return this.db.query(`SELECT * FROM product_records`).all() as ProductsRecord[];
+    all(): ProductRecord[] {
+        return this.db.query(`SELECT * FROM product_records`).all() as ProductRecord[];
     }
 }
 

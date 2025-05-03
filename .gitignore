@@ -1,4 +1,4 @@
 api
 node_modules/
 .env.*
-./database/data.db
+database/data.db
