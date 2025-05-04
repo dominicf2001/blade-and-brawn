@@ -6,6 +6,11 @@ const productRecords = new ProductRecords();
 
 const server = Bun.serve({
     routes: {
+        "/test": {
+            async GET(req){
+                return Response.json("Hello world");
+            }
+        },
         "/webhook/printful": {
             async POST(req) {
                 const payload: Printful.Webhook.EventPayload = await req.json()
