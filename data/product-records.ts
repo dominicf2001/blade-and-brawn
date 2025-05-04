@@ -9,7 +9,11 @@ export class ProductRecords {
     private db: Database;
 
     constructor() {
-        this.db = new Database("./database/data.db");
+        const dbPath = Bun.env.NODE_ENV === "production" ?
+            "/data/data.db" :
+            "./data/data.db";
+
+        this.db = new Database(dbPath);
     }
 
     findFromWebflow(webflowProductId: number): ProductRecord | undefined {

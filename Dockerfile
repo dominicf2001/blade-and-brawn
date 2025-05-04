@@ -31,5 +31,8 @@ FROM base
 # Copy built application
 COPY --from=build /app /app
 
+RUN apt-get update && apt-get install -y sqlite3 && rm -rf /var/lib/apt/lists/*
+
 # Start the server by default, this can be overwritten at runtime
+CMD [ "bun", "run", "db:seed:prod" ]
 CMD [ "bun", "run", "start" ]

@@ -1,4 +1,4 @@
-import { ProductRecords } from "./database/product-records";
+import { ProductRecords } from "./data/product-records";
 import { Printful } from "./printful"
 
 export namespace Webflow {
@@ -71,6 +71,7 @@ export namespace Webflow {
         const foundSizes = Array.from(new Set(printfulVariants.map(v => v.size)));
 
         // CREATE WEBFLOW PRODUCT
+        console.log("CREATE WEBFLOW PRODUCT");
         let addProductResponse = await fetch(`${API_URL}/products`, {
             method: "POST",
             headers: {
@@ -108,11 +109,13 @@ export namespace Webflow {
             })
         });
         addProductResponse = await addProductResponse.json();
+        console.log(JSON.stringify(addProductResponse));
 
         const webflowProductId = addProductResponse["product"]["id"];
         const printfulProductId = printfulProduct.result.sync_product.id;
 
         // CREATE WEBFLOW PRODUCT SKUs
+        console.log("CREATE SKUS");
         let createSkuResponse = await fetch(`${API_URL}/products/${webflowProductId}/skus`, {
             method: "POST",
             headers: {
@@ -124,10 +127,12 @@ export namespace Webflow {
             })
         });
         createSkuResponse = await createSkuResponse.json();
+        console.log(JSON.stringify(createSkuResponse));
 
         const responseSkus = [addProductResponse["sku"], ...createSkuResponse["skus"]];
 
         // SYNC WEBFLOW/PRINTFUL PRODUCT AND VARIANT IDs
+        console.log("SYNC PRODUCT IDs");
         let modifyPrintfulProductResponse = await fetch(`${Printful.API_URL}/store/products/${printfulProductId}`, {
             method: "PUT",
             headers: {
@@ -146,8 +151,10 @@ export namespace Webflow {
             })
         });
         modifyPrintfulProductResponse = await modifyPrintfulProductResponse.json();
+        console.log(JSON.stringify(modifyPrintfulProductResponse));
 
         // CACHE WEBFLOW/PRINTFUL PRODUCT ASSOCIATION
+        console.log("CACHING PRODUCT ASSOCIATION");
         productRecords.add({ printfulProductId, webflowProductId });
     }
 }

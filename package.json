@@ -4,7 +4,8 @@
     "@types/bun": "^1.2.11"
   },
   "scripts": {
-    "db:seed": "sqlite3 ./database/data.db < ./database/seed.sql",
+    "db:seed:dev": "sqlite3 ./data/data.db < ./data/seed.sql",
+    "db:seed:prod": "sqlite3 /data/data.db < ./data/seed.sql",
     "start": "bun run main.ts"
   }
 }
