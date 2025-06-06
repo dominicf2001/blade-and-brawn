@@ -43,6 +43,108 @@ export namespace Webflow {
         }
     }
 
+    export async function updateProduct(printfulProduct: Printful.Products.SyncProduct, productRecords: ProductRecords) {
+        const webflowProductId = productRecords.findFromPrintful(printfulProduct.result.sync_product.id)?.webflowProductId;
+        if (!webflowProductId) {
+            throw new Error("Product is not recognized");
+        }
+
+        const printfulVariants = printfulProduct.result.sync_variants;
+        const webflowVariants: Products.Sku[] = [];
+        for (const printfulVariant of printfulVariants) {
+            webflowVariants.push({
+                "fieldData": {
+                    "name": printfulVariant.name,
+                    "slug": formatSlug(printfulVariant.name),
+                    "sku-values": {
+                        "color": printfulVariant.color,
+                        "size": printfulVariant.size,
+                    },
+                    "price": {
+                        "value": +printfulVariant.retail_price * 100,
+                        "unit": printfulVariant.currency,
+                        "currency": printfulVariant.currency
+                    },
+                    // TODO: sync image
+                    "main-image": "https://www.example.com/image.jpg"
+                }
+            });
+        }
+
+
+        const variantColors = printfulVariants.map(v => v.color);
+        const variantSizes = printfulVariants.map(v => v.size);
+        const variantExternalIds = printfulVariants.map(v => v.external_id);
+
+        const foundColors = Array.from(new Set(variantColors));
+        const foundSizes = Array.from(new Set(variantSizes));
+
+        let updateProductResponse = await fetch(`${API_URL}/products/${webflowProductId}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}`,
+            },
+            body: JSON.stringify({
+                "product": {
+                    "fieldData": {
+                        "name": printfulProduct.result.sync_product.name,
+                        "slug": formatSlug(printfulProduct.result.sync_product.name),
+                        "sku-properties": [
+                            {
+                                "id": "color",
+                                "name": "Color",
+                                "enum": foundColors.map(color => ({
+                                    "id": color,
+                                    "slug": formatSlug(color),
+                                    "name": color
+                                }))
+                            },
+                            {
+                                "id": "size",
+                                "name": "Size",
+                                "enum": foundSizes.map(size => ({
+                                    "id": size,
+                                    "slug": formatSlug(size),
+                                    "name": size
+                                }))
+                            },
+                        ]
+                    }
+                },
+                "sku": webflowVariants[0]
+            })
+        });
+        updateProductResponse = await updateProductResponse.json();
+
+        const getProductResponse = await fetch(`${API_URL}/products/${webflowProductId}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}`
+            }
+        });
+        const product = await getProductResponse.json();
+
+        for (let i = 0; i < product["skus"].length; ++i) {
+            const webflowSkuId = variantExternalIds[i];
+
+            await fetch(`${API_URL}/products/${webflowProductId}/skus/${webflowSkuId}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}`
+                },
+                body: JSON.stringify({
+                    "sku": webflowVariants[i]
+                })
+            });
+        }
+
+        return {
+            "updateProduct": updateProductResponse,
+        };
+    }
+
     export async function createProduct(printfulProduct: Printful.Products.SyncProduct, productRecords: ProductRecords) {
         const printfulVariants = printfulProduct.result.sync_variants;
 
@@ -61,7 +163,7 @@ export namespace Webflow {
                         "unit": printfulVariant.currency,
                         "currency": printfulVariant.currency
                     },
-                    // TODO
+                    // TODO: sync image
                     "main-image": "https://www.example.com/image.jpg"
                 }
             });
@@ -71,7 +173,6 @@ export namespace Webflow {
         const foundSizes = Array.from(new Set(printfulVariants.map(v => v.size)));
 
         // CREATE WEBFLOW PRODUCT
-        console.log("CREATE WEBFLOW PRODUCT");
         let addProductResponse = await fetch(`${API_URL}/products`, {
             method: "POST",
             headers: {
@@ -109,13 +210,11 @@ export namespace Webflow {
             })
         });
         addProductResponse = await addProductResponse.json();
-        console.log(JSON.stringify(addProductResponse));
 
         const webflowProductId = addProductResponse["product"]["id"];
         const printfulProductId = printfulProduct.result.sync_product.id;
 
         // CREATE WEBFLOW PRODUCT SKUs
-        console.log("CREATE SKUS");
         let createSkuResponse = await fetch(`${API_URL}/products/${webflowProductId}/skus`, {
             method: "POST",
             headers: {
@@ -127,12 +226,10 @@ export namespace Webflow {
             })
         });
         createSkuResponse = await createSkuResponse.json();
-        console.log(JSON.stringify(createSkuResponse));
 
         const responseSkus = [addProductResponse["sku"], ...createSkuResponse["skus"]];
 
         // SYNC WEBFLOW/PRINTFUL PRODUCT AND VARIANT IDs
-        console.log("SYNC PRODUCT IDs");
         let modifyPrintfulProductResponse = await fetch(`${Printful.API_URL}/store/products/${printfulProductId}`, {
             method: "PUT",
             headers: {
@@ -151,10 +248,8 @@ export namespace Webflow {
             })
         });
         modifyPrintfulProductResponse = await modifyPrintfulProductResponse.json();
-        console.log(JSON.stringify(modifyPrintfulProductResponse));
 
         // CACHE WEBFLOW/PRINTFUL PRODUCT ASSOCIATION
-        console.log("CACHING PRODUCT ASSOCIATION");
         productRecords.add({ printfulProductId, webflowProductId });
     }
 }
