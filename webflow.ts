@@ -2,9 +2,18 @@ import { ProductRecords } from "./data/product-records";
 import { Printful } from "./printful"
 
 export namespace Webflow {
-    export const API_URL = `https://api.webflow.com/v2/sites/${Bun.env.WEBFLOW_SITE_ID}`;
+    export const API_SITES_URL = `https://api.webflow.com/v2/sites/${Bun.env.WEBFLOW_SITE_ID}`;
+    export const API_COLLECTIONS_URL = `https://api.webflow.com/v2/collections/${Bun.env.WEBFLOW_COLLECTION_ID}`;
 
-    const formatSlug = name => name.replaceAll(" ", "-").replaceAll("/", "").toLowerCase();
+    const formatSlug = (name: string): string => {
+        return name
+            .toLowerCase()
+            .replace(/[^a-z0-9-_]/g, '-')      // replace illegal chars with dashes
+            .replace(/^-+/, '')                // remove leading dashes
+            .replace(/-+$/, '')                // remove trailing dashes
+            .replace(/--+/g, '-')              // collapse multiple dashes
+            .replace(/^([^a-z0-9_])/, '_$1');  // if it starts with an invalid char, prefix underscore
+    };
 
     namespace Products {
         export interface Sku {
@@ -40,6 +49,21 @@ export namespace Webflow {
             };
             sku: Sku;
             publishStatus: string;
+        }
+    }
+
+    export async function deleteProduct(printfulProductId: number, productRecords: ProductRecords) {
+        const webflowProductId = productRecords.findFromPrintful(printfulProductId)?.webflowProductId;
+        if (webflowProductId){
+            const res = await fetch(`${Webflow.API_COLLECTIONS_URL}/items/${webflowProductId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}`
+                },
+                body: JSON.stringify({})
+            });
+            productRecords.deleteFromWebflow(webflowProductId);
         }
     }
 
@@ -79,7 +103,7 @@ export namespace Webflow {
         const foundColors = Array.from(new Set(variantColors));
         const foundSizes = Array.from(new Set(variantSizes));
 
-        let updateProductResponse = await fetch(`${Webflow.API_URL}/products/${webflowProductId}`, {
+        let updateProductResponse = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -117,7 +141,7 @@ export namespace Webflow {
         });
         updateProductResponse = await updateProductResponse.json();
 
-        const getProductResponse = await fetch(`${Webflow.API_URL}/products/${webflowProductId}`, {
+        const getProductResponse = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}`, {
             method: "GET",
             headers: {
                 "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}`
@@ -128,7 +152,7 @@ export namespace Webflow {
         for (let i = 0; i < webflowProduct["skus"].length; ++i) {
             const webflowSkuId = variantExternalIds[i];
 
-            const res = await fetch(`${Webflow.API_URL}/products/${webflowProductId}/skus/${webflowSkuId}`, {
+            const res = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}/skus/${webflowSkuId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -170,7 +194,7 @@ export namespace Webflow {
         const foundSizes = Array.from(new Set(printfulVariants.map(v => v.size)));
 
         // CREATE WEBFLOW PRODUCT
-        let addProductResponse = await fetch(`${Webflow.API_URL}/products`, {
+        let addProductResponse = await fetch(`${Webflow.API_SITES_URL}/products`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -216,7 +240,7 @@ export namespace Webflow {
         const printfulProductId = printfulProduct.result.sync_product.id;
 
         // CREATE WEBFLOW PRODUCT SKUs
-        let createSkuResponse = await fetch(`${Webflow.API_URL}/products/${webflowProductId}/skus`, {
+        let createSkuResponse = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}/skus`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -231,7 +255,6 @@ export namespace Webflow {
         const responseSkus = [addProductResponse["sku"], ...createSkuResponse["skus"]];
 
         // SYNC WEBFLOW/PRINTFUL PRODUCT AND VARIANT IDs
-        console.log(`Hitting: ${Printful.API_URL}/store/products/${printfulProductId}`);
         let modifyPrintfulProductResponse = await fetch(`${Printful.API_URL}/store/products/${printfulProductId}`, {
             method: "PUT",
             headers: {

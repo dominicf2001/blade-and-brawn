@@ -32,6 +32,18 @@ export class ProductRecords {
         return row as ProductRecord | undefined;
     }
 
+    deleteFromWebflow(webflowProductId: number) {
+        this.db.run(`
+            DELETE FROM product_records WHERE webflowProductId = ?
+       `, [webflowProductId]);
+    }
+
+    deleteFromPrintful(printfulProductId: number) {
+        this.db.run(`
+            DELETE FROM product_records WHERE printfulProductId = ?
+       `, [printfulProductId]);
+    }
+
     add(record: ProductRecord): void {
         this.db.run(`
           INSERT OR IGNORE INTO product_records (webflowProductId, printfulProductId)

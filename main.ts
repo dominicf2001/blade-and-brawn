@@ -19,9 +19,9 @@ const server = Bun.serve({
                 try {
                     switch (payload.type) {
                         // ADD/UPDATE
-                        case Printful.Webhook.Event.ProductUpdated:
-                            const printfulProduct = await Printful.getSyncProduct(payload.data.sync_product.id)
-                            const productRecord = productRecords.findFromPrintful(payload.data.sync_product.id)
+                        case Printful.Webhook.Event.ProductUpdated: {
+                            const printfulProduct = await Printful.getSyncProduct(payload.data.sync_product.id);
+                            const productRecord = productRecords.findFromPrintful(payload.data.sync_product.id);
 
                             if (productRecord) {
                                 await Webflow.updateProduct(printfulProduct, productRecords);
@@ -30,9 +30,12 @@ const server = Bun.serve({
                                 await Webflow.createProduct(printfulProduct, productRecords);
                             }
                             break;
+                        }
                         // DELETE
-                        case Printful.Webhook.Event.ProductDeleted:
+                        case Printful.Webhook.Event.ProductDeleted: {
+                            await Webflow.deleteProduct(payload.data.sync_product.id, productRecords);
                             break;
+                        }
                     }
                 }
                 catch (error){
