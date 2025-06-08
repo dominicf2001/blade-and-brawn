@@ -1,5 +1,5 @@
 export namespace Printful {
-    export const API_URL = "https://api.printful.com/store";
+    export const API_URL = "https://api.printful.com";
 
     export namespace Webhook {
         // meta
@@ -120,7 +120,7 @@ export namespace Printful {
 
     export async function getSyncProduct(syncProductId: number): Promise<Products.SyncProduct> {
         const payload: Products.SyncProduct = await (
-            await fetch(`${API_URL}/products/${syncProductId}`, {
+            await fetch(`${Printful.API_URL}/store/products/${syncProductId}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${Bun.env.PRINTFUL_AUTH}`,

@@ -79,7 +79,7 @@ export namespace Webflow {
         const foundColors = Array.from(new Set(variantColors));
         const foundSizes = Array.from(new Set(variantSizes));
 
-        let updateProductResponse = await fetch(`${API_URL}/products/${webflowProductId}`, {
+        let updateProductResponse = await fetch(`${Webflow.API_URL}/products/${webflowProductId}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -117,7 +117,7 @@ export namespace Webflow {
         });
         updateProductResponse = await updateProductResponse.json();
 
-        const getProductResponse = await fetch(`${API_URL}/products/${webflowProductId}`, {
+        const getProductResponse = await fetch(`${Webflow.API_URL}/products/${webflowProductId}`, {
             method: "GET",
             headers: {
                 "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}`
@@ -128,7 +128,7 @@ export namespace Webflow {
         for (let i = 0; i < webflowProduct["skus"].length; ++i) {
             const webflowSkuId = variantExternalIds[i];
 
-            const res = await fetch(`${API_URL}/products/${webflowProductId}/skus/${webflowSkuId}`, {
+            const res = await fetch(`${Webflow.API_URL}/products/${webflowProductId}/skus/${webflowSkuId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -170,7 +170,7 @@ export namespace Webflow {
         const foundSizes = Array.from(new Set(printfulVariants.map(v => v.size)));
 
         // CREATE WEBFLOW PRODUCT
-        let addProductResponse = await fetch(`${API_URL}/products`, {
+        let addProductResponse = await fetch(`${Webflow.API_URL}/products`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -207,12 +207,16 @@ export namespace Webflow {
             })
         });
         addProductResponse = await addProductResponse.json();
+        if (!addProductResponse?.product?.id) {
+            console.error("Webflow product creation failed:", addProductResponse);
+            throw new Error("Failed to create Webflow product");
+        }
 
         const webflowProductId = addProductResponse["product"]["id"];
         const printfulProductId = printfulProduct.result.sync_product.id;
 
         // CREATE WEBFLOW PRODUCT SKUs
-        let createSkuResponse = await fetch(`${API_URL}/products/${webflowProductId}/skus`, {
+        let createSkuResponse = await fetch(`${Webflow.API_URL}/products/${webflowProductId}/skus`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -227,6 +231,7 @@ export namespace Webflow {
         const responseSkus = [addProductResponse["sku"], ...createSkuResponse["skus"]];
 
         // SYNC WEBFLOW/PRINTFUL PRODUCT AND VARIANT IDs
+        console.log(`Hitting: ${Printful.API_URL}/store/products/${printfulProductId}`);
         let modifyPrintfulProductResponse = await fetch(`${Printful.API_URL}/store/products/${printfulProductId}`, {
             method: "PUT",
             headers: {
@@ -240,12 +245,11 @@ export namespace Webflow {
                 },
                 "sync_variants": responseSkus.map((sku, i) => ({
                     "id": Number(printfulVariants[i].id), // printful variant id
-                    "external_id": String(sku["id"]),     // webflow variant id
+                    "external_id": String(sku.id),     // webflow variant id
                 }))
             })
         });
         modifyPrintfulProductResponse = await modifyPrintfulProductResponse.json();
-        console.log(JSON.stringify(modifyPrintfulProductResponse));
 
         // CACHE WEBFLOW/PRINTFUL PRODUCT ASSOCIATION
         productRecords.add({ printfulProductId, webflowProductId });

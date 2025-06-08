@@ -16,25 +16,31 @@ const server = Bun.serve({
                 const payload: Printful.Webhook.EventPayload = await req.json()
                 console.log(JSON.stringify(payload));
                 console.log("PRINTFUL WEBHOOK: " + payload.type);
-                switch (payload.type) {
-                    // ADD/UPDATE
-                    case Printful.Webhook.Event.ProductUpdated:
-                        const printfulProduct = await Printful.getSyncProduct(payload.data.sync_product.id)
-                        const productRecord = productRecords.findFromPrintful(payload.data.sync_product.id)
+                try {
+                    switch (payload.type) {
+                        // ADD/UPDATE
+                        case Printful.Webhook.Event.ProductUpdated:
+                            const printfulProduct = await Printful.getSyncProduct(payload.data.sync_product.id)
+                            const productRecord = productRecords.findFromPrintful(payload.data.sync_product.id)
 
-                        if (productRecord) {
-                            await Webflow.updateProduct(printfulProduct, productRecords);
-                        }
-                        else {
-                            await Webflow.createProduct(printfulProduct, productRecords);
-                        }
-                        break;
-                    // DELETE
-                    case Printful.Webhook.Event.ProductDeleted:
-                        break;
+                            if (productRecord) {
+                                await Webflow.updateProduct(printfulProduct, productRecords);
+                            }
+                            else {
+                                await Webflow.createProduct(printfulProduct, productRecords);
+                            }
+                            break;
+                        // DELETE
+                        case Printful.Webhook.Event.ProductDeleted:
+                            break;
+                    }
+                }
+                catch (error){
+                    console.error(error);
+                    Response.error();
                 }
 
-                return Response.json("Hello world")
+                return Response.json("Hello world");
             }
         }
     },
