@@ -95,13 +95,8 @@ export namespace Webflow {
             });
         }
 
-
-        const variantColors = printfulVariants.map(v => v.color);
-        const variantSizes = printfulVariants.map(v => v.size);
-        const variantExternalIds = printfulVariants.map(v => v.external_id);
-
-        const foundColors = Array.from(new Set(variantColors));
-        const foundSizes = Array.from(new Set(variantSizes));
+        const foundColors = Array.from(new Set(printfulVariants.map(v => v.color)));
+        const foundSizes = Array.from(new Set(printfulVariants.map(v => v.size)));
 
         let updateProductResponse = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}`, {
             method: "PATCH",
@@ -150,7 +145,7 @@ export namespace Webflow {
         const webflowProduct = await getProductResponse.json();
 
         for (let i = 0; i < webflowProduct["skus"].length; ++i) {
-            const webflowSkuId = variantExternalIds[i];
+            const webflowSkuId = printfulVariants[i].external_id;
 
             const res = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}/skus/${webflowSkuId}`, {
                 method: "PATCH",
