@@ -123,12 +123,12 @@ export namespace Webflow {
                 "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}`
             }
         });
-        const product = await getProductResponse.json();
+        const webflowProduct = await getProductResponse.json();
 
-        for (let i = 0; i < product["skus"].length; ++i) {
+        for (let i = 0; i < webflowProduct["skus"].length; ++i) {
             const webflowSkuId = variantExternalIds[i];
 
-            await fetch(`${API_URL}/products/${webflowProductId}/skus/${webflowSkuId}`, {
+            const res = await fetch(`${API_URL}/products/${webflowProductId}/skus/${webflowSkuId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
@@ -138,11 +138,8 @@ export namespace Webflow {
                     "sku": webflowVariants[i]
                 })
             });
+            console.log(JSON.stringify((await res.json())));
         }
-
-        return {
-            "updateProduct": updateProductResponse,
-        };
     }
 
     export async function createProduct(printfulProduct: Printful.Products.SyncProduct, productRecords: ProductRecords) {
@@ -248,8 +245,10 @@ export namespace Webflow {
             })
         });
         modifyPrintfulProductResponse = await modifyPrintfulProductResponse.json();
+        console.log(JSON.stringify(modifyPrintfulProductResponse));
 
         // CACHE WEBFLOW/PRINTFUL PRODUCT ASSOCIATION
         productRecords.add({ printfulProductId, webflowProductId });
     }
 }
+
