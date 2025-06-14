@@ -1,12 +1,50 @@
+import { calcAttributeLevels, calcPlayerLevel, computeLevels } from "./calculator/calc.ts";
+import { activities, Activity, BenchmarkPerformance, Gender, genders } from "./calculator/util.ts";
 import { productRecords } from "./data/product-records.ts";
 import { Printful } from "./printful.ts"
 import { Webflow } from "./webflow.ts";
 
+interface CalcRequest {
+    player: {
+        age: number,
+        weightKG: number,
+        gender: Gender
+    }
+    performances: {
+        activity: Activity,
+        performance: number,
+    }[]
+}
+
 const server = Bun.serve({
     routes: {
-        "/test": {
+        "/calc": {
             async GET(req) {
-                return Response.json("Hello world");
+                const calcReq: CalcRequest = await req.json();
+                const { player, performances } = calcReq;
+
+                console.log(calcReq);
+
+                const computedPerformances: BenchmarkPerformance[] = [];
+                for (const p of performances) {
+                    computedPerformances.push({
+                        activity: p.activity,
+                        performance: p.performance,
+                        levels: computeLevels(
+                            player.age,
+                            player.weightKG,
+                            player.gender,
+                            p.activity
+                        )
+                    })
+                }
+
+                return Response.json({
+                    levels: {
+                        attributes: calcAttributeLevels(computedPerformances),
+                        player: calcPlayerLevel(computedPerformances)
+                    }
+                });
             }
         },
         "/webhook/printful": {
@@ -41,7 +79,7 @@ const server = Bun.serve({
                     Response.error();
                 }
 
-                return Response.json("Hello world");
+                return Response.json("");
             }
         }
     },
