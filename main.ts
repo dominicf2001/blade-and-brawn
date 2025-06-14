@@ -1,8 +1,6 @@
+import { productRecords } from "./data/product-records.ts";
 import { Printful } from "./printful.ts"
-import { ProductRecords } from "./data/product-records.ts"
 import { Webflow } from "./webflow.ts";
-
-const productRecords = new ProductRecords();
 
 const server = Bun.serve({
     routes: {
@@ -24,21 +22,21 @@ const server = Bun.serve({
                             const productRecord = productRecords.findFromPrintful(payload.data.sync_product.id);
 
                             if (productRecord) {
-                                await Webflow.updateProduct(printfulProduct, productRecords);
+                                await Webflow.updateProductFromPrintful(printfulProduct);
                             }
                             else {
-                                await Webflow.createProduct(printfulProduct, productRecords);
+                                await Webflow.createProductFromPrintful(printfulProduct);
                             }
                             break;
                         }
                         // DELETE
                         case Printful.Webhook.Event.ProductDeleted: {
-                            await Webflow.deleteProduct(payload.data.sync_product.id, productRecords);
+                            await Webflow.deleteProductFromPrintful(payload.data.sync_product.id);
                             break;
                         }
                     }
                 }
-                catch (error){
+                catch (error) {
                     console.error(error);
                     Response.error();
                 }
@@ -49,7 +47,5 @@ const server = Bun.serve({
     },
     development: true
 })
-
-productRecords.add({ webflowProductId: 123, printfulProductId: 321 });
 
 console.log(`Listening on ${server.url}`);

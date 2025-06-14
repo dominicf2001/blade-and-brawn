@@ -5,7 +5,7 @@ interface ProductRecord {
     printfulProductId: number;
 }
 
-export class ProductRecords {
+class ProductRecords {
     private db: Database;
 
     constructor() {
@@ -56,3 +56,4 @@ export class ProductRecords {
     }
 }
 
+export const productRecords = new ProductRecords();

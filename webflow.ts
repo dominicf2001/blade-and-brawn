@@ -1,4 +1,4 @@
-import { ProductRecords } from "./data/product-records";
+import { productRecords } from "./data/product-records";
 import { Printful } from "./printful"
 
 export namespace Webflow {
@@ -52,9 +52,9 @@ export namespace Webflow {
         }
     }
 
-    export async function deleteProduct(printfulProductId: number, productRecords: ProductRecords) {
+    export async function deleteProductFromPrintful(printfulProductId: number) {
         const webflowProductId = productRecords.findFromPrintful(printfulProductId)?.webflowProductId;
-        if (webflowProductId){
+        if (webflowProductId) {
             const res = await fetch(`${Webflow.API_COLLECTIONS_URL}/items/${webflowProductId}`, {
                 method: "DELETE",
                 headers: {
@@ -67,7 +67,7 @@ export namespace Webflow {
         }
     }
 
-    export async function updateProduct(printfulProduct: Printful.Products.SyncProduct, productRecords: ProductRecords) {
+    export async function updateProductFromPrintful(printfulProduct: Printful.Products.SyncProduct) {
         const webflowProductId = productRecords.findFromPrintful(printfulProduct.result.sync_product.id)?.webflowProductId;
         if (!webflowProductId) {
             throw new Error("Product is not recognized");
@@ -161,7 +161,7 @@ export namespace Webflow {
         }
     }
 
-    export async function createProduct(printfulProduct: Printful.Products.SyncProduct, productRecords: ProductRecords) {
+    export async function createProductFromPrintful(printfulProduct: Printful.Products.SyncProduct) {
         const printfulVariants = printfulProduct.result.sync_variants;
 
         const webflowVariants: Products.Sku[] = [];
@@ -189,7 +189,7 @@ export namespace Webflow {
         const foundSizes = Array.from(new Set(printfulVariants.map(v => v.size)));
 
         // CREATE WEBFLOW PRODUCT
-        let addProductResponse = await fetch(`${Webflow.API_SITES_URL}/products`, {
+        let addProductResponse = await (await fetch(`${Webflow.API_SITES_URL}/products`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -224,8 +224,8 @@ export namespace Webflow {
                 },
                 "sku": webflowVariants[0],
             })
-        });
-        addProductResponse = await addProductResponse.json();
+        }))?.json();
+
         if (!addProductResponse?.product?.id) {
             console.error("Webflow product creation failed:", addProductResponse);
             throw new Error("Failed to create Webflow product");
