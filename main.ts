@@ -1,5 +1,5 @@
 import { calcAttributeLevels, calcPlayerLevel, computeLevels } from "./calculator/calc.ts";
-import { activities, Activity, BenchmarkPerformance, Gender, genders } from "./calculator/util.ts";
+import { Activity, BenchmarkPerformance, Gender } from "./calculator/util.ts";
 import { productRecords } from "./data/product-records.ts";
 import { Printful } from "./printful.ts"
 import { Webflow } from "./webflow.ts";
@@ -16,10 +16,30 @@ interface CalcRequest {
     }[]
 }
 
+export class ClientResponse extends Response {
+    constructor(body?: BodyInit | null, init: ResponseInit = {}) {
+        const headers = new Headers(init.headers);
+        headers.set("Access-Control-Allow-Origin", "*");
+        headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+        headers.set("Access-Control-Allow-Headers", "Content-Type");
+        super(body, { ...init, headers });
+    }
+
+    static json(data: unknown, init: ResponseInit = {}) {
+        const body = JSON.stringify(data);
+        const headers = new Headers(init.headers);
+        headers.set("Content-Type", "application/json");
+        return new ClientResponse(body, { ...init, headers });
+    }
+}
+
 const server = Bun.serve({
     routes: {
         "/calc": {
-            async GET(req) {
+            OPTIONS() {
+                return new ClientResponse(undefined, { status: 204 });
+            },
+            async POST(req) {
                 const calcReq: CalcRequest = await req.json();
                 const { player, performances } = calcReq;
 
@@ -39,15 +59,18 @@ const server = Bun.serve({
                     })
                 }
 
-                return Response.json({
+                return ClientResponse.json({
                     levels: {
                         attributes: calcAttributeLevels(computedPerformances),
                         player: calcPlayerLevel(computedPerformances)
                     }
-                });
+                })
             }
         },
         "/webhook/printful": {
+            OPTIONS() {
+                return new ClientResponse(undefined, { status: 204 });
+            },
             async POST(req) {
                 const payload: Printful.Webhook.EventPayload = await req.json()
                 console.log(JSON.stringify(payload));
@@ -76,10 +99,10 @@ const server = Bun.serve({
                 }
                 catch (error) {
                     console.error(error);
-                    Response.error();
+                    ClientResponse.error();
                 }
 
-                return Response.json("");
+                return ClientResponse.json("");
             }
         }
     },
