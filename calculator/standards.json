@@ -5768,21 +5768,21 @@
     "activityType": "Cone Drill",
     "gender": "male",
     "bodyWeight": -1,
-    "physicallyActive": 9500,
-    "beginner": 8700,
-    "intermediate": 7800,
-    "advanced": 7000,
-    "elite": 6500
+    "physicallyActive": 17000,
+    "beginner": 16000,
+    "intermediate": 12000,
+    "advanced": 11000,
+    "elite": 10000
   },
   {
     "age": 18,
     "activityType": "Cone Drill",
     "gender": "female",
     "bodyWeight": -1,
-    "physicallyActive": 10500,
-    "beginner": 9600,
-    "intermediate": 8700,
-    "advanced": 7800,
-    "elite": 7200
+    "physicallyActive": 20000,
+    "beginner": 16000,
+    "intermediate": 15500,
+    "advanced": 14500,
+    "elite": 13500
   }
 ]
