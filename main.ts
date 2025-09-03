@@ -1,8 +1,8 @@
 import { calcAttributeLevels, calcPlayerLevel, computeLevels } from "./calculator/calc.ts";
 import { Activity, BenchmarkPerformance, Gender } from "./calculator/util.ts";
-import { productRecords } from "./data/product-records.ts";
-import { Printful } from "./printful.ts"
-import { Webflow } from "./webflow.ts";
+import { productRecords } from "./commerce/data/product-records.ts";
+import { Printful } from "./commerce/printful.ts"
+import { Webflow } from "./commerce/webflow.ts";
 
 interface CalcRequest {
     player: {
@@ -43,8 +43,6 @@ const server = Bun.serve({
                 const calcReq: CalcRequest = await req.json();
                 const { player, performances } = calcReq;
 
-                console.log(calcReq);
-
                 const computedPerformances: BenchmarkPerformance[] = [];
                 for (const p of performances) {
                     computedPerformances.push({
@@ -73,6 +71,8 @@ const server = Bun.serve({
             },
             async POST(req) {
                 const payload: Printful.Webhook.EventPayload = await req.json()
+                console.log(JSON.stringify(payload));
+                console.log("PRINTFUL WEBHOOK: " + payload.type);
                 try {
                     switch (payload.type) {
                         // ADD/UPDATE

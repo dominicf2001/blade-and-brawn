@@ -1,6 +1,5 @@
 import { activities, Activity, Attribute, attributes, BenchmarkPerformance, findNearestPoints, Gender, getActivityAttribute, kgToLb, Levels, msToTime, StandardsItem } from "./util";
-import rawStandards from "./standards.json" assert { type: "json" }
-import { which } from "bun";
+import rawStandards from "./data/standards.json" assert { type: "json" }
 
 const standards = rawStandards as StandardsItem[];
 
