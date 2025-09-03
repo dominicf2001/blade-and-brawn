@@ -1,6 +1,6 @@
 import { calcAttributeLevels, calcPlayerLevel, computeLevels } from "./calculator/calc.ts";
 import { Activity, BenchmarkPerformance, Gender } from "./calculator/util.ts";
-import { productRecords } from "./commerce/data/product-records.ts";
+import { productRecords } from "./commerce/product-records.ts";
 import { Printful } from "./commerce/printful.ts"
 import { Webflow } from "./commerce/webflow.ts";
 

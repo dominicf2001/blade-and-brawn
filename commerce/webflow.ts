@@ -1,4 +1,4 @@
-import { productRecords } from "./data/product-records";
+import { productRecords } from "./product-records";
 import { Printful } from "./printful"
 
 export namespace Webflow {
