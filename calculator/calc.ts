@@ -1,4 +1,4 @@
-import { activities, Activity, Attribute, attributes, BenchmarkPerformance, findNearestPoints, Gender, getActivityAttribute, kgToLb, Levels, msToTime, StandardsItem } from "./util";
+import { Activity, Attribute, attributes, BenchmarkPerformance, findNearestPoints, Gender, getActivityAttribute, getAttributeActivities, kgToLb, Levels, msToTime, Player, StandardsItem } from "./util";
 import rawStandards from "./standards.json" assert { type: "json" }
 
 const standards = rawStandards as StandardsItem[];
@@ -35,8 +35,22 @@ export const calcAttributeLevel = (
     attribute: Attribute,
     benchmarkPerformances: BenchmarkPerformance[],
 ): number => {
+    // must be activities of the given attribute
     if (benchmarkPerformances.some((bp) => getActivityAttribute(bp.activity) !== attribute)) {
         throw new Error("Wrong benchmark performance attribute");
+    }
+
+    // must perform all of an attributes activities
+    for (const activity of getAttributeActivities(attribute)) {
+        const benchmarkActivites = benchmarkPerformances.map((bp) => bp.activity);
+        if (!benchmarkActivites.includes(activity))
+            return 0;
+    }
+
+    // must have all benchmarks using a valid performance value (> 0) 
+    for (const benchmarkPerformance of benchmarkPerformances) {
+        if (benchmarkPerformance.performance <= 0)
+            return 0
     }
 
     const benchmarkLevels = benchmarkPerformances.map((abp) =>
@@ -51,15 +65,21 @@ export const calcAttributeLevel = (
 };
 
 export const calcAttributeLevels = (
+    player: Player,
     benchmarkPerformances: BenchmarkPerformance[],
 ): Record<Attribute, number> => {
     const attrLevels: Record<Attribute, number> = {
-        [attributes.STRENGTH]: 1,
-        [attributes.POWER]: 1,
-        [attributes.ENDURANCE]: 1,
-        [attributes.SPEED]: 1,
-        [attributes.AGILITY]: 1,
+        [attributes.STRENGTH]: 0,
+        [attributes.POWER]: 0,
+        [attributes.ENDURANCE]: 0,
+        // [attributes.SPEED]: 0,
+        [attributes.AGILITY]: 0,
     } as const;
+
+    for (const value of Object.values(player)) {
+        if (!value)
+            return attrLevels;
+    }
 
     (Object.values(attributes) as Attribute[]).forEach((attribute) => {
         const attrBenchmarkPerformances = benchmarkPerformances.filter(
@@ -71,8 +91,18 @@ export const calcAttributeLevels = (
     return attrLevels;
 };
 
-export const calcPlayerLevel = (benchmarkPerformances: BenchmarkPerformance[]): number => {
-    const attrLevels = calcAttributeLevels(benchmarkPerformances);
+export const calcPlayerLevel = (player: Player, benchmarkPerformances: BenchmarkPerformance[]): number => {
+    for (const value of Object.values(player)) {
+        if (!value)
+            return 0;
+    }
+
+    const attrLevels = calcAttributeLevels(player, benchmarkPerformances);
+    for (const level of Object.values(attrLevels)) {
+        if (!level)
+            return 0;
+    }
+
     const attrLevelsSum = Object.values(attrLevels).reduce((sum, lvl) => sum + lvl, 0);
     return Math.round(attrLevelsSum / Object.keys(attributes).length);
 };
@@ -80,31 +110,31 @@ export const calcPlayerLevel = (benchmarkPerformances: BenchmarkPerformance[]): 
 // -------------------------------------------------------------------------------------------------
 // Presentation helpers
 // -------------------------------------------------------------------------------------------------
-export const formatLevelValues = (
-    levels: Record<number, number>,
-    activity: Activity,
-): Record<number, string> => {
-    const timedActivities: Activity[] = [activities.RUN, activities.DASH, activities.CONE_DRILL];
-
-    const formattedLevels: Record<number, string> = {};
-    for (const level in levels) {
-        const lvl = +level as number;
-        let displayValue = "";
-        if (timedActivities.includes(activity)) {
-            displayValue = msToTime(levels[lvl]);
-        } else if (activity === activities.TREADMILL_DASH) {
-            displayValue = `${(levels[lvl] * 1000).toFixed(2)} m/s`;
-        } else if (activity === activities.BROAD_JUMP) {
-            displayValue = `${(levels[lvl] * 0.0328084).toFixed(2)} ft.`;
-        } else {
-            displayValue = kgToLb(levels[lvl]).toFixed(0);
-        }
-
-        formattedLevels[lvl] = displayValue;
-    }
-
-    return formattedLevels;
-};
+// export const formatLevelValues = (
+//     levels: Record<number, number>,
+//     activity: Activity,
+// ): Record<number, string> => {
+//     const timedActivities: Activity[] = [activities.RUN, activities.DASH, activities.CONE_DRILL];
+//
+//     const formattedLevels: Record<number, string> = {};
+//     for (const level in levels) {
+//         const lvl = +level as number;
+//         let displayValue = "";
+//         if (timedActivities.includes(activity)) {
+//             displayValue = msToTime(levels[lvl]);
+//         } else if (activity === activities.TREADMILL_DASH) {
+//             displayValue = `${(levels[lvl] * 1000).toFixed(2)} m/s`;
+//         } else if (activity === activities.BROAD_JUMP) {
+//             displayValue = `${(levels[lvl] * 0.0328084).toFixed(2)} ft.`;
+//         } else {
+//             displayValue = kgToLb(levels[lvl]).toFixed(0);
+//         }
+//
+//         formattedLevels[lvl] = displayValue;
+//     }
+//
+//     return formattedLevels;
+// };
 
 // -------------------------------------------------------------------------------------------------
 // Level utilities
