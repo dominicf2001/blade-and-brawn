@@ -121,7 +121,7 @@ export namespace Printful {
             }[]
         }
 
-        export async function getSyncProduct(syncProductId: number): Promise<SyncProduct> {
+        export async function get(syncProductId: number): Promise<SyncProduct> {
             const payload: MetaDataSingle<SyncProduct> = await (
                 await fetch(`${Printful.API_URL}/store/products/${syncProductId}`, {
                     method: "GET",
@@ -135,7 +135,7 @@ export namespace Printful {
             return payload.result;
         }
 
-        export async function getSyncProducts(): Promise<SyncProduct[]> {
+        export async function getAll(): Promise<SyncProduct[]> {
             const payload: MetaDataMulti<SyncProduct["sync_product"]> = await (
                 await fetch(`${Printful.API_URL}/store/products`, {
                     method: "GET",
@@ -148,9 +148,15 @@ export namespace Printful {
 
             // need to fetch variants
             const syncProducts = await Promise.all(
-                payload.result.map(p => getSyncProduct(p.id))
+                payload.result.map(p => get(p.id))
             );
             return syncProducts;
+        }
+
+
+        export function getVariantPreviewUrl(syncVariant: Printful.Products.SyncProduct["sync_variants"][number]): string {
+            const previewFile = syncVariant.files.find(f => f.type === "preview");
+            return previewFile?.preview_url ?? syncVariant.product.image;
         }
     }
 }

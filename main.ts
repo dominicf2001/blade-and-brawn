@@ -1,6 +1,5 @@
 import { calcAttributeLevels, calcPlayerLevel, computeLevels } from "./calculator/calc.ts";
 import { Activity, BenchmarkPerformance, Player } from "./calculator/util.ts";
-import { productRecords } from "./commerce/product-records.ts";
 import { Printful } from "./commerce/printful.ts"
 import { Webflow } from "./commerce/webflow.ts";
 
@@ -30,6 +29,7 @@ export class ClientResponse extends Response {
 }
 
 const server = Bun.serve({
+    idleTimeout: 180,
     routes: {
         "/calc": {
             OPTIONS() {
@@ -66,27 +66,21 @@ const server = Bun.serve({
                 return new ClientResponse(undefined, { status: 204 });
             },
             async POST(req) {
-                const printfulProducts = await Printful.Products.getSyncProducts();
+                const printfulProducts = await Printful.Products.getAll();
 
                 // handle update/create
                 for (const printfulProduct of printfulProducts) {
-                    const productRecord = productRecords.findUsingPrintful(printfulProduct.sync_product.id);
-                    if (productRecord) {
-                        await Webflow.updateProductUsingPrintful(printfulProduct);
+                    const webflowProductExists = await Webflow.Products.exists(printfulProduct.sync_product.external_id);
+                    if (webflowProductExists) {
+                        await Webflow.Products.updateUsingPrintful(printfulProduct);
                     }
                     else {
-                        await Webflow.createProductUsingPrintful(printfulProduct);
+                        await Webflow.Products.createUsingPrintful(printfulProduct);
                     }
+                    console.log("DONE");
                 }
 
-                // handle delete
-                // for (const productRecord of productRecords.all()) {
-                //     const existsInPrintful = printfulProducts
-                //         .some(printfulProduct => printfulProduct.sync_product.id === productRecord.printfulProductId);
-                //     if (!existsInPrintful) {
-                //         await Webflow.deleteProductUsingPrintful(productRecord.printfulProductId);
-                //     }
-                // }
+                // handle delete (TODO)
 
                 return ClientResponse.json({});
             }
@@ -101,20 +95,19 @@ const server = Bun.serve({
                     switch (payload.type) {
                         // ADD/UPDATE
                         case Printful.Webhook.Event.ProductUpdated: {
-                            const printfulProduct = await Printful.Products.getSyncProduct(payload.data.sync_product.id);
-                            const productRecord = productRecords.findUsingPrintful(payload.data.sync_product.id);
-
-                            if (productRecord) {
-                                await Webflow.updateProductUsingPrintful(printfulProduct);
+                            const printfulProduct = await Printful.Products.get(payload.data.sync_product.id);
+                            const webflowProductExists = await Webflow.Products.exists(printfulProduct.sync_product.external_id);
+                            if (webflowProductExists) {
+                                await Webflow.Products.updateUsingPrintful(printfulProduct);
                             }
                             else {
-                                await Webflow.createProductUsingPrintful(printfulProduct);
+                                await Webflow.Products.createUsingPrintful(printfulProduct);
                             }
                             break;
                         }
                         // DELETE
                         case Printful.Webhook.Event.ProductDeleted: {
-                            await Webflow.deleteProductUsingPrintful(payload.data.sync_product.id);
+                            await Webflow.Products.remove(payload.data.sync_product.external_id);
                             break;
                         }
                     }
