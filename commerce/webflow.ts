@@ -26,7 +26,7 @@ export namespace Webflow {
                     unit: string;
                     currency: string;
                 };
-                "main-image": string;
+                "main-image"?: string;
             }
         }
 
@@ -52,8 +52,8 @@ export namespace Webflow {
         }
     }
 
-    export async function deleteProductFromPrintful(printfulProductId: number) {
-        const webflowProductId = productRecords.findFromPrintful(printfulProductId)?.webflowProductId;
+    export async function deleteProductUsingPrintful(printfulProductId: number) {
+        const webflowProductId = productRecords.findUsingPrintful(printfulProductId)?.webflowProductId;
         if (webflowProductId) {
             const res = await fetch(`${Webflow.API_COLLECTIONS_URL}/items/${webflowProductId}`, {
                 method: "DELETE",
@@ -63,17 +63,17 @@ export namespace Webflow {
                 },
                 body: JSON.stringify({})
             });
-            productRecords.deleteFromWebflow(webflowProductId);
+            productRecords.deleteUsingWebflow(webflowProductId);
         }
     }
 
-    export async function updateProductFromPrintful(printfulProduct: Printful.Products.SyncProduct) {
-        const webflowProductId = productRecords.findFromPrintful(printfulProduct.result.sync_product.id)?.webflowProductId;
+    export async function updateProductUsingPrintful(printfulProduct: Printful.Products.SyncProduct) {
+        const webflowProductId = productRecords.findUsingPrintful(printfulProduct.sync_product.id)?.webflowProductId;
         if (!webflowProductId) {
             throw new Error("Product is not recognized");
         }
 
-        const printfulVariants = printfulProduct.result.sync_variants;
+        const printfulVariants = printfulProduct.sync_variants;
         const webflowVariants: Products.Sku[] = [];
         for (const printfulVariant of printfulVariants) {
             webflowVariants.push({
@@ -107,8 +107,8 @@ export namespace Webflow {
             body: JSON.stringify({
                 "product": {
                     "fieldData": {
-                        "name": printfulProduct.result.sync_product.name,
-                        "slug": formatSlug(printfulProduct.result.sync_product.name),
+                        "name": printfulProduct.sync_product.name,
+                        "slug": formatSlug(printfulProduct.sync_product.name),
                         "sku-properties": [
                             {
                                 "id": "color",
@@ -157,12 +157,11 @@ export namespace Webflow {
                     "sku": webflowVariants[i]
                 })
             });
-            console.log(JSON.stringify((await res.json())));
         }
     }
 
-    export async function createProductFromPrintful(printfulProduct: Printful.Products.SyncProduct) {
-        const printfulVariants = printfulProduct.result.sync_variants;
+    export async function createProductUsingPrintful(printfulProduct: Printful.Products.SyncProduct) {
+        const printfulVariants = printfulProduct.sync_variants;
 
         const webflowVariants: Products.Sku[] = [];
         for (const printfulVariant of printfulVariants) {
@@ -180,7 +179,7 @@ export namespace Webflow {
                         "currency": printfulVariant.currency
                     },
                     // TODO: sync image
-                    "main-image": "https://www.example.com/image.jpg"
+                    // "main-image": "https://www.example.com/image.jpg"
                 }
             });
         }
@@ -198,8 +197,8 @@ export namespace Webflow {
             body: JSON.stringify({
                 "product": {
                     "fieldData": {
-                        "name": printfulProduct.result.sync_product.name,
-                        "slug": formatSlug(printfulProduct.result.sync_product.name),
+                        "name": printfulProduct.sync_product.name,
+                        "slug": formatSlug(printfulProduct.sync_product.name),
                         "sku-properties": [
                             {
                                 "id": "color",
@@ -232,7 +231,7 @@ export namespace Webflow {
         }
 
         const webflowProductId = addProductResponse["product"]["id"];
-        const printfulProductId = printfulProduct.result.sync_product.id;
+        const printfulProductId = printfulProduct.sync_product.id;
 
         // CREATE WEBFLOW PRODUCT SKUs
         let createSkuResponse = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}/skus`, {

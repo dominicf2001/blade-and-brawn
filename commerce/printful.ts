@@ -46,9 +46,14 @@ export namespace Printful {
     }
 
     export namespace Products {
-        interface MetaData<T = any> {
+        export interface MetaDataSingle<T = any> {
             code: number;
             result: T;
+        }
+
+        export interface MetaDataMulti<T = any> {
+            code: number;
+            result: T[];
         }
 
         interface Option {
@@ -77,7 +82,7 @@ export namespace Printful {
             stitch_count_tier: string;
         }
 
-        interface SyncProductData {
+        export interface SyncProduct {
             sync_product: {
                 id: number;
                 external_id: string;
@@ -115,20 +120,37 @@ export namespace Printful {
 
             }[]
         }
-        export type SyncProduct = MetaData<SyncProductData>;
-    }
 
-    export async function getSyncProduct(syncProductId: number): Promise<Products.SyncProduct> {
-        const payload: Products.SyncProduct = await (
-            await fetch(`${Printful.API_URL}/store/products/${syncProductId}`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${Bun.env.PRINTFUL_AUTH}`,
-                    "X-PF-Store-Id": `${Bun.env.PRINTFUL_STORE_ID}`
-                }
-            })
-        ).json();
+        export async function getSyncProduct(syncProductId: number): Promise<SyncProduct> {
+            const payload: MetaDataSingle<SyncProduct> = await (
+                await fetch(`${Printful.API_URL}/store/products/${syncProductId}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${Bun.env.PRINTFUL_AUTH}`,
+                        "X-PF-Store-Id": `${Bun.env.PRINTFUL_STORE_ID}`
+                    }
+                })
+            ).json();
 
-        return payload;
+            return payload.result;
+        }
+
+        export async function getSyncProducts(): Promise<SyncProduct[]> {
+            const payload: MetaDataMulti<SyncProduct["sync_product"]> = await (
+                await fetch(`${Printful.API_URL}/store/products`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${Bun.env.PRINTFUL_AUTH}`,
+                        "X-PF-Store-Id": `${Bun.env.PRINTFUL_STORE_ID}`
+                    }
+                })
+            ).json();
+
+            // need to fetch variants
+            const syncProducts = await Promise.all(
+                payload.result.map(p => getSyncProduct(p.id))
+            );
+            return syncProducts;
+        }
     }
 }

@@ -16,7 +16,7 @@ class ProductRecords {
         this.db = new Database(dbPath);
     }
 
-    findFromWebflow(webflowProductId: number): ProductRecord | undefined {
+    findUsingWebflow(webflowProductId: number): ProductRecord | undefined {
         const row = this.db.query(`
           SELECT * FROM product_records WHERE webflowProductId = ?
         `).get(webflowProductId);
@@ -24,7 +24,7 @@ class ProductRecords {
         return row as ProductRecord | undefined;
     }
 
-    findFromPrintful(printfulProductId: number): ProductRecord | undefined {
+    findUsingPrintful(printfulProductId: number): ProductRecord | undefined {
         const row = this.db.query(`
           SELECT * FROM product_records WHERE printfulProductId = ?
         `).get(printfulProductId);
@@ -32,13 +32,13 @@ class ProductRecords {
         return row as ProductRecord | undefined;
     }
 
-    deleteFromWebflow(webflowProductId: number) {
+    deleteUsingWebflow(webflowProductId: number) {
         this.db.run(`
             DELETE FROM product_records WHERE webflowProductId = ?
        `, [webflowProductId]);
     }
 
-    deleteFromPrintful(printfulProductId: number) {
+    deleteUsingPrintful(printfulProductId: number) {
         this.db.run(`
             DELETE FROM product_records WHERE printfulProductId = ?
        `, [printfulProductId]);
