@@ -1,5 +1,5 @@
 import { Activity, Attribute, attributes, ActivityPerformance, findNearestPoints, getActivityAttribute, getAttributeActivities, Player, StandardsMap, BaseLevel, Standard } from "./util";
-import rawStandards from "./newStandards.json" assert { type: "json" }
+import rawStandards from "./standards.json" assert { type: "json" }
 
 // SOURCES
 // Squat, Bench, Dead Lift: 
