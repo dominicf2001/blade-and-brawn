@@ -1,14 +1,5 @@
-import { activities, BenchmarkPerformance, genders, Player } from "./util";
-import { calcAttributeLevels, calcPlayerLevel, computeLevels } from "./calc.ts";
-
-const lbToKg = (lb) => +lb * 0.453592;
-const kgToLb = (kg) => +kg * 2.20462;
-
-const minToMs = (min) => min * 60000;
-const secToMs = (sec) => sec * 1000;
-
-const feetToCm = (feet) => feet * 30.48;
-const inchesToCm = (inches) => inches * 2.54;
+import { activities, ActivityPerformance, feetToCm, genders, inchesToCm, lbToKg, minToMs, Player, secToMs } from "./util";
+import { calcAllAttributeLevels, calcPlayerLevel } from "./calc.ts";
 
 const player: Player = {
     age: 18,
@@ -16,77 +7,73 @@ const player: Player = {
     gender: genders.MALE
 };
 
-const computedPerformances: BenchmarkPerformance[] = [
+const computedPerformances: ActivityPerformance[] = [
     // STRENGTH
     {
         activity: activities.BENCH_PRESS,
-        performance: lbToKg(200),
-        levels: computeLevels(
-            player.age,
-            player.weightKG,
-            player.gender,
-            activities.BENCH_PRESS
-        )
+        performance: lbToKg(200)
     },
     {
         activity: activities.DEADLIFT,
         performance: lbToKg(200),
-        levels: computeLevels(
-            player.age,
-            player.weightKG,
-            player.gender,
-            activities.DEADLIFT
-        )
     },
     {
         activity: activities.BACK_SQUAT,
         performance: lbToKg(200),
-        levels: computeLevels(
-            player.age,
-            player.weightKG,
-            player.gender,
-            activities.BACK_SQUAT
-        )
     },
     // POWER
     {
         activity: activities.BROAD_JUMP,
-        performance: feetToCm(5) + inchesToCm(2),
-        levels: computeLevels(
-            player.age,
-            player.weightKG,
-            player.gender,
-            activities.BROAD_JUMP
-        )
+        performance: feetToCm(10) + inchesToCm(2),
     },
     // ENDURANCE
     {
         activity: activities.RUN,
         performance: minToMs(5) + secToMs(20),
-        levels: computeLevels(
-            player.age,
-            player.weightKG,
-            player.gender,
-            activities.RUN
-        )
     },
     // AGILITY
     {
         activity: activities.CONE_DRILL,
         performance: secToMs(5),
-        levels: computeLevels(
-            player.age,
-            player.weightKG,
-            player.gender,
-            activities.CONE_DRILL
-        )
     },
 ];
 
 const levels = {
-    attributes: calcAttributeLevels(player, computedPerformances),
+    attributes: calcAllAttributeLevels(player, computedPerformances),
     player: calcPlayerLevel(player, computedPerformances)
 };
 
 console.log(levels);
 
+// const newStandards: Standards = {
+//     "Back Squat": [],
+//     "Deadlift": [],
+//     "Bench Press": [],
+//     "Run": [],
+//     "Dash": [],
+//     "Treadmill Dash": [],
+//     "Broad Jump": [],
+//     "Cone Drill": [],
+// };
+//
+// for (const item of standards) {
+//     if (!newStandards[item.activityType])
+//         continue;
+//
+//     newStandards[item.activityType].push({
+//         metrics: {
+//             age: item.age,
+//             weight: item.bodyWeight,
+//             gender: item.gender
+//         },
+//         levels: {
+//             physicallyActive: item.physicallyActive,
+//             beginner: item.beginner,
+//             intermediate: item.intermediate,
+//             advanced: item.advanced,
+//             elite: item.elite
+//         }
+//     });
+// }
+//
+// Bun.write("./newStandards.json", JSON.stringify(newStandards, null, 2));

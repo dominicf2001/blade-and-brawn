@@ -1,14 +1,11 @@
-import { calcAttributeLevels, calcPlayerLevel, computeLevels } from "./calculator/calc.ts";
-import { Activity, BenchmarkPerformance, Player } from "./calculator/util.ts";
+import { calcAllAttributeLevels, calcPlayerLevel } from "./calculator/calc.ts";
+import { ActivityPerformance, Player } from "./calculator/util.ts";
 import { Printful } from "./commerce/printful.ts"
 import { Webflow } from "./commerce/webflow.ts";
 
 interface CalcRequest {
     player: Player,
-    performances: {
-        activity: Activity,
-        performance: number,
-    }[]
+    performances: ActivityPerformance[]
 }
 
 export class ClientResponse extends Response {
@@ -39,24 +36,10 @@ const server = Bun.serve({
                 const calcReq: CalcRequest = await req.json();
                 const { player, performances } = calcReq;
 
-                const computedPerformances: BenchmarkPerformance[] = [];
-                for (const p of performances) {
-                    computedPerformances.push({
-                        activity: p.activity,
-                        performance: p.performance,
-                        levels: computeLevels(
-                            player.age,
-                            player.weightKG,
-                            player.gender,
-                            p.activity
-                        )
-                    })
-                }
-
                 return ClientResponse.json({
                     levels: {
-                        attributes: calcAttributeLevels(player, computedPerformances),
-                        player: calcPlayerLevel(player, computedPerformances)
+                        attributes: calcAllAttributeLevels(player, performances),
+                        player: calcPlayerLevel(player, performances)
                     }
                 })
             }

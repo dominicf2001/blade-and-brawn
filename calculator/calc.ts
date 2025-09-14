@@ -1,7 +1,5 @@
-import { Activity, Attribute, attributes, BenchmarkPerformance, findNearestPoints, Gender, getActivityAttribute, getAttributeActivities, kgToLb, Levels, msToTime, Player, StandardsItem } from "./util";
-import rawStandards from "./standards.json" assert { type: "json" }
-
-const standards = rawStandards as StandardsItem[];
+import { Activity, Attribute, attributes, ActivityPerformance, findNearestPoints, getActivityAttribute, getAttributeActivities, Player, StandardsMap, BaseLevel, Standard } from "./util";
+import rawStandards from "./newStandards.json" assert { type: "json" }
 
 // SOURCES
 // Squat, Bench, Dead Lift: 
@@ -13,136 +11,32 @@ const standards = rawStandards as StandardsItem[];
 // Broad Jump:
 //  
 
+const standards = rawStandards as StandardsMap;
+
+type BaseLevelValues = Record<BaseLevel, number>
 
 // -------------------------------------------------------------------------------------------------
-// Level calculations
+// Level utilities (helpers)
 // -------------------------------------------------------------------------------------------------
-export const calcBenchmarkLevel = (performance: number, levels: Record<number, number>): number => {
-    let playerLevel = 1;
-    let playerLevelDiff = Infinity;
+
+function findLevel(levels: Record<number, number>, performance: number): number {
+    let resultLevel = 1;
+    let resultLevelDiff = Infinity;
 
     for (const level in levels) {
         const diff = Math.abs(performance - levels[level as unknown as number]);
-        if (diff < playerLevelDiff) {
-            playerLevel = +level;
-            playerLevelDiff = diff;
+        if (diff < resultLevelDiff) {
+            resultLevel = +level;
+            resultLevelDiff = diff;
         }
     }
-    return playerLevel;
-};
+    return resultLevel;
+}
 
-export const calcAttributeLevel = (
-    attribute: Attribute,
-    benchmarkPerformances: BenchmarkPerformance[],
-): number => {
-    // must be activities of the given attribute
-    if (benchmarkPerformances.some((bp) => getActivityAttribute(bp.activity) !== attribute)) {
-        throw new Error("Wrong benchmark performance attribute");
-    }
-
-    // must perform all of an attributes activities
-    for (const activity of getAttributeActivities(attribute)) {
-        const benchmarkActivites = benchmarkPerformances.map((bp) => bp.activity);
-        if (!benchmarkActivites.includes(activity))
-            return 0;
-    }
-
-    // must have all benchmarks using a valid performance value (> 0) 
-    for (const benchmarkPerformance of benchmarkPerformances) {
-        if (benchmarkPerformance.performance <= 0)
-            return 0
-    }
-
-    const benchmarkLevels = benchmarkPerformances.map((abp) =>
-        calcBenchmarkLevel(abp.performance, abp.levels),
-    );
-
-    const benchmarkLevelsAvg = Math.round(
-        benchmarkLevels.reduce((sum, curr) => sum + curr, 0) / benchmarkLevels.length,
-    );
-
-    return benchmarkLevelsAvg;
-};
-
-export const calcAttributeLevels = (
-    player: Player,
-    benchmarkPerformances: BenchmarkPerformance[],
-): Record<Attribute, number> => {
-    const attrLevels: Record<Attribute, number> = {
-        [attributes.STRENGTH]: 0,
-        [attributes.POWER]: 0,
-        [attributes.ENDURANCE]: 0,
-        // [attributes.SPEED]: 0,
-        [attributes.AGILITY]: 0,
-    } as const;
-
-    for (const value of Object.values(player)) {
-        if (!value)
-            return attrLevels;
-    }
-
-    (Object.values(attributes) as Attribute[]).forEach((attribute) => {
-        const attrBenchmarkPerformances = benchmarkPerformances.filter(
-            (bp) => getActivityAttribute(bp.activity) === attribute,
-        );
-        attrLevels[attribute] = calcAttributeLevel(attribute, attrBenchmarkPerformances);
-    });
-
-    return attrLevels;
-};
-
-export const calcPlayerLevel = (player: Player, benchmarkPerformances: BenchmarkPerformance[]): number => {
-    for (const value of Object.values(player)) {
-        if (!value)
-            return 0;
-    }
-
-    const attrLevels = calcAttributeLevels(player, benchmarkPerformances);
-    for (const level of Object.values(attrLevels)) {
-        if (!level)
-            return 0;
-    }
-
-    const attrLevelsSum = Object.values(attrLevels).reduce((sum, lvl) => sum + lvl, 0);
-    return Math.round(attrLevelsSum / Object.keys(attributes).length);
-};
-
-// -------------------------------------------------------------------------------------------------
-// Presentation helpers
-// -------------------------------------------------------------------------------------------------
-// export const formatLevelValues = (
-//     levels: Record<number, number>,
-//     activity: Activity,
-// ): Record<number, string> => {
-//     const timedActivities: Activity[] = [activities.RUN, activities.DASH, activities.CONE_DRILL];
-//
-//     const formattedLevels: Record<number, string> = {};
-//     for (const level in levels) {
-//         const lvl = +level as number;
-//         let displayValue = "";
-//         if (timedActivities.includes(activity)) {
-//             displayValue = msToTime(levels[lvl]);
-//         } else if (activity === activities.TREADMILL_DASH) {
-//             displayValue = `${(levels[lvl] * 1000).toFixed(2)} m/s`;
-//         } else if (activity === activities.BROAD_JUMP) {
-//             displayValue = `${(levels[lvl] * 0.0328084).toFixed(2)} ft.`;
-//         } else {
-//             displayValue = kgToLb(levels[lvl]).toFixed(0);
-//         }
-//
-//         formattedLevels[lvl] = displayValue;
-//     }
-//
-//     return formattedLevels;
-// };
-
-// -------------------------------------------------------------------------------------------------
-// Level utilities
-// -------------------------------------------------------------------------------------------------
-const compressLevels = (
+function compressLevels(
     levels: Record<number, number>,
     targetLevelsAmount: number,
-): Record<number, number> => {
+): Record<number, number> {
     const levelsAmount = Object.keys(levels).length;
     if (levelsAmount < targetLevelsAmount) {
         throw new Error(
@@ -166,12 +60,12 @@ const compressLevels = (
     }
 
     return compressedLevels;
-};
+}
 
-const expandLevels = (
-    levels: Levels | Record<number, number>,
+function expandLevels(
+    levels: BaseLevel | Record<number, number>,
     i: number
-): Record<number, number> => {
+): Record<number, number> {
     if (i == 0) {
         // ensure we always use number keys
         const newLevels = {};
@@ -198,15 +92,70 @@ const expandLevels = (
 }
 
 // -------------------------------------------------------------------------------------------------
-// Main level function
+// Standards interpolation (heavy math bits)
 // -------------------------------------------------------------------------------------------------
-export const computeLevels = (
-    age: number,
-    weightKG: number,
-    gender: Gender,
+
+function interpolateStandardsValues(
+    lower: BaseLevelValues,
+    upper: BaseLevelValues,
+    ratio: number,
+): BaseLevelValues {
+    function lerp(k: BaseLevel): number {
+        return (lower[k] as number) + ((upper[k] as number) - (lower[k] as number)) * ratio;
+    }
+
+    return {
+        physicallyActive: lerp("physicallyActive"),
+        beginner: lerp("beginner"),
+        intermediate: lerp("intermediate"),
+        advanced: lerp("advanced"),
+        elite: lerp("elite"),
+    };
+}
+
+function interpolateByBodyWeight(
+    targetAge: number,
+    bodyWeightKG: number,
+    standardsArr: Standard[],
+): BaseLevelValues | null {
+    const ageFilteredStandards = standardsArr.filter((s) => s.metrics.age === targetAge);
+    if (ageFilteredStandards[0].metrics.weight === -1) return ageFilteredStandards[0].levels;
+
+    const weightArray = [...new Set(ageFilteredStandards.map((s) => s.metrics.weight))].sort((a, b) => a - b);
+    const { lower, upper } = findNearestPoints(bodyWeightKG, weightArray);
+
+    const weightLower = ageFilteredStandards.find((s) => s.metrics.weight === lower);
+    const weightUpper = ageFilteredStandards.find((s) => s.metrics.weight === upper);
+    if (!weightLower || !weightUpper) return null;
+
+    let weightRatio = upper === lower ? 1 : (bodyWeightKG - lower) / (upper - lower);
+    weightRatio = Math.max(0, Math.min(1, weightRatio));
+
+    return interpolateStandardsValues(weightLower.levels, weightUpper.levels, weightRatio);
+}
+
+function interpolateActivityLevels(
     activity: Activity,
-) => {
-    const levels = calculateLevels(age, weightKG, gender, activity, standards);
+    player: Player,
+): Record<number, number> {
+    // Filter dataset
+    const filteredStandards = standards[activity]
+        .filter(a => a.metrics.gender === player.gender);
+    if (filteredStandards.length === 0) return {};
+
+    // Age interpolation
+    const ageArray = [...new Set(filteredStandards.map((s) => s.metrics.age))].sort((a, b) => a - b);
+    const { lower: ageLower, upper: ageUpper } = findNearestPoints(player.age, ageArray);
+
+    const lowerValues = interpolateByBodyWeight(ageLower, player.weightKG, filteredStandards);
+    const upperValues = interpolateByBodyWeight(ageUpper, player.weightKG, filteredStandards);
+    if (!lowerValues || !upperValues) return {};
+
+    let ageRatio = ageUpper === ageLower ? 1 : (player.age - ageLower) / (ageUpper - ageLower);
+    ageRatio = Math.max(0, Math.min(1, ageRatio));
+
+    const levels = interpolateStandardsValues(lowerValues, upperValues, ageRatio);
+
     if (levels) {
         const expandedLevels = expandLevels(levels, 5);
         const compressedLevels = compressLevels(expandedLevels, 100);
@@ -217,69 +166,83 @@ export const computeLevels = (
 }
 
 // -------------------------------------------------------------------------------------------------
-// Standards interpolation (heavy math bits)
+// Level calculations (public API)
 // -------------------------------------------------------------------------------------------------
-const calculateLevels = (
-    age: number,
-    weightKG: number,
-    gender: Gender,
-    activity: Activity,
-    standards: StandardsItem[],
-): Levels | null => {
-    // Filter dataset
-    const filtered = standards.filter(
-        (item) => item.gender === gender && item.activityType === activity,
+
+export function calcAttributeLevel(
+    attribute: Attribute,
+    player: Player,
+    activityPerformances: ActivityPerformance[],
+): number {
+    // must be activities of the given attribute
+    if (activityPerformances.some((bp) => getActivityAttribute(bp.activity) !== attribute)) {
+        throw new Error("Wrong activity performance attribute");
+    }
+
+    // must perform all of an attributes activities
+    for (const activity of getAttributeActivities(attribute)) {
+        const filteredActivites = activityPerformances.map((bp) => bp.activity);
+        if (!filteredActivites.includes(activity))
+            return 0;
+    }
+
+    // must have all activties using a valid performance value (> 0) 
+    for (const activityPerformance of activityPerformances) {
+        if (activityPerformance.performance <= 0)
+            return 0
+    }
+
+    const activityLevels = activityPerformances.map((abp) =>
+        findLevel(interpolateActivityLevels(abp.activity, player), abp.performance),
     );
-    if (filtered.length === 0) return null;
 
-    // Age interpolation
-    const ageArray = [...new Set(filtered.map((s) => s.age))].sort((a, b) => a - b);
-    const { lower: ageLower, upper: ageUpper } = findNearestPoints(age, ageArray);
+    const activityLevelsAvg = Math.round(
+        activityLevels.reduce((sum, curr) => sum + curr, 0) / activityLevels.length,
+    );
 
-    const lowerValues = interpolateByBodyWeight(ageLower, weightKG, filtered);
-    const upperValues = interpolateByBodyWeight(ageUpper, weightKG, filtered);
-    if (!lowerValues || !upperValues) return null;
+    return activityLevelsAvg;
+}
 
-    let ageRatio = ageUpper === ageLower ? 1 : (age - ageLower) / (ageUpper - ageLower);
-    ageRatio = Math.max(0, Math.min(1, ageRatio));
+export function calcAllAttributeLevels(
+    player: Player,
+    activityPerformances: ActivityPerformance[],
+): Record<Attribute, number> {
+    const attrLevels: Record<Attribute, number> = {
+        [attributes.STRENGTH]: 0,
+        [attributes.POWER]: 0,
+        [attributes.ENDURANCE]: 0,
+        // [attributes.SPEED]: 0,
+        [attributes.AGILITY]: 0,
+    } as const;
 
-    return interpolateStandardsValues(lowerValues, upperValues, ageRatio);
-};
+    for (const value of Object.values(player)) {
+        if (!value)
+            return attrLevels;
+    }
 
-const interpolateByBodyWeight = (
-    agePoint: number,
-    bodyWeightKG: number,
-    filtered: StandardsItem[],
-): Levels | null => {
-    const ageFiltered = filtered.filter((item) => item.age === agePoint);
-    if (ageFiltered[0].bodyWeight === -1) return ageFiltered[0];
+    (Object.values(attributes) as Attribute[]).forEach((attribute) => {
+        const attrActivityPerformances = activityPerformances.filter(
+            (bp) => getActivityAttribute(bp.activity) === attribute,
+        );
+        attrLevels[attribute] = calcAttributeLevel(attribute, player, attrActivityPerformances);
+    });
 
-    const weightArray = [...new Set(ageFiltered.map((obj) => obj.bodyWeight))].sort((a, b) => a - b);
-    const { lower, upper } = findNearestPoints(bodyWeightKG, weightArray);
+    return attrLevels;
+}
 
-    const weightLower = ageFiltered.find((i) => i.bodyWeight === lower);
-    const weightUpper = ageFiltered.find((i) => i.bodyWeight === upper);
-    if (!weightLower || !weightUpper) return null;
+export function calcPlayerLevel(player: Player, activityPerformances: ActivityPerformance[]): number {
+    for (const value of Object.values(player)) {
+        if (!value)
+            return 0;
+    }
 
-    let weightRatio = upper === lower ? 1 : (bodyWeightKG - lower) / (upper - lower);
-    weightRatio = Math.max(0, Math.min(1, weightRatio));
+    const attrLevels = calcAllAttributeLevels(player, activityPerformances);
+    for (const level of Object.values(attrLevels)) {
+        if (!level)
+            return 0;
+    }
 
-    return interpolateStandardsValues(weightLower, weightUpper, weightRatio);
-};
+    const attrLevelsSum = Object.values(attrLevels).reduce((sum, lvl) => sum + lvl, 0);
+    return Math.round(attrLevelsSum / Object.keys(attributes).length);
+}
 
-const interpolateStandardsValues = (
-    lower: Levels,
-    upper: Levels,
-    ratio: number,
-): Levels => {
-    const lerp = (k: keyof Levels): number =>
-        (lower[k] as number) + ((upper[k] as number) - (lower[k] as number)) * ratio;
-
-    return {
-        physicallyActive: lerp("physicallyActive"),
-        beginner: lerp("beginner"),
-        intermediate: lerp("intermediate"),
-        advanced: lerp("advanced"),
-        elite: lerp("elite"),
-    };
-};

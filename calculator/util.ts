@@ -70,30 +70,33 @@ export type Gender = typeof genders[keyof typeof genders];
 // -------------------------------------------------------------------------------------------------
 // Data model interfaces
 // -------------------------------------------------------------------------------------------------
-export interface BenchmarkPerformance {
+export interface ActivityPerformance {
     activity: Activity;
     performance: number;
-    /**
-     * Key: level number, Value: performance value (kg, ms, m/s, etc.)
-     */
-    levels: Record<number, number>;
 }
 
-export interface Levels {
-    /** KG or -1 for body‑weight‑agnostic entries */
-    physicallyActive: number;
-    beginner: number;
-    intermediate: number;
-    advanced: number;
-    elite: number;
-}
+export type BaseLevel =
+    | "physicallyActive"
+    | "beginner"
+    | "intermediate"
+    | "advanced"
+    | "elite";
 
-export interface StandardsItem extends Levels {
-    bodyWeight: number;
-    gender: Gender;
-    activityType: Activity;
+interface Metrics {
     age: number;
+    weight: number;
+    gender: Gender;
+};
+
+export interface Standard {
+    metrics: Metrics;
+    levels: Record<BaseLevel, number>;
 }
+
+export type StandardsMap = Record<
+    Activity,
+    Standard[]
+>;
 
 // -------------------------------------------------------------------------------------------------
 // Conversion utilities
@@ -101,7 +104,11 @@ export interface StandardsItem extends Levels {
 export const lbToKg = (lb: number | string): number => +lb * 0.453592;
 export const kgToLb = (kg: number | string): number => +kg * 2.20462;
 
-export const feetToCm = (feet: number): number => feet * 30.48;
+export const minToMs = (min) => min * 60000;
+export const secToMs = (sec) => sec * 1000;
+
+export const feetToCm = (feet) => feet * 30.48;
+export const inchesToCm = (inches) => inches * 2.54;
 
 export const mphToMtrsPerMs = (mph: number): number => (mph * 0.44704) / 1000;
 
