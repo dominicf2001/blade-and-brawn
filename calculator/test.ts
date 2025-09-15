@@ -4,8 +4,8 @@ import rawStandards from "../data/standards.json" assert { type: "json" }
 
 const player: Player = {
     metrics: {
-        age: 18,
-        weight: lbToKg(200),
+        age: 25,
+        weight: lbToKg(190),
         gender: genders.MALE
     }
 };
@@ -14,30 +14,30 @@ const computedPerformances: ActivityPerformance[] = [
     // STRENGTH
     {
         activity: activities.BENCH_PRESS,
-        performance: lbToKg(200)
+        performance: lbToKg(225)
     },
     {
         activity: activities.DEADLIFT,
-        performance: lbToKg(200),
+        performance: lbToKg(270),
     },
     {
         activity: activities.BACK_SQUAT,
-        performance: lbToKg(200),
+        performance: lbToKg(190),
     },
     // POWER
     {
         activity: activities.BROAD_JUMP,
-        performance: feetToCm(10) + inchesToCm(2),
+        performance: feetToCm(105) + inchesToCm(5),
     },
     // ENDURANCE
     {
         activity: activities.RUN,
-        performance: minToMs(5) + secToMs(20),
+        performance: minToMs(7) + secToMs(15),
     },
     // AGILITY
     {
         activity: activities.CONE_DRILL,
-        performance: secToMs(5),
+        performance: secToMs(9),
     },
 ];
 

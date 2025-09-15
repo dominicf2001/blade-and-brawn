@@ -11,8 +11,8 @@ import { Activity, Attribute, attributes, ActivityPerformance, getActivityAttrib
 //  
 
 type LevelCalculatorConfig = {
-    compressTo?: number;
     expandIters?: number;
+    compressTo?: number;
 }
 
 type LevelCalculatorOutput = {
@@ -26,8 +26,8 @@ export class LevelCalculator {
 
     public constructor(standards: Standards, cfg: LevelCalculatorConfig = {}) {
         this.cfg = {
-            compressTo: cfg.compressTo ?? 100,
-            expandIters: cfg.expandIters ?? 5
+            expandIters: cfg.expandIters ?? 5,
+            compressTo: cfg.compressTo ?? 100
         }
         this.standards = standards;
     }
@@ -183,11 +183,13 @@ export class LevelCalculator {
         if (Object.keys(lower).length !== Object.keys(upper).length)
             throw new Error("Cannot interpolate between varying number of levels");
 
-        function lerp(lvl: number): number {
-            return (lower[lvl] as number) + ((upper[lvl] as number) - (lower[lvl] as number)) * ratio;
+        const lerp = (lvl: string) => (lower[lvl] as number) + ((upper[lvl] as number) - (lower[lvl] as number)) * ratio;
+
+        const interpolatedLevels = {};
+        for (const lvl in lower) {
+            interpolatedLevels[lvl] = lerp(lvl);
         }
 
-        const interpolatedLevels = Object.keys(lower).map(lvl => lerp(+lvl));
         return interpolatedLevels;
     }
 
@@ -282,8 +284,9 @@ export class Standards {
         levels: Levels,
         i: number
     ): Levels {
-        if (i == 0)
+        if (i == 0) {
             return levels;
+        }
 
         const newLevels = {};
         let j = 1;

@@ -73,7 +73,7 @@ export interface ActivityPerformance {
     performance: number;
 }
 
-export type Levels = Record<number, number>
+export type Levels = Record<string, number>
 
 export interface Metrics {
     age: number;
