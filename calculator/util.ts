@@ -16,9 +16,7 @@ export type Attribute = typeof attributes[keyof typeof attributes];
 // -------------------------------------------------------------------------------------------------
 
 export interface Player {
-    age: number,
-    weightKG: number,
-    gender: Gender
+    metrics: Metrics;
 }
 
 export const activities = Object.freeze({
@@ -75,14 +73,9 @@ export interface ActivityPerformance {
     performance: number;
 }
 
-export type BaseLevel =
-    | "physicallyActive"
-    | "beginner"
-    | "intermediate"
-    | "advanced"
-    | "elite";
+export type Levels = Record<number, number>
 
-interface Metrics {
+export interface Metrics {
     age: number;
     weight: number;
     gender: Gender;
@@ -90,7 +83,7 @@ interface Metrics {
 
 export interface Standard {
     metrics: Metrics;
-    levels: Record<BaseLevel, number>;
+    levels: Levels;
 }
 
 export type StandardsMap = Record<

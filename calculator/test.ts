@@ -1,10 +1,12 @@
 import { activities, ActivityPerformance, feetToCm, genders, inchesToCm, lbToKg, minToMs, Player, secToMs } from "./util";
-import { calcAllAttributeLevels, calcPlayerLevel } from "./calc.ts";
+import { LevelCalculator } from "./calc.ts";
 
 const player: Player = {
-    age: 18,
-    weightKG: lbToKg(200),
-    gender: genders.MALE
+    metrics: {
+        age: 18,
+        weight: lbToKg(200),
+        gender: genders.MALE
+    }
 };
 
 const computedPerformances: ActivityPerformance[] = [
@@ -38,9 +40,13 @@ const computedPerformances: ActivityPerformance[] = [
     },
 ];
 
+console.log(Bun.argv);
+// const levelCalculator = new LevelCalculator({ compressTo: +Bun.argv[2], expandIters: +Bun.argv[3] });
+const levelCalculator = new LevelCalculator();
+
 const levels = {
-    attributes: calcAllAttributeLevels(player, computedPerformances),
-    player: calcPlayerLevel(player, computedPerformances)
+    attributes: levelCalculator.calcAllAttributeLevels(player, computedPerformances),
+    player: levelCalculator.calcPlayerLevel(player, computedPerformances)
 };
 
 console.log(levels);

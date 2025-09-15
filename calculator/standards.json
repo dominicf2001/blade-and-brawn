@@ -7,11 +7,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 34,
-        "beginner": 59,
-        "intermediate": 78,
-        "advanced": 107,
-        "elite": 136
+        "1": 34,
+        "2": 59,
+        "3": 78,
+        "4": 107,
+        "5": 136
       }
     },
     {
@@ -21,11 +21,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 38,
-        "beginner": 65,
-        "intermediate": 87,
-        "advanced": 120,
-        "elite": 158
+        "1": 38,
+        "2": 65,
+        "3": 87,
+        "4": 120,
+        "5": 158
       }
     },
     {
@@ -35,11 +35,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 46,
-        "beginner": 80,
-        "intermediate": 106,
-        "advanced": 146,
-        "elite": 192
+        "1": 46,
+        "2": 80,
+        "3": 106,
+        "4": 146,
+        "5": 192
       }
     },
     {
@@ -49,11 +49,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 49,
-        "beginner": 85,
-        "intermediate": 113,
-        "advanced": 155,
-        "elite": 205
+        "1": 49,
+        "2": 85,
+        "3": 113,
+        "4": 155,
+        "5": 205
       }
     },
     {
@@ -63,11 +63,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 52,
-        "beginner": 89,
-        "intermediate": 118,
-        "advanced": 162,
-        "elite": 209
+        "1": 52,
+        "2": 89,
+        "3": 118,
+        "4": 162,
+        "5": 209
       }
     },
     {
@@ -77,11 +77,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 53,
-        "beginner": 90,
-        "intermediate": 120,
-        "advanced": 165,
-        "elite": 213
+        "1": 53,
+        "2": 90,
+        "3": 120,
+        "4": 165,
+        "5": 213
       }
     },
     {
@@ -91,11 +91,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 56,
-        "beginner": 97,
-        "intermediate": 129,
-        "advanced": 177,
-        "elite": 219
+        "1": 56,
+        "2": 97,
+        "3": 129,
+        "4": 177,
+        "5": 219
       }
     },
     {
@@ -105,11 +105,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 38,
-        "beginner": 65,
-        "intermediate": 87,
-        "advanced": 120,
-        "elite": 153
+        "1": 38,
+        "2": 65,
+        "3": 87,
+        "4": 120,
+        "5": 153
       }
     },
     {
@@ -119,11 +119,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 46,
-        "beginner": 78,
-        "intermediate": 104,
-        "advanced": 143,
-        "elite": 189
+        "1": 46,
+        "2": 78,
+        "3": 104,
+        "4": 143,
+        "5": 189
       }
     },
     {
@@ -133,11 +133,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 51,
-        "beginner": 87,
-        "intermediate": 116,
-        "advanced": 160,
-        "elite": 210
+        "1": 51,
+        "2": 87,
+        "3": 116,
+        "4": 160,
+        "5": 210
       }
     },
     {
@@ -147,11 +147,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 58,
-        "beginner": 98,
-        "intermediate": 130,
-        "advanced": 179,
-        "elite": 236
+        "1": 58,
+        "2": 98,
+        "3": 130,
+        "4": 179,
+        "5": 236
       }
     },
     {
@@ -161,11 +161,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 57,
-        "beginner": 98,
-        "intermediate": 131,
-        "advanced": 180,
-        "elite": 232
+        "1": 57,
+        "2": 98,
+        "3": 131,
+        "4": 180,
+        "5": 232
       }
     },
     {
@@ -175,11 +175,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 70,
-        "beginner": 120,
-        "intermediate": 160,
-        "advanced": 220,
-        "elite": 285
+        "1": 70,
+        "2": 120,
+        "3": 160,
+        "4": 220,
+        "5": 285
       }
     },
     {
@@ -189,11 +189,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 68,
-        "beginner": 116,
-        "intermediate": 164,
-        "advanced": 226,
-        "elite": 282
+        "1": 68,
+        "2": 116,
+        "3": 164,
+        "4": 226,
+        "5": 282
       }
     },
     {
@@ -203,11 +203,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 40,
-        "beginner": 68,
-        "intermediate": 91,
-        "advanced": 125,
-        "elite": 159
+        "1": 40,
+        "2": 68,
+        "3": 91,
+        "4": 125,
+        "5": 159
       }
     },
     {
@@ -217,11 +217,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 48,
-        "beginner": 82,
-        "intermediate": 110,
-        "advanced": 151,
-        "elite": 199
+        "1": 48,
+        "2": 82,
+        "3": 110,
+        "4": 151,
+        "5": 199
       }
     },
     {
@@ -231,11 +231,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 53,
-        "beginner": 91,
-        "intermediate": 122,
-        "advanced": 167,
-        "elite": 220
+        "1": 53,
+        "2": 91,
+        "3": 122,
+        "4": 167,
+        "5": 220
       }
     },
     {
@@ -245,11 +245,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 58,
-        "beginner": 99,
-        "intermediate": 132,
-        "advanced": 181,
-        "elite": 238
+        "1": 58,
+        "2": 99,
+        "3": 132,
+        "4": 181,
+        "5": 238
       }
     },
     {
@@ -259,11 +259,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 62,
-        "beginner": 106,
-        "intermediate": 142,
-        "advanced": 195,
-        "elite": 252
+        "1": 62,
+        "2": 106,
+        "3": 142,
+        "4": 195,
+        "5": 252
       }
     },
     {
@@ -273,11 +273,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 66,
-        "beginner": 113,
-        "intermediate": 150,
-        "advanced": 206,
-        "elite": 267
+        "1": 66,
+        "2": 113,
+        "3": 150,
+        "4": 206,
+        "5": 267
       }
     },
     {
@@ -287,11 +287,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 74,
-        "beginner": 127,
-        "intermediate": 169,
-        "advanced": 232,
-        "elite": 291
+        "1": 74,
+        "2": 127,
+        "3": 169,
+        "4": 232,
+        "5": 291
       }
     },
     {
@@ -301,11 +301,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 38,
-        "beginner": 65,
-        "intermediate": 86,
-        "advanced": 118,
-        "elite": 142
+        "1": 38,
+        "2": 65,
+        "3": 86,
+        "4": 118,
+        "5": 142
       }
     },
     {
@@ -315,11 +315,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 43,
-        "beginner": 73,
-        "intermediate": 98,
-        "advanced": 134,
-        "elite": 161
+        "1": 43,
+        "2": 73,
+        "3": 98,
+        "4": 134,
+        "5": 161
       }
     },
     {
@@ -329,11 +329,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 46,
-        "beginner": 79,
-        "intermediate": 105,
-        "advanced": 144,
-        "elite": 173
+        "1": 46,
+        "2": 79,
+        "3": 105,
+        "4": 144,
+        "5": 173
       }
     },
     {
@@ -343,11 +343,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 54,
-        "beginner": 92,
-        "intermediate": 123,
-        "advanced": 169,
-        "elite": 203
+        "1": 54,
+        "2": 92,
+        "3": 123,
+        "4": 169,
+        "5": 203
       }
     },
     {
@@ -357,11 +357,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 56,
-        "beginner": 97,
-        "intermediate": 129,
-        "advanced": 177,
-        "elite": 213
+        "1": 56,
+        "2": 97,
+        "3": 129,
+        "4": 177,
+        "5": 213
       }
     },
     {
@@ -371,11 +371,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 61,
-        "beginner": 104,
-        "intermediate": 139,
-        "advanced": 191,
-        "elite": 229
+        "1": 61,
+        "2": 104,
+        "3": 139,
+        "4": 191,
+        "5": 229
       }
     },
     {
@@ -385,11 +385,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 66,
-        "beginner": 113,
-        "intermediate": 150,
-        "advanced": 206,
-        "elite": 248
+        "1": 66,
+        "2": 113,
+        "3": 150,
+        "4": 206,
+        "5": 248
       }
     },
     {
@@ -399,11 +399,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 32,
-        "beginner": 55,
-        "intermediate": 73,
-        "advanced": 100,
-        "elite": 132
+        "1": 32,
+        "2": 55,
+        "3": 73,
+        "4": 100,
+        "5": 132
       }
     },
     {
@@ -413,11 +413,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 37,
-        "beginner": 64,
-        "intermediate": 85,
-        "advanced": 117,
-        "elite": 154
+        "1": 37,
+        "2": 64,
+        "3": 85,
+        "4": 117,
+        "5": 154
       }
     },
     {
@@ -427,11 +427,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 42,
-        "beginner": 71,
-        "intermediate": 95,
-        "advanced": 131,
-        "elite": 172
+        "1": 42,
+        "2": 71,
+        "3": 95,
+        "4": 131,
+        "5": 172
       }
     },
     {
@@ -441,11 +441,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 46,
-        "beginner": 80,
-        "intermediate": 106,
-        "advanced": 146,
-        "elite": 192
+        "1": 46,
+        "2": 80,
+        "3": 106,
+        "4": 146,
+        "5": 192
       }
     },
     {
@@ -455,11 +455,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 50,
-        "beginner": 86,
-        "intermediate": 114,
-        "advanced": 157,
-        "elite": 207
+        "1": 50,
+        "2": 86,
+        "3": 114,
+        "4": 157,
+        "5": 207
       }
     },
     {
@@ -469,11 +469,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 53,
-        "beginner": 90,
-        "intermediate": 120,
-        "advanced": 165,
-        "elite": 218
+        "1": 53,
+        "2": 90,
+        "3": 120,
+        "4": 165,
+        "5": 218
       }
     },
     {
@@ -483,11 +483,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 54,
-        "beginner": 93,
-        "intermediate": 124,
-        "advanced": 171,
-        "elite": 225
+        "1": 54,
+        "2": 93,
+        "3": 124,
+        "4": 171,
+        "5": 225
       }
     },
     {
@@ -497,11 +497,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 23,
-        "beginner": 40,
-        "intermediate": 53,
-        "advanced": 73,
-        "elite": 96
+        "1": 23,
+        "2": 40,
+        "3": 53,
+        "4": 73,
+        "5": 96
       }
     },
     {
@@ -511,11 +511,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 33,
-        "beginner": 57,
-        "intermediate": 76,
-        "advanced": 105,
-        "elite": 138
+        "1": 33,
+        "2": 57,
+        "3": 76,
+        "4": 105,
+        "5": 138
       }
     },
     {
@@ -525,11 +525,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 40,
-        "beginner": 68,
-        "intermediate": 91,
-        "advanced": 125,
-        "elite": 165
+        "1": 40,
+        "2": 68,
+        "3": 91,
+        "4": 125,
+        "5": 165
       }
     },
     {
@@ -539,11 +539,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 43,
-        "beginner": 74,
-        "intermediate": 98,
-        "advanced": 135,
-        "elite": 178
+        "1": 43,
+        "2": 74,
+        "3": 98,
+        "4": 135,
+        "5": 178
       }
     },
     {
@@ -553,11 +553,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 47,
-        "beginner": 80,
-        "intermediate": 107,
-        "advanced": 147,
-        "elite": 194
+        "1": 47,
+        "2": 80,
+        "3": 107,
+        "4": 147,
+        "5": 194
       }
     },
     {
@@ -567,11 +567,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 48,
-        "beginner": 83,
-        "intermediate": 110,
-        "advanced": 151,
-        "elite": 199
+        "1": 48,
+        "2": 83,
+        "3": 110,
+        "4": 151,
+        "5": 199
       }
     },
     {
@@ -581,11 +581,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 50,
-        "beginner": 86,
-        "intermediate": 115,
-        "advanced": 158,
-        "elite": 208
+        "1": 50,
+        "2": 86,
+        "3": 115,
+        "4": 158,
+        "5": 208
       }
     },
     {
@@ -595,11 +595,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 22,
-        "beginner": 38,
-        "intermediate": 51,
-        "advanced": 70,
-        "elite": 92
+        "1": 22,
+        "2": 38,
+        "3": 51,
+        "4": 70,
+        "5": 92
       }
     },
     {
@@ -609,11 +609,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 30,
-        "beginner": 51,
-        "intermediate": 68,
-        "advanced": 94,
-        "elite": 123
+        "1": 30,
+        "2": 51,
+        "3": 68,
+        "4": 94,
+        "5": 123
       }
     },
     {
@@ -623,11 +623,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 33,
-        "beginner": 56,
-        "intermediate": 75,
-        "advanced": 103,
-        "elite": 136
+        "1": 33,
+        "2": 56,
+        "3": 75,
+        "4": 103,
+        "5": 136
       }
     },
     {
@@ -637,11 +637,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 34,
-        "beginner": 59,
-        "intermediate": 78,
-        "advanced": 107,
-        "elite": 141
+        "1": 34,
+        "2": 59,
+        "3": 78,
+        "4": 107,
+        "5": 141
       }
     },
     {
@@ -651,11 +651,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 35,
-        "beginner": 59,
-        "intermediate": 79,
-        "advanced": 109,
-        "elite": 143
+        "1": 35,
+        "2": 59,
+        "3": 79,
+        "4": 109,
+        "5": 143
       }
     },
     {
@@ -665,11 +665,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 35,
-        "beginner": 60,
-        "intermediate": 80,
-        "advanced": 110,
-        "elite": 145
+        "1": 35,
+        "2": 60,
+        "3": 80,
+        "4": 110,
+        "5": 145
       }
     },
     {
@@ -679,11 +679,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 36,
-        "beginner": 62,
-        "intermediate": 82,
-        "advanced": 113,
-        "elite": 149
+        "1": 36,
+        "2": 62,
+        "3": 82,
+        "4": 113,
+        "5": 149
       }
     },
     {
@@ -693,11 +693,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 18,
-        "beginner": 30,
-        "intermediate": 40,
-        "advanced": 55,
-        "elite": 73
+        "1": 18,
+        "2": 30,
+        "3": 40,
+        "4": 55,
+        "5": 73
       }
     },
     {
@@ -707,11 +707,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 24,
-        "beginner": 40,
-        "intermediate": 54,
-        "advanced": 74,
-        "elite": 97
+        "1": 24,
+        "2": 40,
+        "3": 54,
+        "4": 74,
+        "5": 97
       }
     },
     {
@@ -721,11 +721,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 26,
-        "beginner": 44,
-        "intermediate": 59,
-        "advanced": 81,
-        "elite": 107
+        "1": 26,
+        "2": 44,
+        "3": 59,
+        "4": 81,
+        "5": 107
       }
     },
     {
@@ -735,11 +735,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 27,
-        "beginner": 46,
-        "intermediate": 62,
-        "advanced": 85,
-        "elite": 112
+        "1": 27,
+        "2": 46,
+        "3": 62,
+        "4": 85,
+        "5": 112
       }
     },
     {
@@ -749,11 +749,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 28,
-        "beginner": 46,
-        "intermediate": 62,
-        "advanced": 86,
-        "elite": 113
+        "1": 28,
+        "2": 46,
+        "3": 62,
+        "4": 86,
+        "5": 113
       }
     },
     {
@@ -763,11 +763,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 28,
-        "beginner": 47,
-        "intermediate": 63,
-        "advanced": 87,
-        "elite": 115
+        "1": 28,
+        "2": 47,
+        "3": 63,
+        "4": 87,
+        "5": 115
       }
     },
     {
@@ -777,11 +777,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 28,
-        "beginner": 49,
-        "intermediate": 65,
-        "advanced": 89,
-        "elite": 117
+        "1": 28,
+        "2": 49,
+        "3": 65,
+        "4": 89,
+        "5": 117
       }
     },
     {
@@ -791,11 +791,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 23,
-        "beginner": 32,
-        "intermediate": 44,
-        "advanced": 61,
-        "elite": 84
+        "1": 23,
+        "2": 32,
+        "3": 44,
+        "4": 61,
+        "5": 84
       }
     },
     {
@@ -805,11 +805,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 29,
-        "beginner": 41,
-        "intermediate": 56,
-        "advanced": 77,
-        "elite": 106
+        "1": 29,
+        "2": 41,
+        "3": 56,
+        "4": 77,
+        "5": 106
       }
     },
     {
@@ -819,11 +819,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 32,
-        "beginner": 44,
-        "intermediate": 61,
-        "advanced": 84,
-        "elite": 116
+        "1": 32,
+        "2": 44,
+        "3": 61,
+        "4": 84,
+        "5": 116
       }
     },
     {
@@ -833,11 +833,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 35,
-        "beginner": 48,
-        "intermediate": 66,
-        "advanced": 91,
-        "elite": 126
+        "1": 35,
+        "2": 48,
+        "3": 66,
+        "4": 91,
+        "5": 126
       }
     },
     {
@@ -847,11 +847,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 35,
-        "beginner": 48,
-        "intermediate": 66,
-        "advanced": 91,
-        "elite": 125
+        "1": 35,
+        "2": 48,
+        "3": 66,
+        "4": 91,
+        "5": 125
       }
     },
     {
@@ -861,11 +861,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 36,
-        "beginner": 50,
-        "intermediate": 68,
-        "advanced": 94,
-        "elite": 130
+        "1": 36,
+        "2": 50,
+        "3": 68,
+        "4": 94,
+        "5": 130
       }
     },
     {
@@ -875,11 +875,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 53,
-        "beginner": 73,
-        "intermediate": 100,
-        "advanced": 138,
-        "elite": 190
+        "1": 53,
+        "2": 73,
+        "3": 100,
+        "4": 138,
+        "5": 190
       }
     },
     {
@@ -889,11 +889,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 27,
-        "beginner": 37,
-        "intermediate": 51,
-        "advanced": 70,
-        "elite": 97
+        "1": 27,
+        "2": 37,
+        "3": 51,
+        "4": 70,
+        "5": 97
       }
     },
     {
@@ -903,11 +903,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 32,
-        "beginner": 45,
-        "intermediate": 61,
-        "advanced": 85,
-        "elite": 118
+        "1": 32,
+        "2": 45,
+        "3": 61,
+        "4": 85,
+        "5": 118
       }
     },
     {
@@ -917,11 +917,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 35,
-        "beginner": 49,
-        "intermediate": 67,
-        "advanced": 93,
-        "elite": 128
+        "1": 35,
+        "2": 49,
+        "3": 67,
+        "4": 93,
+        "5": 128
       }
     },
     {
@@ -931,11 +931,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 36,
-        "beginner": 50,
-        "intermediate": 69,
-        "advanced": 95,
-        "elite": 132
+        "1": 36,
+        "2": 50,
+        "3": 69,
+        "4": 95,
+        "5": 132
       }
     },
     {
@@ -945,11 +945,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 40,
-        "beginner": 55,
-        "intermediate": 76,
-        "advanced": 105,
-        "elite": 145
+        "1": 40,
+        "2": 55,
+        "3": 76,
+        "4": 105,
+        "5": 145
       }
     },
     {
@@ -959,11 +959,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 46,
-        "beginner": 63,
-        "intermediate": 87,
-        "advanced": 120,
-        "elite": 165
+        "1": 46,
+        "2": 63,
+        "3": 87,
+        "4": 120,
+        "5": 165
       }
     },
     {
@@ -973,11 +973,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 57,
-        "beginner": 75,
-        "intermediate": 105,
-        "advanced": 140,
-        "elite": 195
+        "1": 57,
+        "2": 75,
+        "3": 105,
+        "4": 140,
+        "5": 195
       }
     },
     {
@@ -987,11 +987,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 28,
-        "beginner": 43,
-        "intermediate": 65,
-        "advanced": 89,
-        "elite": 112
+        "1": 28,
+        "2": 43,
+        "3": 65,
+        "4": 89,
+        "5": 112
       }
     },
     {
@@ -1001,11 +1001,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 34,
-        "beginner": 48,
-        "intermediate": 71,
-        "advanced": 97,
-        "elite": 128
+        "1": 34,
+        "2": 48,
+        "3": 71,
+        "4": 97,
+        "5": 128
       }
     },
     {
@@ -1015,11 +1015,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 36,
-        "beginner": 55,
-        "intermediate": 80,
-        "advanced": 110,
-        "elite": 144
+        "1": 36,
+        "2": 55,
+        "3": 80,
+        "4": 110,
+        "5": 144
       }
     },
     {
@@ -1029,11 +1029,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 38,
-        "beginner": 59,
-        "intermediate": 85,
-        "advanced": 117,
-        "elite": 154
+        "1": 38,
+        "2": 59,
+        "3": 85,
+        "4": 117,
+        "5": 154
       }
     },
     {
@@ -1043,11 +1043,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 44,
-        "beginner": 62,
-        "intermediate": 89,
-        "advanced": 123,
-        "elite": 157
+        "1": 44,
+        "2": 62,
+        "3": 89,
+        "4": 123,
+        "5": 157
       }
     },
     {
@@ -1057,11 +1057,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 51,
-        "beginner": 68,
-        "intermediate": 97,
-        "advanced": 134,
-        "elite": 171
+        "1": 51,
+        "2": 68,
+        "3": 97,
+        "4": 134,
+        "5": 171
       }
     },
     {
@@ -1071,11 +1071,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 60,
-        "beginner": 81,
-        "intermediate": 114,
-        "advanced": 157,
-        "elite": 192
+        "1": 60,
+        "2": 81,
+        "3": 114,
+        "4": 157,
+        "5": 192
       }
     },
     {
@@ -1085,11 +1085,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 23,
-        "beginner": 38,
-        "intermediate": 41,
-        "advanced": 69,
-        "elite": 78
+        "1": 23,
+        "2": 38,
+        "3": 41,
+        "4": 69,
+        "5": 78
       }
     },
     {
@@ -1099,11 +1099,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 30,
-        "beginner": 49,
-        "intermediate": 55,
-        "advanced": 90,
-        "elite": 100
+        "1": 30,
+        "2": 49,
+        "3": 55,
+        "4": 90,
+        "5": 100
       }
     },
     {
@@ -1113,11 +1113,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 33,
-        "beginner": 53,
-        "intermediate": 59,
-        "advanced": 96,
-        "elite": 108
+        "1": 33,
+        "2": 53,
+        "3": 59,
+        "4": 96,
+        "5": 108
       }
     },
     {
@@ -1127,11 +1127,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 34,
-        "beginner": 55,
-        "intermediate": 62,
-        "advanced": 101,
-        "elite": 114
+        "1": 34,
+        "2": 55,
+        "3": 62,
+        "4": 101,
+        "5": 114
       }
     },
     {
@@ -1141,11 +1141,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 36,
-        "beginner": 58,
-        "intermediate": 65,
-        "advanced": 105,
-        "elite": 119
+        "1": 36,
+        "2": 58,
+        "3": 65,
+        "4": 105,
+        "5": 119
       }
     },
     {
@@ -1155,11 +1155,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 38,
-        "beginner": 61,
-        "intermediate": 69,
-        "advanced": 111,
-        "elite": 126
+        "1": 38,
+        "2": 61,
+        "3": 69,
+        "4": 111,
+        "5": 126
       }
     },
     {
@@ -1169,11 +1169,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 40,
-        "beginner": 64,
-        "intermediate": 73,
-        "advanced": 117,
-        "elite": 133
+        "1": 40,
+        "2": 64,
+        "3": 73,
+        "4": 117,
+        "5": 133
       }
     },
     {
@@ -1183,11 +1183,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 19,
-        "beginner": 33,
-        "intermediate": 40,
-        "advanced": 60,
-        "elite": 76
+        "1": 19,
+        "2": 33,
+        "3": 40,
+        "4": 60,
+        "5": 76
       }
     },
     {
@@ -1197,11 +1197,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 24,
-        "beginner": 41,
-        "intermediate": 54,
-        "advanced": 74,
-        "elite": 97
+        "1": 24,
+        "2": 41,
+        "3": 54,
+        "4": 74,
+        "5": 97
       }
     },
     {
@@ -1211,11 +1211,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 25,
-        "beginner": 42,
-        "intermediate": 56,
-        "advanced": 76,
-        "elite": 102
+        "1": 25,
+        "2": 42,
+        "3": 56,
+        "4": 76,
+        "5": 102
       }
     },
     {
@@ -1225,11 +1225,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 26,
-        "beginner": 44,
-        "intermediate": 59,
-        "advanced": 81,
-        "elite": 107
+        "1": 26,
+        "2": 44,
+        "3": 59,
+        "4": 81,
+        "5": 107
       }
     },
     {
@@ -1239,11 +1239,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 29,
-        "beginner": 49,
-        "intermediate": 64,
-        "advanced": 90,
-        "elite": 118
+        "1": 29,
+        "2": 49,
+        "3": 64,
+        "4": 90,
+        "5": 118
       }
     },
     {
@@ -1253,11 +1253,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 29,
-        "beginner": 50,
-        "intermediate": 67,
-        "advanced": 92,
-        "elite": 121
+        "1": 29,
+        "2": 50,
+        "3": 67,
+        "4": 92,
+        "5": 121
       }
     },
     {
@@ -1267,11 +1267,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 35,
-        "beginner": 59,
-        "intermediate": 70,
-        "advanced": 111,
-        "elite": 130
+        "1": 35,
+        "2": 59,
+        "3": 70,
+        "4": 111,
+        "5": 130
       }
     },
     {
@@ -1281,11 +1281,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 15,
-        "beginner": 26,
-        "intermediate": 35,
-        "advanced": 48,
-        "elite": 63
+        "1": 15,
+        "2": 26,
+        "3": 35,
+        "4": 48,
+        "5": 63
       }
     },
     {
@@ -1295,11 +1295,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 18,
-        "beginner": 33,
-        "intermediate": 44,
-        "advanced": 62,
-        "elite": 81
+        "1": 18,
+        "2": 33,
+        "3": 44,
+        "4": 62,
+        "5": 81
       }
     },
     {
@@ -1309,11 +1309,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 20,
-        "beginner": 35,
-        "intermediate": 47,
-        "advanced": 65,
-        "elite": 83
+        "1": 20,
+        "2": 35,
+        "3": 47,
+        "4": 65,
+        "5": 83
       }
     },
     {
@@ -1323,11 +1323,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 22,
-        "beginner": 37,
-        "intermediate": 48,
-        "advanced": 66,
-        "elite": 85
+        "1": 22,
+        "2": 37,
+        "3": 48,
+        "4": 66,
+        "5": 85
       }
     },
     {
@@ -1337,11 +1337,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 24,
-        "beginner": 40,
-        "intermediate": 54,
-        "advanced": 74,
-        "elite": 93
+        "1": 24,
+        "2": 40,
+        "3": 54,
+        "4": 74,
+        "5": 93
       }
     },
     {
@@ -1351,11 +1351,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 25,
-        "beginner": 42,
-        "intermediate": 56,
-        "advanced": 78,
-        "elite": 99
+        "1": 25,
+        "2": 42,
+        "3": 56,
+        "4": 78,
+        "5": 99
       }
     },
     {
@@ -1365,11 +1365,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 26,
-        "beginner": 45,
-        "intermediate": 58,
-        "advanced": 79,
-        "elite": 102
+        "1": 26,
+        "2": 45,
+        "3": 58,
+        "4": 79,
+        "5": 102
       }
     },
     {
@@ -1379,11 +1379,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 14,
-        "beginner": 24,
-        "intermediate": 32,
-        "advanced": 44,
-        "elite": 58
+        "1": 14,
+        "2": 24,
+        "3": 32,
+        "4": 44,
+        "5": 58
       }
     },
     {
@@ -1393,11 +1393,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 15,
-        "beginner": 25,
-        "intermediate": 33,
-        "advanced": 46,
-        "elite": 60
+        "1": 15,
+        "2": 25,
+        "3": 33,
+        "4": 46,
+        "5": 60
       }
     },
     {
@@ -1407,11 +1407,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 16,
-        "beginner": 27,
-        "intermediate": 36,
-        "advanced": 50,
-        "elite": 65
+        "1": 16,
+        "2": 27,
+        "3": 36,
+        "4": 50,
+        "5": 65
       }
     },
     {
@@ -1421,11 +1421,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 17,
-        "beginner": 28,
-        "intermediate": 37,
-        "advanced": 52,
-        "elite": 69
+        "1": 17,
+        "2": 28,
+        "3": 37,
+        "4": 52,
+        "5": 69
       }
     },
     {
@@ -1435,11 +1435,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 17,
-        "beginner": 29,
-        "intermediate": 39,
-        "advanced": 54,
-        "elite": 71
+        "1": 17,
+        "2": 29,
+        "3": 39,
+        "4": 54,
+        "5": 71
       }
     },
     {
@@ -1449,11 +1449,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 18,
-        "beginner": 30,
-        "intermediate": 40,
-        "advanced": 55,
-        "elite": 73
+        "1": 18,
+        "2": 30,
+        "3": 40,
+        "4": 55,
+        "5": 73
       }
     },
     {
@@ -1463,11 +1463,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 18,
-        "beginner": 30,
-        "intermediate": 40,
-        "advanced": 55,
-        "elite": 73
+        "1": 18,
+        "2": 30,
+        "3": 40,
+        "4": 55,
+        "5": 73
       }
     },
     {
@@ -1477,11 +1477,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 11,
-        "beginner": 19,
-        "intermediate": 25,
-        "advanced": 35,
-        "elite": 46
+        "1": 11,
+        "2": 19,
+        "3": 25,
+        "4": 35,
+        "5": 46
       }
     },
     {
@@ -1491,11 +1491,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 11,
-        "beginner": 20,
-        "intermediate": 26,
-        "advanced": 36,
-        "elite": 48
+        "1": 11,
+        "2": 20,
+        "3": 26,
+        "4": 36,
+        "5": 48
       }
     },
     {
@@ -1505,11 +1505,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 12,
-        "beginner": 21,
-        "intermediate": 28,
-        "advanced": 39,
-        "elite": 52
+        "1": 12,
+        "2": 21,
+        "3": 28,
+        "4": 39,
+        "5": 52
       }
     },
     {
@@ -1519,11 +1519,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 13,
-        "beginner": 23,
-        "intermediate": 30,
-        "advanced": 41,
-        "elite": 54
+        "1": 13,
+        "2": 23,
+        "3": 30,
+        "4": 41,
+        "5": 54
       }
     },
     {
@@ -1533,11 +1533,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 13,
-        "beginner": 23,
-        "intermediate": 31,
-        "advanced": 42,
-        "elite": 56
+        "1": 13,
+        "2": 23,
+        "3": 31,
+        "4": 42,
+        "5": 56
       }
     },
     {
@@ -1547,11 +1547,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 14,
-        "beginner": 24,
-        "intermediate": 32,
-        "advanced": 43,
-        "elite": 57
+        "1": 14,
+        "2": 24,
+        "3": 32,
+        "4": 43,
+        "5": 57
       }
     },
     {
@@ -1561,11 +1561,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 14,
-        "beginner": 24,
-        "intermediate": 32,
-        "advanced": 43,
-        "elite": 57
+        "1": 14,
+        "2": 24,
+        "3": 32,
+        "4": 43,
+        "5": 57
       }
     }
   ],
@@ -1577,11 +1577,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 45,
-        "beginner": 74,
-        "intermediate": 93,
-        "advanced": 103,
-        "elite": 115
+        "1": 45,
+        "2": 74,
+        "3": 93,
+        "4": 103,
+        "5": 115
       }
     },
     {
@@ -1591,11 +1591,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 58,
-        "beginner": 97,
-        "intermediate": 121,
-        "advanced": 134,
-        "elite": 149
+        "1": 58,
+        "2": 97,
+        "3": 121,
+        "4": 134,
+        "5": 149
       }
     },
     {
@@ -1605,11 +1605,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 73,
-        "beginner": 122,
-        "intermediate": 152,
-        "advanced": 169,
-        "elite": 188
+        "1": 73,
+        "2": 122,
+        "3": 152,
+        "4": 169,
+        "5": 188
       }
     },
     {
@@ -1619,11 +1619,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 77,
-        "beginner": 129,
-        "intermediate": 161,
-        "advanced": 179,
-        "elite": 199
+        "1": 77,
+        "2": 129,
+        "3": 161,
+        "4": 179,
+        "5": 199
       }
     },
     {
@@ -1633,11 +1633,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 81,
-        "beginner": 135,
-        "intermediate": 169,
-        "advanced": 188,
-        "elite": 209
+        "1": 81,
+        "2": 135,
+        "3": 169,
+        "4": 188,
+        "5": 209
       }
     },
     {
@@ -1647,11 +1647,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 82,
-        "beginner": 137,
-        "intermediate": 172,
-        "advanced": 191,
-        "elite": 212
+        "1": 82,
+        "2": 137,
+        "3": 172,
+        "4": 191,
+        "5": 212
       }
     },
     {
@@ -1661,11 +1661,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 84,
-        "beginner": 139,
-        "intermediate": 174,
-        "advanced": 194,
-        "elite": 215
+        "1": 84,
+        "2": 139,
+        "3": 174,
+        "4": 194,
+        "5": 215
       }
     },
     {
@@ -1675,11 +1675,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 47,
-        "beginner": 81,
-        "intermediate": 101,
-        "advanced": 127,
-        "elite": 141
+        "1": 47,
+        "2": 81,
+        "3": 101,
+        "4": 127,
+        "5": 141
       }
     },
     {
@@ -1689,11 +1689,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 64,
-        "beginner": 112,
-        "intermediate": 139,
-        "advanced": 186,
-        "elite": 207
+        "1": 64,
+        "2": 112,
+        "3": 139,
+        "4": 186,
+        "5": 207
       }
     },
     {
@@ -1703,11 +1703,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 76,
-        "beginner": 131,
-        "intermediate": 164,
-        "advanced": 219,
-        "elite": 243
+        "1": 76,
+        "2": 131,
+        "3": 164,
+        "4": 219,
+        "5": 243
       }
     },
     {
@@ -1717,11 +1717,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 83,
-        "beginner": 144,
-        "intermediate": 180,
-        "advanced": 240,
-        "elite": 266
+        "1": 83,
+        "2": 144,
+        "3": 180,
+        "4": 240,
+        "5": 266
       }
     },
     {
@@ -1731,11 +1731,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 84,
-        "beginner": 146,
-        "intermediate": 182,
-        "advanced": 243,
-        "elite": 270
+        "1": 84,
+        "2": 146,
+        "3": 182,
+        "4": 243,
+        "5": 270
       }
     },
     {
@@ -1745,11 +1745,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 85,
-        "beginner": 147,
-        "intermediate": 184,
-        "advanced": 245,
-        "elite": 273
+        "1": 85,
+        "2": 147,
+        "3": 184,
+        "4": 245,
+        "5": 273
       }
     },
     {
@@ -1759,11 +1759,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 86,
-        "beginner": 149,
-        "intermediate": 187,
-        "advanced": 249,
-        "elite": 276
+        "1": 86,
+        "2": 149,
+        "3": 187,
+        "4": 249,
+        "5": 276
       }
     },
     {
@@ -1773,11 +1773,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 51,
-        "beginner": 89,
-        "intermediate": 112,
-        "advanced": 149,
-        "elite": 175
+        "1": 51,
+        "2": 89,
+        "3": 112,
+        "4": 149,
+        "5": 175
       }
     },
     {
@@ -1787,11 +1787,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 64,
-        "beginner": 112,
-        "intermediate": 140,
-        "advanced": 186,
-        "elite": 219
+        "1": 64,
+        "2": 112,
+        "3": 140,
+        "4": 186,
+        "5": 219
       }
     },
     {
@@ -1801,11 +1801,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 76,
-        "beginner": 132,
-        "intermediate": 165,
-        "advanced": 220,
-        "elite": 259
+        "1": 76,
+        "2": 132,
+        "3": 165,
+        "4": 220,
+        "5": 259
       }
     },
     {
@@ -1815,11 +1815,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 81,
-        "beginner": 142,
-        "intermediate": 177,
-        "advanced": 236,
-        "elite": 278
+        "1": 81,
+        "2": 142,
+        "3": 177,
+        "4": 236,
+        "5": 278
       }
     },
     {
@@ -1829,11 +1829,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 83,
-        "beginner": 145,
-        "intermediate": 181,
-        "advanced": 242,
-        "elite": 284
+        "1": 83,
+        "2": 145,
+        "3": 181,
+        "4": 242,
+        "5": 284
       }
     },
     {
@@ -1843,11 +1843,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 84,
-        "beginner": 146,
-        "intermediate": 183,
-        "advanced": 244,
-        "elite": 287
+        "1": 84,
+        "2": 146,
+        "3": 183,
+        "4": 244,
+        "5": 287
       }
     },
     {
@@ -1857,11 +1857,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 89,
-        "beginner": 154,
-        "intermediate": 192,
-        "advanced": 257,
-        "elite": 302
+        "1": 89,
+        "2": 154,
+        "3": 192,
+        "4": 257,
+        "5": 302
       }
     },
     {
@@ -1871,11 +1871,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 46,
-        "beginner": 80,
-        "intermediate": 100,
-        "advanced": 118,
-        "elite": 131
+        "1": 46,
+        "2": 80,
+        "3": 100,
+        "4": 118,
+        "5": 131
       }
     },
     {
@@ -1885,11 +1885,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 53,
-        "beginner": 92,
-        "intermediate": 115,
-        "advanced": 154,
-        "elite": 181
+        "1": 53,
+        "2": 92,
+        "3": 115,
+        "4": 154,
+        "5": 181
       }
     },
     {
@@ -1899,11 +1899,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 63,
-        "beginner": 109,
-        "intermediate": 137,
-        "advanced": 182,
-        "elite": 214
+        "1": 63,
+        "2": 109,
+        "3": 137,
+        "4": 182,
+        "5": 214
       }
     },
     {
@@ -1913,11 +1913,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 65,
-        "beginner": 113,
-        "intermediate": 141,
-        "advanced": 188,
-        "elite": 222
+        "1": 65,
+        "2": 113,
+        "3": 141,
+        "4": 188,
+        "5": 222
       }
     },
     {
@@ -1927,11 +1927,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 71,
-        "beginner": 124,
-        "intermediate": 154,
-        "advanced": 206,
-        "elite": 242
+        "1": 71,
+        "2": 124,
+        "3": 154,
+        "4": 206,
+        "5": 242
       }
     },
     {
@@ -1941,11 +1941,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 75,
-        "beginner": 130,
-        "intermediate": 162,
-        "advanced": 217,
-        "elite": 255
+        "1": 75,
+        "2": 130,
+        "3": 162,
+        "4": 217,
+        "5": 255
       }
     },
     {
@@ -1955,11 +1955,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 76,
-        "beginner": 133,
-        "intermediate": 166,
-        "advanced": 221,
-        "elite": 260
+        "1": 76,
+        "2": 133,
+        "3": 166,
+        "4": 221,
+        "5": 260
       }
     },
     {
@@ -1969,11 +1969,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 40,
-        "beginner": 69,
-        "intermediate": 86,
-        "advanced": 102,
-        "elite": 113
+        "1": 40,
+        "2": 69,
+        "3": 86,
+        "4": 102,
+        "5": 113
       }
     },
     {
@@ -1983,11 +1983,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 48,
-        "beginner": 84,
-        "intermediate": 105,
-        "advanced": 140,
-        "elite": 164
+        "1": 48,
+        "2": 84,
+        "3": 105,
+        "4": 140,
+        "5": 164
       }
     },
     {
@@ -1997,11 +1997,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 56,
-        "beginner": 97,
-        "intermediate": 121,
-        "advanced": 161,
-        "elite": 190
+        "1": 56,
+        "2": 97,
+        "3": 121,
+        "4": 161,
+        "5": 190
       }
     },
     {
@@ -2011,11 +2011,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 60,
-        "beginner": 104,
-        "intermediate": 130,
-        "advanced": 173,
-        "elite": 204
+        "1": 60,
+        "2": 104,
+        "3": 130,
+        "4": 173,
+        "5": 204
       }
     },
     {
@@ -2025,11 +2025,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 63,
-        "beginner": 110,
-        "intermediate": 138,
-        "advanced": 183,
-        "elite": 216
+        "1": 63,
+        "2": 110,
+        "3": 138,
+        "4": 183,
+        "5": 216
       }
     },
     {
@@ -2039,11 +2039,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 64,
-        "beginner": 111,
-        "intermediate": 139,
-        "advanced": 185,
-        "elite": 218
+        "1": 64,
+        "2": 111,
+        "3": 139,
+        "4": 185,
+        "5": 218
       }
     },
     {
@@ -2053,11 +2053,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 65,
-        "beginner": 114,
-        "intermediate": 142,
-        "advanced": 190,
-        "elite": 223
+        "1": 65,
+        "2": 114,
+        "3": 142,
+        "4": 190,
+        "5": 223
       }
     },
     {
@@ -2067,11 +2067,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 35,
-        "beginner": 61,
-        "intermediate": 79,
-        "advanced": 95,
-        "elite": 109
+        "1": 35,
+        "2": 61,
+        "3": 79,
+        "4": 95,
+        "5": 109
       }
     },
     {
@@ -2081,11 +2081,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 46,
-        "beginner": 79,
-        "intermediate": 103,
-        "advanced": 124,
-        "elite": 142
+        "1": 46,
+        "2": 79,
+        "3": 103,
+        "4": 124,
+        "5": 142
       }
     },
     {
@@ -2095,11 +2095,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 52,
-        "beginner": 90,
-        "intermediate": 117,
-        "advanced": 141,
-        "elite": 162
+        "1": 52,
+        "2": 90,
+        "3": 117,
+        "4": 141,
+        "5": 162
       }
     },
     {
@@ -2109,11 +2109,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 57,
-        "beginner": 98,
-        "intermediate": 128,
-        "advanced": 155,
-        "elite": 177
+        "1": 57,
+        "2": 98,
+        "3": 128,
+        "4": 155,
+        "5": 177
       }
     },
     {
@@ -2123,11 +2123,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 61,
-        "beginner": 107,
-        "intermediate": 138,
-        "advanced": 167,
-        "elite": 191
+        "1": 61,
+        "2": 107,
+        "3": 138,
+        "4": 167,
+        "5": 191
       }
     },
     {
@@ -2137,11 +2137,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 62,
-        "beginner": 109,
-        "intermediate": 140,
-        "advanced": 170,
-        "elite": 194
+        "1": 62,
+        "2": 109,
+        "3": 140,
+        "4": 170,
+        "5": 194
       }
     },
     {
@@ -2151,11 +2151,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 64,
-        "beginner": 112,
-        "intermediate": 144,
-        "advanced": 175,
-        "elite": 200
+        "1": 64,
+        "2": 112,
+        "3": 144,
+        "4": 175,
+        "5": 200
       }
     },
     {
@@ -2165,11 +2165,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 29,
-        "beginner": 51,
-        "intermediate": 68,
-        "advanced": 85,
-        "elite": 98
+        "1": 29,
+        "2": 51,
+        "3": 68,
+        "4": 85,
+        "5": 98
       }
     },
     {
@@ -2179,11 +2179,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 36,
-        "beginner": 62,
-        "intermediate": 82,
-        "advanced": 103,
-        "elite": 121
+        "1": 36,
+        "2": 62,
+        "3": 82,
+        "4": 103,
+        "5": 121
       }
     },
     {
@@ -2193,11 +2193,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 42,
-        "beginner": 74,
-        "intermediate": 98,
-        "advanced": 123,
-        "elite": 144
+        "1": 42,
+        "2": 74,
+        "3": 98,
+        "4": 123,
+        "5": 144
       }
     },
     {
@@ -2207,11 +2207,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 45,
-        "beginner": 79,
-        "intermediate": 105,
-        "advanced": 131,
-        "elite": 155
+        "1": 45,
+        "2": 79,
+        "3": 105,
+        "4": 131,
+        "5": 155
       }
     },
     {
@@ -2221,11 +2221,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 49,
-        "beginner": 86,
-        "intermediate": 114,
-        "advanced": 143,
-        "elite": 168
+        "1": 49,
+        "2": 86,
+        "3": 114,
+        "4": 143,
+        "5": 168
       }
     },
     {
@@ -2235,11 +2235,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 50,
-        "beginner": 87,
-        "intermediate": 116,
-        "advanced": 145,
-        "elite": 170
+        "1": 50,
+        "2": 87,
+        "3": 116,
+        "4": 145,
+        "5": 170
       }
     },
     {
@@ -2249,11 +2249,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 52,
-        "beginner": 90,
-        "intermediate": 120,
-        "advanced": 150,
-        "elite": 176
+        "1": 52,
+        "2": 90,
+        "3": 120,
+        "4": 150,
+        "5": 176
       }
     },
     {
@@ -2263,11 +2263,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 21,
-        "beginner": 36,
-        "intermediate": 48,
-        "advanced": 60,
-        "elite": 68
+        "1": 21,
+        "2": 36,
+        "3": 48,
+        "4": 60,
+        "5": 68
       }
     },
     {
@@ -2277,11 +2277,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 25,
-        "beginner": 43,
-        "intermediate": 58,
-        "advanced": 72,
-        "elite": 85
+        "1": 25,
+        "2": 43,
+        "3": 58,
+        "4": 72,
+        "5": 85
       }
     },
     {
@@ -2291,11 +2291,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 30,
-        "beginner": 51,
-        "intermediate": 69,
-        "advanced": 86,
-        "elite": 101
+        "1": 30,
+        "2": 51,
+        "3": 69,
+        "4": 86,
+        "5": 101
       }
     },
     {
@@ -2305,11 +2305,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 32,
-        "beginner": 55,
-        "intermediate": 74,
-        "advanced": 92,
-        "elite": 108
+        "1": 32,
+        "2": 55,
+        "3": 74,
+        "4": 92,
+        "5": 108
       }
     },
     {
@@ -2319,11 +2319,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 35,
-        "beginner": 60,
-        "intermediate": 80,
-        "advanced": 100,
-        "elite": 118
+        "1": 35,
+        "2": 60,
+        "3": 80,
+        "4": 100,
+        "5": 118
       }
     },
     {
@@ -2333,11 +2333,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 35,
-        "beginner": 61,
-        "intermediate": 81,
-        "advanced": 101,
-        "elite": 119
+        "1": 35,
+        "2": 61,
+        "3": 81,
+        "4": 101,
+        "5": 119
       }
     },
     {
@@ -2347,11 +2347,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 36,
-        "beginner": 63,
-        "intermediate": 84,
-        "advanced": 105,
-        "elite": 123
+        "1": 36,
+        "2": 63,
+        "3": 84,
+        "4": 105,
+        "5": 123
       }
     },
     {
@@ -2361,11 +2361,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 17,
-        "beginner": 39,
-        "intermediate": 51,
-        "advanced": 62,
-        "elite": 82
+        "1": 17,
+        "2": 39,
+        "3": 51,
+        "4": 62,
+        "5": 82
       }
     },
     {
@@ -2375,11 +2375,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 22,
-        "beginner": 51,
-        "intermediate": 65,
-        "advanced": 80,
-        "elite": 102
+        "1": 22,
+        "2": 51,
+        "3": 65,
+        "4": 80,
+        "5": 102
       }
     },
     {
@@ -2389,11 +2389,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 24,
-        "beginner": 56,
-        "intermediate": 72,
-        "advanced": 88,
-        "elite": 108
+        "1": 24,
+        "2": 56,
+        "3": 72,
+        "4": 88,
+        "5": 108
       }
     },
     {
@@ -2403,11 +2403,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 25,
-        "beginner": 59,
-        "intermediate": 75,
-        "advanced": 92,
-        "elite": 113
+        "1": 25,
+        "2": 59,
+        "3": 75,
+        "4": 92,
+        "5": 113
       }
     },
     {
@@ -2417,11 +2417,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 26,
-        "beginner": 61,
-        "intermediate": 79,
-        "advanced": 99,
-        "elite": 118
+        "1": 26,
+        "2": 61,
+        "3": 79,
+        "4": 99,
+        "5": 118
       }
     },
     {
@@ -2431,11 +2431,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 27,
-        "beginner": 62,
-        "intermediate": 80,
-        "advanced": 103,
-        "elite": 123
+        "1": 27,
+        "2": 62,
+        "3": 80,
+        "4": 103,
+        "5": 123
       }
     },
     {
@@ -2445,11 +2445,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 29,
-        "beginner": 69,
-        "intermediate": 89,
-        "advanced": 109,
-        "elite": 129
+        "1": 29,
+        "2": 69,
+        "3": 89,
+        "4": 109,
+        "5": 129
       }
     },
     {
@@ -2459,11 +2459,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 25,
-        "beginner": 58,
-        "intermediate": 74,
-        "advanced": 91,
-        "elite": 120
+        "1": 25,
+        "2": 58,
+        "3": 74,
+        "4": 91,
+        "5": 120
       }
     },
     {
@@ -2473,11 +2473,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 30,
-        "beginner": 70,
-        "intermediate": 90,
-        "advanced": 110,
-        "elite": 140
+        "1": 30,
+        "2": 70,
+        "3": 90,
+        "4": 110,
+        "5": 140
       }
     },
     {
@@ -2487,11 +2487,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 33,
-        "beginner": 77,
-        "intermediate": 99,
-        "advanced": 121,
-        "elite": 150
+        "1": 33,
+        "2": 77,
+        "3": 99,
+        "4": 121,
+        "5": 150
       }
     },
     {
@@ -2501,11 +2501,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 34,
-        "beginner": 79,
-        "intermediate": 101,
-        "advanced": 124,
-        "elite": 154
+        "1": 34,
+        "2": 79,
+        "3": 101,
+        "4": 124,
+        "5": 154
       }
     },
     {
@@ -2515,11 +2515,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 35,
-        "beginner": 82,
-        "intermediate": 107,
-        "advanced": 133,
-        "elite": 162
+        "1": 35,
+        "2": 82,
+        "3": 107,
+        "4": 133,
+        "5": 162
       }
     },
     {
@@ -2529,11 +2529,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 35,
-        "beginner": 82,
-        "intermediate": 106,
-        "advanced": 134,
-        "elite": 164
+        "1": 35,
+        "2": 82,
+        "3": 106,
+        "4": 134,
+        "5": 164
       }
     },
     {
@@ -2543,11 +2543,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 36,
-        "beginner": 84,
-        "intermediate": 108,
-        "advanced": 132,
-        "elite": 159
+        "1": 36,
+        "2": 84,
+        "3": 108,
+        "4": 132,
+        "5": 159
       }
     },
     {
@@ -2557,11 +2557,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 30,
-        "beginner": 70,
-        "intermediate": 90,
-        "advanced": 110,
-        "elite": 145
+        "1": 30,
+        "2": 70,
+        "3": 90,
+        "4": 110,
+        "5": 145
       }
     },
     {
@@ -2571,11 +2571,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 32,
-        "beginner": 74,
-        "intermediate": 96,
-        "advanced": 117,
-        "elite": 149
+        "1": 32,
+        "2": 74,
+        "3": 96,
+        "4": 117,
+        "5": 149
       }
     },
     {
@@ -2585,11 +2585,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 35,
-        "beginner": 81,
-        "intermediate": 104,
-        "advanced": 127,
-        "elite": 157
+        "1": 35,
+        "2": 81,
+        "3": 104,
+        "4": 127,
+        "5": 157
       }
     },
     {
@@ -2599,11 +2599,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 36,
-        "beginner": 83,
-        "intermediate": 107,
-        "advanced": 131,
-        "elite": 162
+        "1": 36,
+        "2": 83,
+        "3": 107,
+        "4": 131,
+        "5": 162
       }
     },
     {
@@ -2613,11 +2613,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 39,
-        "beginner": 91,
-        "intermediate": 118,
-        "advanced": 147,
-        "elite": 179
+        "1": 39,
+        "2": 91,
+        "3": 118,
+        "4": 147,
+        "5": 179
       }
     },
     {
@@ -2627,11 +2627,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 40,
-        "beginner": 93,
-        "intermediate": 119,
-        "advanced": 151,
-        "elite": 185
+        "1": 40,
+        "2": 93,
+        "3": 119,
+        "4": 151,
+        "5": 185
       }
     },
     {
@@ -2641,11 +2641,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 40,
-        "beginner": 94,
-        "intermediate": 120,
-        "advanced": 147,
-        "elite": 178
+        "1": 40,
+        "2": 94,
+        "3": 120,
+        "4": 147,
+        "5": 178
       }
     },
     {
@@ -2655,11 +2655,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 23,
-        "beginner": 54,
-        "intermediate": 70,
-        "advanced": 85,
-        "elite": 112
+        "1": 23,
+        "2": 54,
+        "3": 70,
+        "4": 85,
+        "5": 112
       }
     },
     {
@@ -2669,11 +2669,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 29,
-        "beginner": 67,
-        "intermediate": 86,
-        "advanced": 105,
-        "elite": 133
+        "1": 29,
+        "2": 67,
+        "3": 86,
+        "4": 105,
+        "5": 133
       }
     },
     {
@@ -2683,11 +2683,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 30,
-        "beginner": 69,
-        "intermediate": 89,
-        "advanced": 109,
-        "elite": 134
+        "1": 30,
+        "2": 69,
+        "3": 89,
+        "4": 109,
+        "5": 134
       }
     },
     {
@@ -2697,11 +2697,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 32,
-        "beginner": 74,
-        "intermediate": 95,
-        "advanced": 116,
-        "elite": 143
+        "1": 32,
+        "2": 74,
+        "3": 95,
+        "4": 116,
+        "5": 143
       }
     },
     {
@@ -2711,11 +2711,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 33,
-        "beginner": 78,
-        "intermediate": 101,
-        "advanced": 126,
-        "elite": 153
+        "1": 33,
+        "2": 78,
+        "3": 101,
+        "4": 126,
+        "5": 153
       }
     },
     {
@@ -2725,11 +2725,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 35,
-        "beginner": 81,
-        "intermediate": 104,
-        "advanced": 132,
-        "elite": 160
+        "1": 35,
+        "2": 81,
+        "3": 104,
+        "4": 132,
+        "5": 160
       }
     },
     {
@@ -2739,11 +2739,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 35,
-        "beginner": 82,
-        "intermediate": 106,
-        "advanced": 129,
-        "elite": 156
+        "1": 35,
+        "2": 82,
+        "3": 106,
+        "4": 129,
+        "5": 156
       }
     },
     {
@@ -2753,11 +2753,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 22,
-        "beginner": 51,
-        "intermediate": 65,
-        "advanced": 80,
-        "elite": 105
+        "1": 22,
+        "2": 51,
+        "3": 65,
+        "4": 80,
+        "5": 105
       }
     },
     {
@@ -2767,11 +2767,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 24,
-        "beginner": 57,
-        "intermediate": 73,
-        "advanced": 89,
-        "elite": 114
+        "1": 24,
+        "2": 57,
+        "3": 73,
+        "4": 89,
+        "5": 114
       }
     },
     {
@@ -2781,11 +2781,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 26,
-        "beginner": 60,
-        "intermediate": 78,
-        "advanced": 95,
-        "elite": 117
+        "1": 26,
+        "2": 60,
+        "3": 78,
+        "4": 95,
+        "5": 117
       }
     },
     {
@@ -2795,11 +2795,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 28,
-        "beginner": 65,
-        "intermediate": 83,
-        "advanced": 102,
-        "elite": 126
+        "1": 28,
+        "2": 65,
+        "3": 83,
+        "4": 102,
+        "5": 126
       }
     },
     {
@@ -2809,11 +2809,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 29,
-        "beginner": 69,
-        "intermediate": 90,
-        "advanced": 112,
-        "elite": 136
+        "1": 29,
+        "2": 69,
+        "3": 90,
+        "4": 112,
+        "5": 136
       }
     },
     {
@@ -2823,11 +2823,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 30,
-        "beginner": 69,
-        "intermediate": 89,
-        "advanced": 114,
-        "elite": 137
+        "1": 30,
+        "2": 69,
+        "3": 89,
+        "4": 114,
+        "5": 137
       }
     },
     {
@@ -2837,11 +2837,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 31,
-        "beginner": 72,
-        "intermediate": 92,
-        "advanced": 113,
-        "elite": 135
+        "1": 31,
+        "2": 72,
+        "3": 92,
+        "4": 113,
+        "5": 135
       }
     },
     {
@@ -2851,11 +2851,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 18,
-        "beginner": 43,
-        "intermediate": 55,
-        "advanced": 67,
-        "elite": 89
+        "1": 18,
+        "2": 43,
+        "3": 55,
+        "4": 67,
+        "5": 89
       }
     },
     {
@@ -2865,11 +2865,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 23,
-        "beginner": 53,
-        "intermediate": 69,
-        "advanced": 84,
-        "elite": 107
+        "1": 23,
+        "2": 53,
+        "3": 69,
+        "4": 84,
+        "5": 107
       }
     },
     {
@@ -2879,11 +2879,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 24,
-        "beginner": 56,
-        "intermediate": 72,
-        "advanced": 89,
-        "elite": 109
+        "1": 24,
+        "2": 56,
+        "3": 72,
+        "4": 89,
+        "5": 109
       }
     },
     {
@@ -2893,11 +2893,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 25,
-        "beginner": 58,
-        "intermediate": 74,
-        "advanced": 91,
-        "elite": 112
+        "1": 25,
+        "2": 58,
+        "3": 74,
+        "4": 91,
+        "5": 112
       }
     },
     {
@@ -2907,11 +2907,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 25,
-        "beginner": 60,
-        "intermediate": 77,
-        "advanced": 97,
-        "elite": 116
+        "1": 25,
+        "2": 60,
+        "3": 77,
+        "4": 97,
+        "5": 116
       }
     },
     {
@@ -2921,11 +2921,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 26,
-        "beginner": 60,
-        "intermediate": 77,
-        "advanced": 99,
-        "elite": 118
+        "1": 26,
+        "2": 60,
+        "3": 77,
+        "4": 99,
+        "5": 118
       }
     },
     {
@@ -2935,11 +2935,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 26,
-        "beginner": 60,
-        "intermediate": 78,
-        "advanced": 95,
-        "elite": 112
+        "1": 26,
+        "2": 60,
+        "3": 78,
+        "4": 95,
+        "5": 112
       }
     },
     {
@@ -2949,11 +2949,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 18,
-        "beginner": 42,
-        "intermediate": 53,
-        "advanced": 66,
-        "elite": 84
+        "1": 18,
+        "2": 42,
+        "3": 53,
+        "4": 66,
+        "5": 84
       }
     },
     {
@@ -2963,11 +2963,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 18,
-        "beginner": 43,
-        "intermediate": 55,
-        "advanced": 67,
-        "elite": 86
+        "1": 18,
+        "2": 43,
+        "3": 55,
+        "4": 67,
+        "5": 86
       }
     },
     {
@@ -2977,11 +2977,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 20,
-        "beginner": 46,
-        "intermediate": 59,
-        "advanced": 72,
-        "elite": 92
+        "1": 20,
+        "2": 46,
+        "3": 59,
+        "4": 72,
+        "5": 92
       }
     },
     {
@@ -2991,11 +2991,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 20,
-        "beginner": 47,
-        "intermediate": 60,
-        "advanced": 73,
-        "elite": 93
+        "1": 20,
+        "2": 47,
+        "3": 60,
+        "4": 73,
+        "5": 93
       }
     },
     {
@@ -3005,11 +3005,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 20,
-        "beginner": 47,
-        "intermediate": 61,
-        "advanced": 79,
-        "elite": 94
+        "1": 20,
+        "2": 47,
+        "3": 61,
+        "4": 79,
+        "5": 94
       }
     },
     {
@@ -3019,11 +3019,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 20,
-        "beginner": 47,
-        "intermediate": 61,
-        "advanced": 79,
-        "elite": 95
+        "1": 20,
+        "2": 47,
+        "3": 61,
+        "4": 79,
+        "5": 95
       }
     },
     {
@@ -3033,11 +3033,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 20,
-        "beginner": 48,
-        "intermediate": 61,
-        "advanced": 79,
-        "elite": 95
+        "1": 20,
+        "2": 48,
+        "3": 61,
+        "4": 79,
+        "5": 95
       }
     },
     {
@@ -3047,11 +3047,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 15,
-        "beginner": 34,
-        "intermediate": 44,
-        "advanced": 53,
-        "elite": 68
+        "1": 15,
+        "2": 34,
+        "3": 44,
+        "4": 53,
+        "5": 68
       }
     },
     {
@@ -3061,11 +3061,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 15,
-        "beginner": 35,
-        "intermediate": 45,
-        "advanced": 55,
-        "elite": 69
+        "1": 15,
+        "2": 35,
+        "3": 45,
+        "4": 55,
+        "5": 69
       }
     },
     {
@@ -3075,11 +3075,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 16,
-        "beginner": 37,
-        "intermediate": 48,
-        "advanced": 58,
-        "elite": 74
+        "1": 16,
+        "2": 37,
+        "3": 48,
+        "4": 58,
+        "5": 74
       }
     },
     {
@@ -3089,11 +3089,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 16,
-        "beginner": 38,
-        "intermediate": 48,
-        "advanced": 59,
-        "elite": 75
+        "1": 16,
+        "2": 38,
+        "3": 48,
+        "4": 59,
+        "5": 75
       }
     },
     {
@@ -3103,11 +3103,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 16,
-        "beginner": 38,
-        "intermediate": 50,
-        "advanced": 65,
-        "elite": 76
+        "1": 16,
+        "2": 38,
+        "3": 50,
+        "4": 65,
+        "5": 76
       }
     },
     {
@@ -3117,11 +3117,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 16,
-        "beginner": 38,
-        "intermediate": 49,
-        "advanced": 65,
-        "elite": 77
+        "1": 16,
+        "2": 38,
+        "3": 49,
+        "4": 65,
+        "5": 77
       }
     },
     {
@@ -3131,11 +3131,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 17,
-        "beginner": 39,
-        "intermediate": 50,
-        "advanced": 65,
-        "elite": 77
+        "1": 17,
+        "2": 39,
+        "3": 50,
+        "4": 65,
+        "5": 77
       }
     }
   ],
@@ -3147,11 +3147,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 34,
-        "beginner": 47,
-        "intermediate": 61,
-        "advanced": 74,
-        "elite": 85
+        "1": 34,
+        "2": 47,
+        "3": 61,
+        "4": 74,
+        "5": 85
       }
     },
     {
@@ -3161,11 +3161,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 42,
-        "beginner": 59,
-        "intermediate": 76,
-        "advanced": 92,
-        "elite": 107
+        "1": 42,
+        "2": 59,
+        "3": 76,
+        "4": 92,
+        "5": 107
       }
     },
     {
@@ -3175,11 +3175,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 43,
-        "beginner": 60,
-        "intermediate": 77,
-        "advanced": 94,
-        "elite": 110
+        "1": 43,
+        "2": 60,
+        "3": 77,
+        "4": 94,
+        "5": 110
       }
     },
     {
@@ -3189,11 +3189,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 51,
-        "beginner": 71,
-        "intermediate": 91,
-        "advanced": 111,
-        "elite": 132
+        "1": 51,
+        "2": 71,
+        "3": 91,
+        "4": 111,
+        "5": 132
       }
     },
     {
@@ -3203,11 +3203,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 53,
-        "beginner": 74,
-        "intermediate": 95,
-        "advanced": 116,
-        "elite": 134
+        "1": 53,
+        "2": 74,
+        "3": 95,
+        "4": 116,
+        "5": 134
       }
     },
     {
@@ -3217,11 +3217,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 53,
-        "beginner": 74,
-        "intermediate": 96,
-        "advanced": 117,
-        "elite": 137
+        "1": 53,
+        "2": 74,
+        "3": 96,
+        "4": 117,
+        "5": 137
       }
     },
     {
@@ -3231,11 +3231,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 53,
-        "beginner": 74,
-        "intermediate": 95,
-        "advanced": 116,
-        "elite": 138
+        "1": 53,
+        "2": 74,
+        "3": 95,
+        "4": 116,
+        "5": 138
       }
     },
     {
@@ -3245,11 +3245,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 36,
-        "beginner": 51,
-        "intermediate": 65,
-        "advanced": 80,
-        "elite": 92
+        "1": 36,
+        "2": 51,
+        "3": 65,
+        "4": 80,
+        "5": 92
       }
     },
     {
@@ -3259,11 +3259,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 50,
-        "beginner": 70,
-        "intermediate": 90,
-        "advanced": 110,
-        "elite": 130
+        "1": 50,
+        "2": 70,
+        "3": 90,
+        "4": 110,
+        "5": 130
       }
     },
     {
@@ -3273,11 +3273,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 50,
-        "beginner": 70,
-        "intermediate": 90,
-        "advanced": 110,
-        "elite": 150
+        "1": 50,
+        "2": 70,
+        "3": 90,
+        "4": 110,
+        "5": 150
       }
     },
     {
@@ -3287,11 +3287,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 52,
-        "beginner": 73,
-        "intermediate": 93,
-        "advanced": 114,
-        "elite": 161
+        "1": 52,
+        "2": 73,
+        "3": 93,
+        "4": 114,
+        "5": 161
       }
     },
     {
@@ -3301,11 +3301,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 55,
-        "beginner": 77,
-        "intermediate": 99,
-        "advanced": 121,
-        "elite": 170
+        "1": 55,
+        "2": 77,
+        "3": 99,
+        "4": 121,
+        "5": 170
       }
     },
     {
@@ -3315,11 +3315,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 59,
-        "beginner": 82,
-        "intermediate": 106,
-        "advanced": 129,
-        "elite": 181
+        "1": 59,
+        "2": 82,
+        "3": 106,
+        "4": 129,
+        "5": 181
       }
     },
     {
@@ -3329,11 +3329,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 61,
-        "beginner": 85,
-        "intermediate": 109,
-        "advanced": 133,
-        "elite": 182
+        "1": 61,
+        "2": 85,
+        "3": 109,
+        "4": 133,
+        "5": 182
       }
     },
     {
@@ -3343,11 +3343,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 39,
-        "beginner": 55,
-        "intermediate": 71,
-        "advanced": 87,
-        "elite": 114
+        "1": 39,
+        "2": 55,
+        "3": 71,
+        "4": 87,
+        "5": 114
       }
     },
     {
@@ -3357,11 +3357,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 53,
-        "beginner": 75,
-        "intermediate": 96,
-        "advanced": 117,
-        "elite": 155
+        "1": 53,
+        "2": 75,
+        "3": 96,
+        "4": 117,
+        "5": 155
       }
     },
     {
@@ -3371,11 +3371,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 54,
-        "beginner": 75,
-        "intermediate": 97,
-        "advanced": 119,
-        "elite": 156
+        "1": 54,
+        "2": 75,
+        "3": 97,
+        "4": 119,
+        "5": 156
       }
     },
     {
@@ -3385,11 +3385,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 59,
-        "beginner": 83,
-        "intermediate": 107,
-        "advanced": 131,
-        "elite": 173
+        "1": 59,
+        "2": 83,
+        "3": 107,
+        "4": 131,
+        "5": 173
       }
     },
     {
@@ -3399,11 +3399,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 61,
-        "beginner": 84,
-        "intermediate": 108,
-        "advanced": 135,
-        "elite": 176
+        "1": 61,
+        "2": 84,
+        "3": 108,
+        "4": 135,
+        "5": 176
       }
     },
     {
@@ -3413,11 +3413,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 62,
-        "beginner": 85,
-        "intermediate": 110,
-        "advanced": 139,
-        "elite": 177
+        "1": 62,
+        "2": 85,
+        "3": 110,
+        "4": 139,
+        "5": 177
       }
     },
     {
@@ -3427,11 +3427,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 67,
-        "beginner": 94,
-        "intermediate": 121,
-        "advanced": 148,
-        "elite": 195
+        "1": 67,
+        "2": 94,
+        "3": 121,
+        "4": 148,
+        "5": 195
       }
     },
     {
@@ -3441,11 +3441,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 37,
-        "beginner": 52,
-        "intermediate": 66,
-        "advanced": 81,
-        "elite": 105
+        "1": 37,
+        "2": 52,
+        "3": 66,
+        "4": 81,
+        "5": 105
       }
     },
     {
@@ -3455,11 +3455,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 41,
-        "beginner": 57,
-        "intermediate": 73,
-        "advanced": 89,
-        "elite": 116
+        "1": 41,
+        "2": 57,
+        "3": 73,
+        "4": 89,
+        "5": 116
       }
     },
     {
@@ -3469,11 +3469,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 48,
-        "beginner": 67,
-        "intermediate": 86,
-        "advanced": 105,
-        "elite": 135
+        "1": 48,
+        "2": 67,
+        "3": 86,
+        "4": 105,
+        "5": 135
       }
     },
     {
@@ -3483,11 +3483,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 54,
-        "beginner": 75,
-        "intermediate": 97,
-        "advanced": 118,
-        "elite": 143
+        "1": 54,
+        "2": 75,
+        "3": 97,
+        "4": 118,
+        "5": 143
       }
     },
     {
@@ -3497,11 +3497,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 56,
-        "beginner": 78,
-        "intermediate": 100,
-        "advanced": 122,
-        "elite": 154
+        "1": 56,
+        "2": 78,
+        "3": 100,
+        "4": 122,
+        "5": 154
       }
     },
     {
@@ -3511,11 +3511,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 58,
-        "beginner": 81,
-        "intermediate": 104,
-        "advanced": 127,
-        "elite": 164
+        "1": 58,
+        "2": 81,
+        "3": 104,
+        "4": 127,
+        "5": 164
       }
     },
     {
@@ -3525,11 +3525,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 62,
-        "beginner": 87,
-        "intermediate": 111,
-        "advanced": 136,
-        "elite": 166
+        "1": 62,
+        "2": 87,
+        "3": 111,
+        "4": 136,
+        "5": 166
       }
     },
     {
@@ -3539,11 +3539,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 29,
-        "beginner": 41,
-        "intermediate": 53,
-        "advanced": 65,
-        "elite": 74
+        "1": 29,
+        "2": 41,
+        "3": 53,
+        "4": 65,
+        "5": 74
       }
     },
     {
@@ -3553,11 +3553,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 40,
-        "beginner": 56,
-        "intermediate": 72,
-        "advanced": 88,
-        "elite": 104
+        "1": 40,
+        "2": 56,
+        "3": 72,
+        "4": 88,
+        "5": 104
       }
     },
     {
@@ -3567,11 +3567,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 43,
-        "beginner": 60,
-        "intermediate": 77,
-        "advanced": 94,
-        "elite": 111
+        "1": 43,
+        "2": 60,
+        "3": 77,
+        "4": 94,
+        "5": 111
       }
     },
     {
@@ -3581,11 +3581,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 49,
-        "beginner": 68,
-        "intermediate": 88,
-        "advanced": 107,
-        "elite": 129
+        "1": 49,
+        "2": 68,
+        "3": 88,
+        "4": 107,
+        "5": 129
       }
     },
     {
@@ -3595,11 +3595,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 53,
-        "beginner": 74,
-        "intermediate": 95,
-        "advanced": 116,
-        "elite": 140
+        "1": 53,
+        "2": 74,
+        "3": 95,
+        "4": 116,
+        "5": 140
       }
     },
     {
@@ -3609,11 +3609,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 54,
-        "beginner": 75,
-        "intermediate": 97,
-        "advanced": 118,
-        "elite": 143
+        "1": 54,
+        "2": 75,
+        "3": 97,
+        "4": 118,
+        "5": 143
       }
     },
     {
@@ -3623,11 +3623,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 54,
-        "beginner": 76,
-        "intermediate": 98,
-        "advanced": 120,
-        "elite": 145
+        "1": 54,
+        "2": 76,
+        "3": 98,
+        "4": 120,
+        "5": 145
       }
     },
     {
@@ -3637,11 +3637,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 25,
-        "beginner": 35,
-        "intermediate": 45,
-        "advanced": 55,
-        "elite": 68
+        "1": 25,
+        "2": 35,
+        "3": 45,
+        "4": 55,
+        "5": 68
       }
     },
     {
@@ -3651,11 +3651,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 32,
-        "beginner": 45,
-        "intermediate": 57,
-        "advanced": 70,
-        "elite": 88
+        "1": 32,
+        "2": 45,
+        "3": 57,
+        "4": 70,
+        "5": 88
       }
     },
     {
@@ -3665,11 +3665,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 36,
-        "beginner": 50,
-        "intermediate": 64,
-        "advanced": 78,
-        "elite": 99
+        "1": 36,
+        "2": 50,
+        "3": 64,
+        "4": 78,
+        "5": 99
       }
     },
     {
@@ -3679,11 +3679,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 47,
-        "beginner": 66,
-        "intermediate": 84,
-        "advanced": 103,
-        "elite": 131
+        "1": 47,
+        "2": 66,
+        "3": 84,
+        "4": 103,
+        "5": 131
       }
     },
     {
@@ -3693,11 +3693,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 48,
-        "beginner": 67,
-        "intermediate": 87,
-        "advanced": 106,
-        "elite": 134
+        "1": 48,
+        "2": 67,
+        "3": 87,
+        "4": 106,
+        "5": 134
       }
     },
     {
@@ -3707,11 +3707,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 49,
-        "beginner": 68,
-        "intermediate": 88,
-        "advanced": 107,
-        "elite": 136
+        "1": 49,
+        "2": 68,
+        "3": 88,
+        "4": 107,
+        "5": 136
       }
     },
     {
@@ -3721,11 +3721,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 50,
-        "beginner": 69,
-        "intermediate": 89,
-        "advanced": 109,
-        "elite": 138
+        "1": 50,
+        "2": 69,
+        "3": 89,
+        "4": 109,
+        "5": 138
       }
     },
     {
@@ -3735,11 +3735,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 23,
-        "beginner": 32,
-        "intermediate": 41,
-        "advanced": 50,
-        "elite": 60
+        "1": 23,
+        "2": 32,
+        "3": 41,
+        "4": 50,
+        "5": 60
       }
     },
     {
@@ -3749,11 +3749,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 29,
-        "beginner": 40,
-        "intermediate": 52,
-        "advanced": 63,
-        "elite": 78
+        "1": 29,
+        "2": 40,
+        "3": 52,
+        "4": 63,
+        "5": 78
       }
     },
     {
@@ -3763,11 +3763,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 33,
-        "beginner": 46,
-        "intermediate": 59,
-        "advanced": 72,
-        "elite": 89
+        "1": 33,
+        "2": 46,
+        "3": 59,
+        "4": 72,
+        "5": 89
       }
     },
     {
@@ -3777,11 +3777,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 34,
-        "beginner": 48,
-        "intermediate": 62,
-        "advanced": 76,
-        "elite": 94
+        "1": 34,
+        "2": 48,
+        "3": 62,
+        "4": 76,
+        "5": 94
       }
     },
     {
@@ -3791,11 +3791,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 36,
-        "beginner": 51,
-        "intermediate": 65,
-        "advanced": 80,
-        "elite": 99
+        "1": 36,
+        "2": 51,
+        "3": 65,
+        "4": 80,
+        "5": 99
       }
     },
     {
@@ -3805,11 +3805,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 44,
-        "beginner": 61,
-        "intermediate": 79,
-        "advanced": 96,
-        "elite": 121
+        "1": 44,
+        "2": 61,
+        "3": 79,
+        "4": 96,
+        "5": 121
       }
     },
     {
@@ -3819,11 +3819,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 48,
-        "beginner": 67,
-        "intermediate": 86,
-        "advanced": 105,
-        "elite": 131
+        "1": 48,
+        "2": 67,
+        "3": 86,
+        "4": 105,
+        "5": 131
       }
     },
     {
@@ -3833,11 +3833,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 16,
-        "beginner": 22,
-        "intermediate": 28,
-        "advanced": 34,
-        "elite": 41
+        "1": 16,
+        "2": 22,
+        "3": 28,
+        "4": 34,
+        "5": 41
       }
     },
     {
@@ -3847,11 +3847,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 20,
-        "beginner": 28,
-        "intermediate": 36,
-        "advanced": 44,
-        "elite": 54
+        "1": 20,
+        "2": 28,
+        "3": 36,
+        "4": 44,
+        "5": 54
       }
     },
     {
@@ -3861,11 +3861,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 22,
-        "beginner": 31,
-        "intermediate": 40,
-        "advanced": 49,
-        "elite": 61
+        "1": 22,
+        "2": 31,
+        "3": 40,
+        "4": 49,
+        "5": 61
       }
     },
     {
@@ -3875,11 +3875,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 24,
-        "beginner": 33,
-        "intermediate": 43,
-        "advanced": 52,
-        "elite": 65
+        "1": 24,
+        "2": 33,
+        "3": 43,
+        "4": 52,
+        "5": 65
       }
     },
     {
@@ -3889,11 +3889,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 25,
-        "beginner": 35,
-        "intermediate": 45,
-        "advanced": 55,
-        "elite": 69
+        "1": 25,
+        "2": 35,
+        "3": 45,
+        "4": 55,
+        "5": 69
       }
     },
     {
@@ -3903,11 +3903,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 30,
-        "beginner": 42,
-        "intermediate": 54,
-        "advanced": 66,
-        "elite": 83
+        "1": 30,
+        "2": 42,
+        "3": 54,
+        "4": 66,
+        "5": 83
       }
     },
     {
@@ -3917,11 +3917,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 33,
-        "beginner": 46,
-        "intermediate": 59,
-        "advanced": 72,
-        "elite": 91
+        "1": 33,
+        "2": 46,
+        "3": 59,
+        "4": 72,
+        "5": 91
       }
     },
     {
@@ -3931,11 +3931,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 14,
-        "beginner": 19,
-        "intermediate": 27,
-        "advanced": 37,
-        "elite": 51
+        "1": 14,
+        "2": 19,
+        "3": 27,
+        "4": 37,
+        "5": 51
       }
     },
     {
@@ -3945,11 +3945,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 17,
-        "beginner": 23,
-        "intermediate": 32,
-        "advanced": 44,
-        "elite": 61
+        "1": 17,
+        "2": 23,
+        "3": 32,
+        "4": 44,
+        "5": 61
       }
     },
     {
@@ -3959,11 +3959,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 19,
-        "beginner": 27,
-        "intermediate": 37,
-        "advanced": 51,
-        "elite": 70
+        "1": 19,
+        "2": 27,
+        "3": 37,
+        "4": 51,
+        "5": 70
       }
     },
     {
@@ -3973,11 +3973,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 21,
-        "beginner": 28,
-        "intermediate": 39,
-        "advanced": 54,
-        "elite": 75
+        "1": 21,
+        "2": 28,
+        "3": 39,
+        "4": 54,
+        "5": 75
       }
     },
     {
@@ -3987,11 +3987,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 22,
-        "beginner": 30,
-        "intermediate": 41,
-        "advanced": 57,
-        "elite": 78
+        "1": 22,
+        "2": 30,
+        "3": 41,
+        "4": 57,
+        "5": 78
       }
     },
     {
@@ -4001,11 +4001,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 22,
-        "beginner": 31,
-        "intermediate": 42,
-        "advanced": 58,
-        "elite": 81
+        "1": 22,
+        "2": 31,
+        "3": 42,
+        "4": 58,
+        "5": 81
       }
     },
     {
@@ -4015,11 +4015,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 23,
-        "beginner": 32,
-        "intermediate": 44,
-        "advanced": 61,
-        "elite": 84
+        "1": 23,
+        "2": 32,
+        "3": 44,
+        "4": 61,
+        "5": 84
       }
     },
     {
@@ -4029,11 +4029,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 14,
-        "beginner": 19,
-        "intermediate": 26,
-        "advanced": 36,
-        "elite": 49
+        "1": 14,
+        "2": 19,
+        "3": 26,
+        "4": 36,
+        "5": 49
       }
     },
     {
@@ -4043,11 +4043,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 19,
-        "beginner": 27,
-        "intermediate": 37,
-        "advanced": 51,
-        "elite": 70
+        "1": 19,
+        "2": 27,
+        "3": 37,
+        "4": 51,
+        "5": 70
       }
     },
     {
@@ -4057,11 +4057,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 21,
-        "beginner": 29,
-        "intermediate": 40,
-        "advanced": 56,
-        "elite": 77
+        "1": 21,
+        "2": 29,
+        "3": 40,
+        "4": 56,
+        "5": 77
       }
     },
     {
@@ -4071,11 +4071,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 22,
-        "beginner": 30,
-        "intermediate": 42,
-        "advanced": 57,
-        "elite": 79
+        "1": 22,
+        "2": 30,
+        "3": 42,
+        "4": 57,
+        "5": 79
       }
     },
     {
@@ -4085,11 +4085,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 25,
-        "beginner": 34,
-        "intermediate": 47,
-        "advanced": 64,
-        "elite": 89
+        "1": 25,
+        "2": 34,
+        "3": 47,
+        "4": 64,
+        "5": 89
       }
     },
     {
@@ -4099,11 +4099,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 25,
-        "beginner": 35,
-        "intermediate": 48,
-        "advanced": 66,
-        "elite": 91
+        "1": 25,
+        "2": 35,
+        "3": 48,
+        "4": 66,
+        "5": 91
       }
     },
     {
@@ -4113,11 +4113,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 28,
-        "beginner": 39,
-        "intermediate": 54,
-        "advanced": 75,
-        "elite": 103
+        "1": 28,
+        "2": 39,
+        "3": 54,
+        "4": 75,
+        "5": 103
       }
     },
     {
@@ -4127,11 +4127,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 12,
-        "beginner": 17,
-        "intermediate": 22,
-        "advanced": 27,
-        "elite": 57
+        "1": 12,
+        "2": 17,
+        "3": 22,
+        "4": 27,
+        "5": 57
       }
     },
     {
@@ -4141,11 +4141,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 30,
-        "beginner": 41,
-        "intermediate": 53,
-        "advanced": 65,
-        "elite": 83
+        "1": 30,
+        "2": 41,
+        "3": 53,
+        "4": 65,
+        "5": 83
       }
     },
     {
@@ -4155,11 +4155,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 33,
-        "beginner": 45,
-        "intermediate": 60,
-        "advanced": 73,
-        "elite": 89
+        "1": 33,
+        "2": 45,
+        "3": 60,
+        "4": 73,
+        "5": 89
       }
     },
     {
@@ -4169,11 +4169,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 35,
-        "beginner": 51,
-        "intermediate": 66,
-        "advanced": 80,
-        "elite": 98
+        "1": 35,
+        "2": 51,
+        "3": 66,
+        "4": 80,
+        "5": 98
       }
     },
     {
@@ -4183,11 +4183,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 38,
-        "beginner": 51,
-        "intermediate": 67,
-        "advanced": 84,
-        "elite": 100
+        "1": 38,
+        "2": 51,
+        "3": 67,
+        "4": 84,
+        "5": 100
       }
     },
     {
@@ -4197,11 +4197,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 39,
-        "beginner": 52,
-        "intermediate": 66,
-        "advanced": 86,
-        "elite": 102
+        "1": 39,
+        "2": 52,
+        "3": 66,
+        "4": 86,
+        "5": 102
       }
     },
     {
@@ -4211,11 +4211,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 41,
-        "beginner": 58,
-        "intermediate": 74,
-        "advanced": 90,
-        "elite": 106
+        "1": 41,
+        "2": 58,
+        "3": 74,
+        "4": 90,
+        "5": 106
       }
     },
     {
@@ -4225,11 +4225,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 14,
-        "beginner": 14,
-        "intermediate": 25,
-        "advanced": 25,
-        "elite": 46
+        "1": 14,
+        "2": 14,
+        "3": 25,
+        "4": 25,
+        "5": 46
       }
     },
     {
@@ -4239,11 +4239,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 20,
-        "beginner": 31,
-        "intermediate": 36,
-        "advanced": 56,
-        "elite": 66
+        "1": 20,
+        "2": 31,
+        "3": 36,
+        "4": 56,
+        "5": 66
       }
     },
     {
@@ -4253,11 +4253,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 23,
-        "beginner": 37,
-        "intermediate": 41,
-        "advanced": 67,
-        "elite": 75
+        "1": 23,
+        "2": 37,
+        "3": 41,
+        "4": 67,
+        "5": 75
       }
     },
     {
@@ -4267,11 +4267,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 24,
-        "beginner": 44,
-        "intermediate": 44,
-        "advanced": 80,
-        "elite": 81
+        "1": 24,
+        "2": 44,
+        "3": 44,
+        "4": 80,
+        "5": 81
       }
     },
     {
@@ -4281,11 +4281,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 26,
-        "beginner": 32,
-        "intermediate": 44,
-        "advanced": 59,
-        "elite": 85
+        "1": 26,
+        "2": 32,
+        "3": 44,
+        "4": 59,
+        "5": 85
       }
     },
     {
@@ -4295,11 +4295,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 26,
-        "beginner": 41,
-        "intermediate": 48,
-        "advanced": 75,
-        "elite": 87
+        "1": 26,
+        "2": 41,
+        "3": 48,
+        "4": 75,
+        "5": 87
       }
     },
     {
@@ -4309,11 +4309,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 28,
-        "beginner": 44,
-        "intermediate": 51,
-        "advanced": 79,
-        "elite": 93
+        "1": 28,
+        "2": 44,
+        "3": 51,
+        "4": 79,
+        "5": 93
       }
     },
     {
@@ -4323,11 +4323,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 7,
-        "beginner": 13,
-        "intermediate": 17,
-        "advanced": 23,
-        "elite": 43
+        "1": 7,
+        "2": 13,
+        "3": 17,
+        "4": 23,
+        "5": 43
       }
     },
     {
@@ -4337,11 +4337,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 16,
-        "beginner": 22,
-        "intermediate": 32,
-        "advanced": 37,
-        "elite": 61
+        "1": 16,
+        "2": 22,
+        "3": 32,
+        "4": 37,
+        "5": 61
       }
     },
     {
@@ -4351,11 +4351,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 18,
-        "beginner": 30,
-        "intermediate": 40,
-        "advanced": 55,
-        "elite": 68
+        "1": 18,
+        "2": 30,
+        "3": 40,
+        "4": 55,
+        "5": 68
       }
     },
     {
@@ -4365,11 +4365,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 18,
-        "beginner": 31,
-        "intermediate": 41,
-        "advanced": 56,
-        "elite": 69
+        "1": 18,
+        "2": 31,
+        "3": 41,
+        "4": 56,
+        "5": 69
       }
     },
     {
@@ -4379,11 +4379,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 15,
-        "beginner": 27,
-        "intermediate": 35,
-        "advanced": 49,
-        "elite": 72
+        "1": 15,
+        "2": 27,
+        "3": 35,
+        "4": 49,
+        "5": 72
       }
     },
     {
@@ -4393,11 +4393,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 18,
-        "beginner": 32,
-        "intermediate": 42,
-        "advanced": 58,
-        "elite": 75
+        "1": 18,
+        "2": 32,
+        "3": 42,
+        "4": 58,
+        "5": 75
       }
     },
     {
@@ -4407,11 +4407,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 21,
-        "beginner": 36,
-        "intermediate": 48,
-        "advanced": 66,
-        "elite": 82
+        "1": 21,
+        "2": 36,
+        "3": 48,
+        "4": 66,
+        "5": 82
       }
     },
     {
@@ -4421,11 +4421,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 9,
-        "beginner": 13,
-        "intermediate": 17,
-        "advanced": 38,
-        "elite": 38
+        "1": 9,
+        "2": 13,
+        "3": 17,
+        "4": 38,
+        "5": 38
       }
     },
     {
@@ -4435,11 +4435,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 18,
-        "beginner": 33,
-        "intermediate": 44,
-        "advanced": 40,
-        "elite": 53
+        "1": 18,
+        "2": 33,
+        "3": 44,
+        "4": 40,
+        "5": 53
       }
     },
     {
@@ -4449,11 +4449,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 20,
-        "beginner": 25,
-        "intermediate": 34,
-        "advanced": 46,
-        "elite": 61
+        "1": 20,
+        "2": 25,
+        "3": 34,
+        "4": 46,
+        "5": 61
       }
     },
     {
@@ -4463,11 +4463,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 22,
-        "beginner": 33,
-        "intermediate": 48,
-        "advanced": 66,
-        "elite": 62
+        "1": 22,
+        "2": 33,
+        "3": 48,
+        "4": 66,
+        "5": 62
       }
     },
     {
@@ -4477,11 +4477,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 12,
-        "beginner": 20,
-        "intermediate": 27,
-        "advanced": 37,
-        "elite": 65
+        "1": 12,
+        "2": 20,
+        "3": 27,
+        "4": 37,
+        "5": 65
       }
     },
     {
@@ -4491,11 +4491,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 18,
-        "beginner": 31,
-        "intermediate": 41,
-        "advanced": 56,
-        "elite": 69
+        "1": 18,
+        "2": 31,
+        "3": 41,
+        "4": 56,
+        "5": 69
       }
     },
     {
@@ -4505,11 +4505,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 20,
-        "beginner": 45,
-        "intermediate": 58,
-        "advanced": 65,
-        "elite": 70
+        "1": 20,
+        "2": 45,
+        "3": 58,
+        "4": 65,
+        "5": 70
       }
     },
     {
@@ -4519,11 +4519,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 9,
-        "beginner": 12,
-        "intermediate": 16,
-        "advanced": 21,
-        "elite": 28
+        "1": 9,
+        "2": 12,
+        "3": 16,
+        "4": 21,
+        "5": 28
       }
     },
     {
@@ -4533,11 +4533,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 14,
-        "beginner": 18,
-        "intermediate": 24,
-        "advanced": 32,
-        "elite": 43
+        "1": 14,
+        "2": 18,
+        "3": 24,
+        "4": 32,
+        "5": 43
       }
     },
     {
@@ -4547,11 +4547,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 16,
-        "beginner": 21,
-        "intermediate": 28,
-        "advanced": 37,
-        "elite": 49
+        "1": 16,
+        "2": 21,
+        "3": 28,
+        "4": 37,
+        "5": 49
       }
     },
     {
@@ -4561,11 +4561,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 17,
-        "beginner": 23,
-        "intermediate": 30,
-        "advanced": 40,
-        "elite": 54
+        "1": 17,
+        "2": 23,
+        "3": 30,
+        "4": 40,
+        "5": 54
       }
     },
     {
@@ -4575,11 +4575,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 17,
-        "beginner": 23,
-        "intermediate": 31,
-        "advanced": 41,
-        "elite": 55
+        "1": 17,
+        "2": 23,
+        "3": 31,
+        "4": 41,
+        "5": 55
       }
     },
     {
@@ -4589,11 +4589,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 18,
-        "beginner": 24,
-        "intermediate": 32,
-        "advanced": 42,
-        "elite": 56
+        "1": 18,
+        "2": 24,
+        "3": 32,
+        "4": 42,
+        "5": 56
       }
     },
     {
@@ -4603,11 +4603,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 19,
-        "beginner": 25,
-        "intermediate": 33,
-        "advanced": 44,
-        "elite": 59
+        "1": 19,
+        "2": 25,
+        "3": 33,
+        "4": 44,
+        "5": 59
       }
     },
     {
@@ -4617,11 +4617,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 8,
-        "beginner": 10,
-        "intermediate": 14,
-        "advanced": 18,
-        "elite": 24
+        "1": 8,
+        "2": 10,
+        "3": 14,
+        "4": 18,
+        "5": 24
       }
     },
     {
@@ -4631,11 +4631,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 9,
-        "beginner": 14,
-        "intermediate": 19,
-        "advanced": 25,
-        "elite": 34
+        "1": 9,
+        "2": 14,
+        "3": 19,
+        "4": 25,
+        "5": 34
       }
     },
     {
@@ -4645,11 +4645,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 12,
-        "beginner": 16,
-        "intermediate": 22,
-        "advanced": 29,
-        "elite": 39
+        "1": 12,
+        "2": 16,
+        "3": 22,
+        "4": 29,
+        "5": 39
       }
     },
     {
@@ -4659,11 +4659,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 13,
-        "beginner": 18,
-        "intermediate": 24,
-        "advanced": 32,
-        "elite": 43
+        "1": 13,
+        "2": 18,
+        "3": 24,
+        "4": 32,
+        "5": 43
       }
     },
     {
@@ -4673,11 +4673,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 14,
-        "beginner": 19,
-        "intermediate": 25,
-        "advanced": 33,
-        "elite": 44
+        "1": 14,
+        "2": 19,
+        "3": 25,
+        "4": 33,
+        "5": 44
       }
     },
     {
@@ -4687,11 +4687,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 15,
-        "beginner": 19,
-        "intermediate": 26,
-        "advanced": 34,
-        "elite": 46
+        "1": 15,
+        "2": 19,
+        "3": 26,
+        "4": 34,
+        "5": 46
       }
     },
     {
@@ -4701,11 +4701,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 15,
-        "beginner": 20,
-        "intermediate": 27,
-        "advanced": 36,
-        "elite": 48
+        "1": 15,
+        "2": 20,
+        "3": 27,
+        "4": 36,
+        "5": 48
       }
     }
   ],
@@ -4717,11 +4717,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 676000,
-        "beginner": 560000,
-        "intermediate": 475000,
-        "advanced": 414000,
-        "elite": 369000
+        "1": 676000,
+        "2": 560000,
+        "3": 475000,
+        "4": 414000,
+        "5": 369000
       }
     },
     {
@@ -4731,11 +4731,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 585000,
-        "beginner": 485000,
-        "intermediate": 411000,
-        "advanced": 358000,
-        "elite": 319000
+        "1": 585000,
+        "2": 485000,
+        "3": 411000,
+        "4": 358000,
+        "5": 319000
       }
     },
     {
@@ -4745,11 +4745,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 565000,
-        "beginner": 468000,
-        "intermediate": 398000,
-        "advanced": 346000,
-        "elite": 308000
+        "1": 565000,
+        "2": 468000,
+        "3": 398000,
+        "4": 346000,
+        "5": 308000
       }
     },
     {
@@ -4759,11 +4759,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 565000,
-        "beginner": 468000,
-        "intermediate": 398000,
-        "advanced": 346000,
-        "elite": 308000
+        "1": 565000,
+        "2": 468000,
+        "3": 398000,
+        "4": 346000,
+        "5": 308000
       }
     },
     {
@@ -4773,11 +4773,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 566000,
-        "beginner": 469000,
-        "intermediate": 398000,
-        "advanced": 346000,
-        "elite": 309000
+        "1": 566000,
+        "2": 469000,
+        "3": 398000,
+        "4": 346000,
+        "5": 309000
       }
     },
     {
@@ -4787,11 +4787,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 575000,
-        "beginner": 476000,
-        "intermediate": 404000,
-        "advanced": 352000,
-        "elite": 314000
+        "1": 575000,
+        "2": 476000,
+        "3": 404000,
+        "4": 352000,
+        "5": 314000
       }
     },
     {
@@ -4801,11 +4801,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 595000,
-        "beginner": 493000,
-        "intermediate": 418000,
-        "advanced": 364000,
-        "elite": 325000
+        "1": 595000,
+        "2": 493000,
+        "3": 418000,
+        "4": 364000,
+        "5": 325000
       }
     },
     {
@@ -4815,11 +4815,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 617000,
-        "beginner": 511000,
-        "intermediate": 434000,
-        "advanced": 378000,
-        "elite": 337000
+        "1": 617000,
+        "2": 511000,
+        "3": 434000,
+        "4": 378000,
+        "5": 337000
       }
     },
     {
@@ -4829,11 +4829,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 642000,
-        "beginner": 531000,
-        "intermediate": 451000,
-        "advanced": 393000,
-        "elite": 350000
+        "1": 642000,
+        "2": 531000,
+        "3": 451000,
+        "4": 393000,
+        "5": 350000
       }
     },
     {
@@ -4843,11 +4843,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 668000,
-        "beginner": 553000,
-        "intermediate": 469000,
-        "advanced": 409000,
-        "elite": 364000
+        "1": 668000,
+        "2": 553000,
+        "3": 469000,
+        "4": 409000,
+        "5": 364000
       }
     },
     {
@@ -4857,11 +4857,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 696000,
-        "beginner": 577000,
-        "intermediate": 489000,
-        "advanced": 426000,
-        "elite": 380000
+        "1": 696000,
+        "2": 577000,
+        "3": 489000,
+        "4": 426000,
+        "5": 380000
       }
     },
     {
@@ -4871,11 +4871,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 727000,
-        "beginner": 602000,
-        "intermediate": 511000,
-        "advanced": 445000,
-        "elite": 397000
+        "1": 727000,
+        "2": 602000,
+        "3": 511000,
+        "4": 445000,
+        "5": 397000
       }
     },
     {
@@ -4885,11 +4885,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 763000,
-        "beginner": 632000,
-        "intermediate": 537000,
-        "advanced": 467000,
-        "elite": 417000
+        "1": 763000,
+        "2": 632000,
+        "3": 537000,
+        "4": 467000,
+        "5": 417000
       }
     },
     {
@@ -4899,11 +4899,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 820000,
-        "beginner": 680000,
-        "intermediate": 577000,
-        "advanced": 502000,
-        "elite": 448000
+        "1": 820000,
+        "2": 680000,
+        "3": 577000,
+        "4": 502000,
+        "5": 448000
       }
     },
     {
@@ -4913,11 +4913,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 908000,
-        "beginner": 752000,
-        "intermediate": 638000,
-        "advanced": 556000,
-        "elite": 495000
+        "1": 908000,
+        "2": 752000,
+        "3": 638000,
+        "4": 556000,
+        "5": 495000
       }
     },
     {
@@ -4927,11 +4927,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 1045000,
-        "beginner": 866000,
-        "intermediate": 735000,
-        "advanced": 640000,
-        "elite": 570000
+        "1": 1045000,
+        "2": 866000,
+        "3": 735000,
+        "4": 640000,
+        "5": 570000
       }
     },
     {
@@ -4941,11 +4941,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 1273000,
-        "beginner": 1055000,
-        "intermediate": 895000,
-        "advanced": 779000,
-        "elite": 695000
+        "1": 1273000,
+        "2": 1055000,
+        "3": 895000,
+        "4": 779000,
+        "5": 695000
       }
     },
     {
@@ -4955,11 +4955,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 749000,
-        "beginner": 632000,
-        "intermediate": 543000,
-        "advanced": 477000,
-        "elite": 428000
+        "1": 749000,
+        "2": 632000,
+        "3": 543000,
+        "4": 477000,
+        "5": 428000
       }
     },
     {
@@ -4969,11 +4969,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 672000,
-        "beginner": 567000,
-        "intermediate": 488000,
-        "advanced": 428000,
-        "elite": 384000
+        "1": 672000,
+        "2": 567000,
+        "3": 488000,
+        "4": 428000,
+        "5": 384000
       }
     },
     {
@@ -4983,11 +4983,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 640000,
-        "beginner": 540000,
-        "intermediate": 464000,
-        "advanced": 408000,
-        "elite": 366000
+        "1": 640000,
+        "2": 540000,
+        "3": 464000,
+        "4": 408000,
+        "5": 366000
       }
     },
     {
@@ -4997,11 +4997,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 640000,
-        "beginner": 540000,
-        "intermediate": 464000,
-        "advanced": 408000,
-        "elite": 366000
+        "1": 640000,
+        "2": 540000,
+        "3": 464000,
+        "4": 408000,
+        "5": 366000
       }
     },
     {
@@ -5011,11 +5011,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 640000,
-        "beginner": 540000,
-        "intermediate": 464000,
-        "advanced": 408000,
-        "elite": 366000
+        "1": 640000,
+        "2": 540000,
+        "3": 464000,
+        "4": 408000,
+        "5": 366000
       }
     },
     {
@@ -5025,11 +5025,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 644000,
-        "beginner": 544000,
-        "intermediate": 467000,
-        "advanced": 410000,
-        "elite": 368000
+        "1": 644000,
+        "2": 544000,
+        "3": 467000,
+        "4": 410000,
+        "5": 368000
       }
     },
     {
@@ -5039,11 +5039,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 658000,
-        "beginner": 555000,
-        "intermediate": 477000,
-        "advanced": 419000,
-        "elite": 376000
+        "1": 658000,
+        "2": 555000,
+        "3": 477000,
+        "4": 419000,
+        "5": 376000
       }
     },
     {
@@ -5053,11 +5053,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 681000,
-        "beginner": 575000,
-        "intermediate": 494000,
-        "advanced": 434000,
-        "elite": 389000
+        "1": 681000,
+        "2": 575000,
+        "3": 494000,
+        "4": 434000,
+        "5": 389000
       }
     },
     {
@@ -5067,11 +5067,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 716000,
-        "beginner": 604000,
-        "intermediate": 520000,
-        "advanced": 456000,
-        "elite": 409000
+        "1": 716000,
+        "2": 604000,
+        "3": 520000,
+        "4": 456000,
+        "5": 409000
       }
     },
     {
@@ -5081,11 +5081,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 757000,
-        "beginner": 639000,
-        "intermediate": 550000,
-        "advanced": 482000,
-        "elite": 433000
+        "1": 757000,
+        "2": 639000,
+        "3": 550000,
+        "4": 482000,
+        "5": 433000
       }
     },
     {
@@ -5095,11 +5095,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 804000,
-        "beginner": 678000,
-        "intermediate": 583000,
-        "advanced": 512000,
-        "elite": 459000
+        "1": 804000,
+        "2": 678000,
+        "3": 583000,
+        "4": 512000,
+        "5": 459000
       }
     },
     {
@@ -5109,11 +5109,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 856000,
-        "beginner": 722000,
-        "intermediate": 621000,
-        "advanced": 545000,
-        "elite": 489000
+        "1": 856000,
+        "2": 722000,
+        "3": 621000,
+        "4": 545000,
+        "5": 489000
       }
     },
     {
@@ -5123,11 +5123,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 915000,
-        "beginner": 772000,
-        "intermediate": 664000,
-        "advanced": 583000,
-        "elite": 523000
+        "1": 915000,
+        "2": 772000,
+        "3": 664000,
+        "4": 583000,
+        "5": 523000
       }
     },
     {
@@ -5137,11 +5137,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 983000,
-        "beginner": 830000,
-        "intermediate": 713000,
-        "advanced": 626000,
-        "elite": 562000
+        "1": 983000,
+        "2": 830000,
+        "3": 713000,
+        "4": 626000,
+        "5": 562000
       }
     },
     {
@@ -5151,11 +5151,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 1065000,
-        "beginner": 898000,
-        "intermediate": 772000,
-        "advanced": 678000,
-        "elite": 608000
+        "1": 1065000,
+        "2": 898000,
+        "3": 772000,
+        "4": 678000,
+        "5": 608000
       }
     },
     {
@@ -5165,11 +5165,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 1199000,
-        "beginner": 1012000,
-        "intermediate": 870000,
-        "advanced": 763000,
-        "elite": 685000
+        "1": 1199000,
+        "2": 1012000,
+        "3": 870000,
+        "4": 763000,
+        "5": 685000
       }
     },
     {
@@ -5179,11 +5179,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 1445000,
-        "beginner": 1219000,
-        "intermediate": 1048000,
-        "advanced": 920000,
-        "elite": 825000
+        "1": 1445000,
+        "2": 1219000,
+        "3": 1048000,
+        "4": 920000,
+        "5": 825000
       }
     }
   ],
@@ -5195,11 +5195,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 14000,
-        "beginner": 13000,
-        "intermediate": 12000,
-        "advanced": 11300,
-        "elite": 10800
+        "1": 14000,
+        "2": 13000,
+        "3": 12000,
+        "4": 11300,
+        "5": 10800
       }
     },
     {
@@ -5209,11 +5209,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 14500,
-        "beginner": 13500,
-        "intermediate": 12400,
-        "advanced": 11700,
-        "elite": 11200
+        "1": 14500,
+        "2": 13500,
+        "3": 12400,
+        "4": 11700,
+        "5": 11200
       }
     },
     {
@@ -5223,11 +5223,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 15700,
-        "beginner": 14500,
-        "intermediate": 13400,
-        "advanced": 12600,
-        "elite": 12100
+        "1": 15700,
+        "2": 14500,
+        "3": 13400,
+        "4": 12600,
+        "5": 12100
       }
     },
     {
@@ -5237,11 +5237,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 15900,
-        "beginner": 14800,
-        "intermediate": 13600,
-        "advanced": 12800,
-        "elite": 12300
+        "1": 15900,
+        "2": 14800,
+        "3": 13600,
+        "4": 12800,
+        "5": 12300
       }
     },
     {
@@ -5251,11 +5251,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 16500,
-        "beginner": 15300,
-        "intermediate": 14200,
-        "advanced": 13300,
-        "elite": 12700
+        "1": 16500,
+        "2": 15300,
+        "3": 14200,
+        "4": 13300,
+        "5": 12700
       }
     },
     {
@@ -5265,11 +5265,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 17100,
-        "beginner": 15900,
-        "intermediate": 14700,
-        "advanced": 13800,
-        "elite": 13200
+        "1": 17100,
+        "2": 15900,
+        "3": 14700,
+        "4": 13800,
+        "5": 13200
       }
     },
     {
@@ -5279,11 +5279,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 18000,
-        "beginner": 16700,
-        "intermediate": 15400,
-        "advanced": 14500,
-        "elite": 13900
+        "1": 18000,
+        "2": 16700,
+        "3": 15400,
+        "4": 14500,
+        "5": 13900
       }
     },
     {
@@ -5293,11 +5293,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 18400,
-        "beginner": 17100,
-        "intermediate": 15800,
-        "advanced": 14900,
-        "elite": 14200
+        "1": 18400,
+        "2": 17100,
+        "3": 15800,
+        "4": 14900,
+        "5": 14200
       }
     },
     {
@@ -5307,11 +5307,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 19400,
-        "beginner": 18000,
-        "intermediate": 16600,
-        "advanced": 15600,
-        "elite": 14900
+        "1": 19400,
+        "2": 18000,
+        "3": 16600,
+        "4": 15600,
+        "5": 14900
       }
     },
     {
@@ -5321,11 +5321,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 20800,
-        "beginner": 19300,
-        "intermediate": 17800,
-        "advanced": 16800,
-        "elite": 16100
+        "1": 20800,
+        "2": 19300,
+        "3": 17800,
+        "4": 16800,
+        "5": 16100
       }
     },
     {
@@ -5335,11 +5335,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 15400,
-        "beginner": 14300,
-        "intermediate": 13300,
-        "advanced": 12500,
-        "elite": 11900
+        "1": 15400,
+        "2": 14300,
+        "3": 13300,
+        "4": 12500,
+        "5": 11900
       }
     },
     {
@@ -5349,11 +5349,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 16100,
-        "beginner": 14900,
-        "intermediate": 13900,
-        "advanced": 13100,
-        "elite": 12400
+        "1": 16100,
+        "2": 14900,
+        "3": 13900,
+        "4": 13100,
+        "5": 12400
       }
     },
     {
@@ -5363,11 +5363,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 16500,
-        "beginner": 15300,
-        "intermediate": 14200,
-        "advanced": 13400,
-        "elite": 12700
+        "1": 16500,
+        "2": 15300,
+        "3": 14200,
+        "4": 13400,
+        "5": 12700
       }
     },
     {
@@ -5377,11 +5377,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 16900,
-        "beginner": 15700,
-        "intermediate": 14600,
-        "advanced": 13700,
-        "elite": 13100
+        "1": 16900,
+        "2": 15700,
+        "3": 14600,
+        "4": 13700,
+        "5": 13100
       }
     },
     {
@@ -5391,11 +5391,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 17600,
-        "beginner": 16400,
-        "intermediate": 15200,
-        "advanced": 14300,
-        "elite": 13600
+        "1": 17600,
+        "2": 16400,
+        "3": 15200,
+        "4": 14300,
+        "5": 13600
       }
     },
     {
@@ -5405,11 +5405,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 19200,
-        "beginner": 17800,
-        "intermediate": 16500,
-        "advanced": 15600,
-        "elite": 14800
+        "1": 19200,
+        "2": 17800,
+        "3": 16500,
+        "4": 15600,
+        "5": 14800
       }
     },
     {
@@ -5419,11 +5419,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 20200,
-        "beginner": 18700,
-        "intermediate": 17400,
-        "advanced": 16400,
-        "elite": 15600
+        "1": 20200,
+        "2": 18700,
+        "3": 17400,
+        "4": 16400,
+        "5": 15600
       }
     },
     {
@@ -5433,11 +5433,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 21400,
-        "beginner": 19900,
-        "intermediate": 18500,
-        "advanced": 17400,
-        "elite": 16500
+        "1": 21400,
+        "2": 19900,
+        "3": 18500,
+        "4": 17400,
+        "5": 16500
       }
     },
     {
@@ -5447,11 +5447,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 21800,
-        "beginner": 20300,
-        "intermediate": 18800,
-        "advanced": 17700,
-        "elite": 16900
+        "1": 21800,
+        "2": 20300,
+        "3": 18800,
+        "4": 17700,
+        "5": 16900
       }
     },
     {
@@ -5461,11 +5461,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 23600,
-        "beginner": 21900,
-        "intermediate": 20300,
-        "advanced": 19100,
-        "elite": 18200
+        "1": 23600,
+        "2": 21900,
+        "3": 20300,
+        "4": 19100,
+        "5": 18200
       }
     }
   ],
@@ -5477,11 +5477,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 0.007142857142857143,
-        "beginner": 0.007692307692307693,
-        "intermediate": 0.008333333333333333,
-        "advanced": 0.008849557522123894,
-        "elite": 0.009259259259259259
+        "1": 0.007142857142857143,
+        "2": 0.007692307692307693,
+        "3": 0.008333333333333333,
+        "4": 0.008849557522123894,
+        "5": 0.009259259259259259
       }
     },
     {
@@ -5491,11 +5491,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 0.006896551724137931,
-        "beginner": 0.007407407407407408,
-        "intermediate": 0.008064516129032258,
-        "advanced": 0.008547008547008548,
-        "elite": 0.008928571428571428
+        "1": 0.006896551724137931,
+        "2": 0.007407407407407408,
+        "3": 0.008064516129032258,
+        "4": 0.008547008547008548,
+        "5": 0.008928571428571428
       }
     },
     {
@@ -5505,11 +5505,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 0.006369426751592357,
-        "beginner": 0.006896551724137931,
-        "intermediate": 0.007462686567164179,
-        "advanced": 0.007936507936507936,
-        "elite": 0.008264462809917356
+        "1": 0.006369426751592357,
+        "2": 0.006896551724137931,
+        "3": 0.007462686567164179,
+        "4": 0.007936507936507936,
+        "5": 0.008264462809917356
       }
     },
     {
@@ -5519,11 +5519,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 0.006289308176100629,
-        "beginner": 0.006756756756756757,
-        "intermediate": 0.007352941176470588,
-        "advanced": 0.0078125,
-        "elite": 0.008130081300813009
+        "1": 0.006289308176100629,
+        "2": 0.006756756756756757,
+        "3": 0.007352941176470588,
+        "4": 0.0078125,
+        "5": 0.008130081300813009
       }
     },
     {
@@ -5533,11 +5533,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 0.006060606060606061,
-        "beginner": 0.006535947712418301,
-        "intermediate": 0.007042253521126761,
-        "advanced": 0.007518796992481203,
-        "elite": 0.007874015748031496
+        "1": 0.006060606060606061,
+        "2": 0.006535947712418301,
+        "3": 0.007042253521126761,
+        "4": 0.007518796992481203,
+        "5": 0.007874015748031496
       }
     },
     {
@@ -5547,11 +5547,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 0.005847953216374269,
-        "beginner": 0.006289308176100629,
-        "intermediate": 0.006802721088435374,
-        "advanced": 0.007246376811594203,
-        "elite": 0.007575757575757576
+        "1": 0.005847953216374269,
+        "2": 0.006289308176100629,
+        "3": 0.006802721088435374,
+        "4": 0.007246376811594203,
+        "5": 0.007575757575757576
       }
     },
     {
@@ -5561,11 +5561,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 0.005555555555555556,
-        "beginner": 0.005988023952095809,
-        "intermediate": 0.006493506493506494,
-        "advanced": 0.006896551724137931,
-        "elite": 0.007194244604316547
+        "1": 0.005555555555555556,
+        "2": 0.005988023952095809,
+        "3": 0.006493506493506494,
+        "4": 0.006896551724137931,
+        "5": 0.007194244604316547
       }
     },
     {
@@ -5575,11 +5575,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 0.005434782608695652,
-        "beginner": 0.005847953216374269,
-        "intermediate": 0.006329113924050633,
-        "advanced": 0.006711409395973154,
-        "elite": 0.007042253521126761
+        "1": 0.005434782608695652,
+        "2": 0.005847953216374269,
+        "3": 0.006329113924050633,
+        "4": 0.006711409395973154,
+        "5": 0.007042253521126761
       }
     },
     {
@@ -5589,11 +5589,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 0.005154639175257732,
-        "beginner": 0.005555555555555556,
-        "intermediate": 0.006024096385542169,
-        "advanced": 0.00641025641025641,
-        "elite": 0.006711409395973154
+        "1": 0.005154639175257732,
+        "2": 0.005555555555555556,
+        "3": 0.006024096385542169,
+        "4": 0.00641025641025641,
+        "5": 0.006711409395973154
       }
     },
     {
@@ -5603,11 +5603,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 0.004807692307692308,
-        "beginner": 0.0051813471502590676,
-        "intermediate": 0.0056179775280898875,
-        "advanced": 0.005952380952380952,
-        "elite": 0.006211180124223602
+        "1": 0.004807692307692308,
+        "2": 0.0051813471502590676,
+        "3": 0.0056179775280898875,
+        "4": 0.005952380952380952,
+        "5": 0.006211180124223602
       }
     },
     {
@@ -5617,11 +5617,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 0.006493506493506494,
-        "beginner": 0.006993006993006993,
-        "intermediate": 0.007518796992481203,
-        "advanced": 0.008,
-        "elite": 0.008403361344537815
+        "1": 0.006493506493506494,
+        "2": 0.006993006993006993,
+        "3": 0.007518796992481203,
+        "4": 0.008,
+        "5": 0.008403361344537815
       }
     },
     {
@@ -5631,11 +5631,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 0.006211180124223602,
-        "beginner": 0.006711409395973154,
-        "intermediate": 0.007194244604316547,
-        "advanced": 0.007633587786259542,
-        "elite": 0.008064516129032258
+        "1": 0.006211180124223602,
+        "2": 0.006711409395973154,
+        "3": 0.007194244604316547,
+        "4": 0.007633587786259542,
+        "5": 0.008064516129032258
       }
     },
     {
@@ -5645,11 +5645,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 0.006060606060606061,
-        "beginner": 0.006535947712418301,
-        "intermediate": 0.007042253521126761,
-        "advanced": 0.007462686567164179,
-        "elite": 0.007874015748031496
+        "1": 0.006060606060606061,
+        "2": 0.006535947712418301,
+        "3": 0.007042253521126761,
+        "4": 0.007462686567164179,
+        "5": 0.007874015748031496
       }
     },
     {
@@ -5659,11 +5659,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 0.005917159763313609,
-        "beginner": 0.006369426751592357,
-        "intermediate": 0.00684931506849315,
-        "advanced": 0.0072992700729927005,
-        "elite": 0.007633587786259542
+        "1": 0.005917159763313609,
+        "2": 0.006369426751592357,
+        "3": 0.00684931506849315,
+        "4": 0.0072992700729927005,
+        "5": 0.007633587786259542
       }
     },
     {
@@ -5673,11 +5673,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 0.005681818181818182,
-        "beginner": 0.006097560975609756,
-        "intermediate": 0.006578947368421052,
-        "advanced": 0.006993006993006993,
-        "elite": 0.007352941176470588
+        "1": 0.005681818181818182,
+        "2": 0.006097560975609756,
+        "3": 0.006578947368421052,
+        "4": 0.006993006993006993,
+        "5": 0.007352941176470588
       }
     },
     {
@@ -5687,11 +5687,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 0.005208333333333333,
-        "beginner": 0.0056179775280898875,
-        "intermediate": 0.006060606060606061,
-        "advanced": 0.00641025641025641,
-        "elite": 0.006756756756756757
+        "1": 0.005208333333333333,
+        "2": 0.0056179775280898875,
+        "3": 0.006060606060606061,
+        "4": 0.00641025641025641,
+        "5": 0.006756756756756757
       }
     },
     {
@@ -5701,11 +5701,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 0.0049504950495049506,
-        "beginner": 0.0053475935828877,
-        "intermediate": 0.005747126436781609,
-        "advanced": 0.006097560975609756,
-        "elite": 0.00641025641025641
+        "1": 0.0049504950495049506,
+        "2": 0.0053475935828877,
+        "3": 0.005747126436781609,
+        "4": 0.006097560975609756,
+        "5": 0.00641025641025641
       }
     },
     {
@@ -5715,11 +5715,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 0.004672897196261682,
-        "beginner": 0.005025125628140704,
-        "intermediate": 0.005405405405405406,
-        "advanced": 0.005747126436781609,
-        "elite": 0.006060606060606061
+        "1": 0.004672897196261682,
+        "2": 0.005025125628140704,
+        "3": 0.005405405405405406,
+        "4": 0.005747126436781609,
+        "5": 0.006060606060606061
       }
     },
     {
@@ -5729,11 +5729,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 0.0045871559633027525,
-        "beginner": 0.0049261083743842365,
-        "intermediate": 0.005319148936170213,
-        "advanced": 0.005649717514124294,
-        "elite": 0.005917159763313609
+        "1": 0.0045871559633027525,
+        "2": 0.0049261083743842365,
+        "3": 0.005319148936170213,
+        "4": 0.005649717514124294,
+        "5": 0.005917159763313609
       }
     },
     {
@@ -5743,11 +5743,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 0.00423728813559322,
-        "beginner": 0.0045662100456621,
-        "intermediate": 0.0049261083743842365,
-        "advanced": 0.005235602094240838,
-        "elite": 0.005494505494505495
+        "1": 0.00423728813559322,
+        "2": 0.0045662100456621,
+        "3": 0.0049261083743842365,
+        "4": 0.005235602094240838,
+        "5": 0.005494505494505495
       }
     }
   ],
@@ -5759,11 +5759,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 200,
-        "beginner": 214,
-        "intermediate": 224,
-        "advanced": 234,
-        "elite": 245
+        "1": 200,
+        "2": 214,
+        "3": 224,
+        "4": 234,
+        "5": 245
       }
     },
     {
@@ -5773,11 +5773,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 150,
-        "beginner": 164,
-        "intermediate": 174,
-        "advanced": 184,
-        "elite": 194
+        "1": 150,
+        "2": 164,
+        "3": 174,
+        "4": 184,
+        "5": 194
       }
     }
   ],
@@ -5789,11 +5789,11 @@
         "gender": "male"
       },
       "levels": {
-        "physicallyActive": 9500,
-        "beginner": 8700,
-        "intermediate": 7800,
-        "advanced": 7000,
-        "elite": 6500
+        "1": 9500,
+        "2": 8700,
+        "3": 7800,
+        "4": 7000,
+        "5": 6500
       }
     },
     {
@@ -5803,11 +5803,11 @@
         "gender": "female"
       },
       "levels": {
-        "physicallyActive": 10500,
-        "beginner": 9600,
-        "intermediate": 8700,
-        "advanced": 7800,
-        "elite": 7200
+        "1": 10500,
+        "2": 9600,
+        "3": 8700,
+        "4": 7800,
+        "5": 7200
       }
     }
   ]

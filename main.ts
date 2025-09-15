@@ -1,11 +1,11 @@
-import { calcAllAttributeLevels, calcPlayerLevel } from "./calculator/calc.ts";
+import { LevelCalculator } from "./calculator/calc.ts";
 import { ActivityPerformance, Player } from "./calculator/util.ts";
 import { Printful } from "./commerce/printful.ts"
 import { Webflow } from "./commerce/webflow.ts";
 
 interface CalcRequest {
     player: Player,
-    performances: ActivityPerformance[]
+    activityPerformances: ActivityPerformance[]
 }
 
 export class ClientResponse extends Response {
@@ -34,12 +34,14 @@ const server = Bun.serve({
             },
             async POST(req) {
                 const calcReq: CalcRequest = await req.json();
-                const { player, performances } = calcReq;
+                const { player, activityPerformances } = calcReq;
+
+                const levelCalculator = new LevelCalculator();
 
                 return ClientResponse.json({
                     levels: {
-                        attributes: calcAllAttributeLevels(player, performances),
-                        player: calcPlayerLevel(player, performances)
+                        attributes: levelCalculator.calcAllAttributeLevels(player, activityPerformances),
+                        player: levelCalculator.calcPlayerLevel(player, activityPerformances)
                     }
                 })
             }
@@ -90,7 +92,8 @@ const server = Bun.serve({
                         }
                         // DELETE
                         case Printful.Webhook.Event.ProductDeleted: {
-                            await Webflow.Products.remove(payload.data.sync_product.external_id);
+                            const webflowProductId = payload.data.sync_product.external_id;
+                            await Webflow.Products.remove(webflowProductId);
                             break;
                         }
                     }
