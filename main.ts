@@ -1,7 +1,8 @@
-import { LevelCalculator } from "./calculator/calc.ts";
-import { ActivityPerformance, Player } from "./calculator/util.ts";
+import { LevelCalculator, Standards } from "./calculator/calc.ts";
+import { ActivityPerformance, Player, StandardsMap } from "./calculator/util.ts";
 import { Printful } from "./commerce/printful.ts"
 import { Webflow } from "./commerce/webflow.ts";
+import rawStandards from "./data/standards.json" assert { type: "json" }
 
 interface CalcRequest {
     player: Player,
@@ -25,6 +26,8 @@ export class ClientResponse extends Response {
     }
 }
 
+const MAIN_STANDARDS = new Standards(rawStandards as StandardsMap);
+
 const server = Bun.serve({
     idleTimeout: 180,
     routes: {
@@ -36,12 +39,12 @@ const server = Bun.serve({
                 const calcReq: CalcRequest = await req.json();
                 const { player, activityPerformances } = calcReq;
 
-                const levelCalculator = new LevelCalculator();
+                const levelCalculator = new LevelCalculator(MAIN_STANDARDS);
 
                 return ClientResponse.json({
                     levels: {
-                        attributes: levelCalculator.calcAllAttributeLevels(player, activityPerformances),
-                        player: levelCalculator.calcPlayerLevel(player, activityPerformances)
+                        attributes: levelCalculator.calculateAllAttributeLevels(player, activityPerformances),
+                        player: levelCalculator.calculatePlayerLevel(player, activityPerformances)
                     }
                 })
             }

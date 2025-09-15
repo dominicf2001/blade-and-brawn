@@ -1,5 +1,6 @@
-import { activities, ActivityPerformance, feetToCm, genders, inchesToCm, lbToKg, minToMs, Player, secToMs } from "./util";
-import { LevelCalculator } from "./calc.ts";
+import { activities, ActivityPerformance, feetToCm, genders, inchesToCm, lbToKg, minToMs, Player, secToMs, StandardsMap } from "./util";
+import { LevelCalculator, Standards } from "./calc.ts";
+import rawStandards from "../data/standards.json" assert { type: "json" }
 
 const player: Player = {
     metrics: {
@@ -40,13 +41,12 @@ const computedPerformances: ActivityPerformance[] = [
     },
 ];
 
-console.log(Bun.argv);
-// const levelCalculator = new LevelCalculator({ compressTo: +Bun.argv[2], expandIters: +Bun.argv[3] });
-const levelCalculator = new LevelCalculator();
+const standards = new Standards(rawStandards as StandardsMap);
+const levelCalculator = new LevelCalculator(standards);
 
 const levels = {
-    attributes: levelCalculator.calcAllAttributeLevels(player, computedPerformances),
-    player: levelCalculator.calcPlayerLevel(player, computedPerformances)
+    attributes: levelCalculator.calculateAllAttributeLevels(player, computedPerformances),
+    player: levelCalculator.calculatePlayerLevel(player, computedPerformances)
 };
 
 console.log(levels);
