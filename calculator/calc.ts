@@ -50,6 +50,17 @@ export class LevelCalculator {
         return resultLevel;
     }
 
+    findNearestStandards(standards: Standard[], target: number, getValue: (x: Metrics) => number) {
+        const lowerStandard = [...standards]
+            .sort((a, b) => getValue(a.metrics) - getValue(b.metrics))
+            .reverse()
+            .find((s) => getValue(s.metrics) <= target) ?? standards.at(0)!;
+        const upperStandard = [...standards]
+            .sort((a, b) => getValue(a.metrics) - getValue(b.metrics))
+            .find((s) => getValue(s.metrics) >= target) ?? standards.at(-1)!;
+        return { lowerStandard, upperStandard };
+    }
+
     compressLevels(
         levels: Levels,
         targetLevelsAmount: number,
@@ -122,25 +133,22 @@ export class LevelCalculator {
         return interpolatedLevels;
     }
 
-    interpolateByBodyWeight(
+    interpolateByWeight(
         targetAge: number,
-        bodyWeightKG: number,
-        standardsArr: Standard[],
-    ): Levels | null {
-        const ageFilteredStandards = standardsArr.filter((s) => s.metrics.age === targetAge);
+        targetWeight: number,
+        standards: Standard[],
+    ): Levels {
+        const ageFilteredStandards = standards.filter((s) => s.metrics.age === targetAge);
         if (ageFilteredStandards[0].metrics.weight === -1) return ageFilteredStandards[0].levels;
 
-        const weightArray = [...new Set(ageFilteredStandards.map((s) => s.metrics.weight))].sort((a, b) => a - b);
-        const { lower, upper } = findNearestPoints(bodyWeightKG, weightArray);
+        const { upperStandard, lowerStandard } = this.findNearestStandards(ageFilteredStandards, targetWeight, m => m.weight);
+        const weightLower = lowerStandard.metrics.weight;
+        const weightUpper = upperStandard.metrics.weight;
 
-        const weightLower = ageFilteredStandards.find((s) => s.metrics.weight === lower);
-        const weightUpper = ageFilteredStandards.find((s) => s.metrics.weight === upper);
-        if (!weightLower || !weightUpper) return null;
-
-        let weightRatio = upper === lower ? 1 : (bodyWeightKG - lower) / (upper - lower);
+        let weightRatio = weightUpper === weightLower ? 1 : (targetWeight - weightLower) / (weightUpper - weightLower);
         weightRatio = Math.max(0, Math.min(1, weightRatio));
 
-        return this.interpolateLevels(weightLower.levels, weightUpper.levels, weightRatio);
+        return this.interpolateLevels(lowerStandard.levels, upperStandard.levels, weightRatio);
     }
 
     getInterpolatedActivityStandard(
@@ -152,27 +160,30 @@ export class LevelCalculator {
             levels: {}
         };
 
-        // Filter dataset
+        // Filter by gender 
         const standardsByGender = standards[activity]
             .filter(a => a.metrics.gender === metrics.gender);
         if (standardsByGender.length === 0) return interpolatedStandard;
 
-        // Age interpolation
-        const ageArray = [...new Set(standardsByGender.map((s) => s.metrics.age))].sort((a, b) => a - b);
-        const { lower: ageLower, upper: ageUpper } = findNearestPoints(metrics.age, ageArray);
+        // Find nearest age standards
+        const { lowerStandard, upperStandard } = this.findNearestStandards(standardsByGender, metrics.age, m => m.age);
+        const ageLower = lowerStandard.metrics.age;
+        const ageUpper = upperStandard.metrics.age;
 
-        const lowerValues = this.interpolateByBodyWeight(ageLower, metrics.weight, standardsByGender);
-        const upperValues = this.interpolateByBodyWeight(ageUpper, metrics.weight, standardsByGender);
-        if (!lowerValues || !upperValues) return interpolatedStandard;
+        // Interpolate by weight
+        const lowerLevels = this.interpolateByWeight(ageLower, metrics.weight, standardsByGender);
+        const upperLevels = this.interpolateByWeight(ageUpper, metrics.weight, standardsByGender);
 
+        // Interpolate by age
         let ageRatio = ageUpper === ageLower ? 1 : (metrics.age - ageLower) / (ageUpper - ageLower);
         ageRatio = Math.max(0, Math.min(1, ageRatio));
+        const levels = this.interpolateLevels(lowerLevels, upperLevels, ageRatio);
 
-        const levels = this.interpolateLevels(lowerValues, upperValues, ageRatio);
+        // Post-process
         const expandedLevels = this.expandLevels(levels, this.cfg.expandIters);
         const compressedLevels = this.compressLevels(expandedLevels, this.cfg.compressTo);
-
         interpolatedStandard.levels = compressedLevels;
+
         return interpolatedStandard;
     }
 
