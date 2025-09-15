@@ -1,4 +1,4 @@
-import { Activity, Attribute, attributes, ActivityPerformance, findNearestPoints, getActivityAttribute, getAttributeActivities, Player, StandardsMap, Levels, Standard, Metrics, activities } from "./util";
+import { Activity, Attribute, attributes, ActivityPerformance, getActivityAttribute, getAttributeActivities, Player, StandardsMap, Levels, Standard, Metrics } from "./util";
 import rawStandards from "./standards.json" assert { type: "json" }
 
 // SOURCES
@@ -11,12 +11,6 @@ import rawStandards from "./standards.json" assert { type: "json" }
 // Broad Jump:
 //  
 
-const standards = rawStandards as StandardsMap;
-
-type TableData = Record<Activity, {
-
-}>
-
 type LevelCalculatorConfig = {
     compressTo?: number;
     expandIters?: number;
@@ -24,11 +18,23 @@ type LevelCalculatorConfig = {
 
 export class LevelCalculator {
     cfg: Required<LevelCalculatorConfig>;
+    standardsMap: StandardsMap;
 
     public constructor(cfg: LevelCalculatorConfig = {}) {
+        // initialize config
         this.cfg = {
             compressTo: cfg.compressTo ?? 100,
             expandIters: cfg.expandIters ?? 5
+        }
+
+        // initialize standards map
+        this.standardsMap = rawStandards as StandardsMap;
+        for (const activity of Object.keys(this.standardsMap) as Activity[]) {
+            for (const standard of this.standardsMap[activity]) {
+                const expandedLevels = this.expandLevels(standard.levels, this.cfg.expandIters);
+                const compressedLevels = this.compressLevels(expandedLevels, this.cfg.compressTo);
+                standard.levels = compressedLevels;
+            }
         }
     }
 
@@ -36,12 +42,12 @@ export class LevelCalculator {
     // Level utilities (helpers)
     // -------------------------------------------------------------------------------------------------
 
-    findLevel(levels: Levels, performance: number): number {
+    private findLevel(standard: Standard, performance: number): number {
         let resultLevel = 1;
         let resultLevelDiff = Infinity;
 
-        for (const level in levels) {
-            const diff = Math.abs(performance - levels[level as unknown as number]);
+        for (const level in standard.levels) {
+            const diff = Math.abs(performance - standard.levels[level as unknown as number]);
             if (diff < resultLevelDiff) {
                 resultLevel = +level;
                 resultLevelDiff = diff;
@@ -50,7 +56,7 @@ export class LevelCalculator {
         return resultLevel;
     }
 
-    findNearestStandards(standards: Standard[], target: number, getValue: (x: Metrics) => number) {
+    private findNearestStandards(standards: Standard[], target: number, getValue: (x: Metrics) => number) {
         const lowerStandard = [...standards]
             .sort((a, b) => getValue(a.metrics) - getValue(b.metrics))
             .reverse()
@@ -61,7 +67,7 @@ export class LevelCalculator {
         return { lowerStandard, upperStandard };
     }
 
-    compressLevels(
+    private compressLevels(
         levels: Levels,
         targetLevelsAmount: number,
     ): Levels {
@@ -90,7 +96,7 @@ export class LevelCalculator {
         return compressedLevels;
     }
 
-    expandLevels(
+    private expandLevels(
         levels: Levels,
         i: number
     ): Levels {
@@ -117,7 +123,7 @@ export class LevelCalculator {
     // Standards interpolation (heavy math bits)
     // -------------------------------------------------------------------------------------------------
 
-    interpolateLevels(
+    private interpolateLevels(
         lower: Levels,
         upper: Levels,
         ratio: number,
@@ -133,25 +139,7 @@ export class LevelCalculator {
         return interpolatedLevels;
     }
 
-    interpolateByWeight(
-        targetAge: number,
-        targetWeight: number,
-        standards: Standard[],
-    ): Levels {
-        const ageFilteredStandards = standards.filter((s) => s.metrics.age === targetAge);
-        if (ageFilteredStandards[0].metrics.weight === -1) return ageFilteredStandards[0].levels;
-
-        const { upperStandard, lowerStandard } = this.findNearestStandards(ageFilteredStandards, targetWeight, m => m.weight);
-        const weightLower = lowerStandard.metrics.weight;
-        const weightUpper = upperStandard.metrics.weight;
-
-        let weightRatio = weightUpper === weightLower ? 1 : (targetWeight - weightLower) / (weightUpper - weightLower);
-        weightRatio = Math.max(0, Math.min(1, weightRatio));
-
-        return this.interpolateLevels(lowerStandard.levels, upperStandard.levels, weightRatio);
-    }
-
-    getInterpolatedActivityStandard(
+    private getInterpolatedActivityStandard(
         activity: Activity,
         metrics: Metrics,
     ): Standard {
@@ -161,7 +149,7 @@ export class LevelCalculator {
         };
 
         // Filter by gender 
-        const standardsByGender = standards[activity]
+        const standardsByGender = this.standardsMap[activity]
             .filter(a => a.metrics.gender === metrics.gender);
         if (standardsByGender.length === 0) return interpolatedStandard;
 
@@ -171,18 +159,27 @@ export class LevelCalculator {
         const ageUpper = upperStandard.metrics.age;
 
         // Interpolate by weight
-        const lowerLevels = this.interpolateByWeight(ageLower, metrics.weight, standardsByGender);
-        const upperLevels = this.interpolateByWeight(ageUpper, metrics.weight, standardsByGender);
+        const interpolateByWeight = (targetAge: number): Levels => {
+            const ageFilteredStandards = standardsByGender.filter((s) => s.metrics.age === targetAge);
+            if (ageFilteredStandards[0].metrics.weight === -1) return ageFilteredStandards[0].levels;
 
+            const { upperStandard, lowerStandard } = this.findNearestStandards(ageFilteredStandards, metrics.weight, m => m.weight);
+            const weightLower = lowerStandard.metrics.weight;
+            const weightUpper = upperStandard.metrics.weight;
+
+            let weightRatio = weightUpper === weightLower ? 1 : (metrics.weight - weightLower) / (weightUpper - weightLower);
+            weightRatio = Math.max(0, Math.min(1, weightRatio));
+
+            return this.interpolateLevels(lowerStandard.levels, upperStandard.levels, weightRatio);
+        }
         // Interpolate by age
         let ageRatio = ageUpper === ageLower ? 1 : (metrics.age - ageLower) / (ageUpper - ageLower);
         ageRatio = Math.max(0, Math.min(1, ageRatio));
-        const levels = this.interpolateLevels(lowerLevels, upperLevels, ageRatio);
-
-        // Post-process
-        const expandedLevels = this.expandLevels(levels, this.cfg.expandIters);
-        const compressedLevels = this.compressLevels(expandedLevels, this.cfg.compressTo);
-        interpolatedStandard.levels = compressedLevels;
+        interpolatedStandard.levels = this.interpolateLevels(
+            interpolateByWeight(ageLower),
+            interpolateByWeight(ageUpper),
+            ageRatio
+        );
 
         return interpolatedStandard;
     }
@@ -190,14 +187,6 @@ export class LevelCalculator {
     // -------------------------------------------------------------------------------------------------
     // Level calculations (public API)
     // -------------------------------------------------------------------------------------------------
-
-    // public generateTableData(metrics: Metrics) {
-    //     const tableData: Record<Activity, Object> = {};
-    //
-    //     for (const activity of Object.values(activities)) {
-    //         const activityLevels = this.interpolateActivityLevels(activity, metrics);
-    //     }
-    // }
 
     public calcAttributeLevel(
         attribute: Attribute,
@@ -224,7 +213,7 @@ export class LevelCalculator {
 
         const activityLevels = activityPerformances.map((p) => {
             const interpolatedStandard = this.getInterpolatedActivityStandard(p.activity, player.metrics);
-            return this.findLevel(interpolatedStandard.levels, p.performance);
+            return this.findLevel(interpolatedStandard, p.performance);
         });
 
         const activityLevelsAvg = Math.round(

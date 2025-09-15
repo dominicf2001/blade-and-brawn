@@ -135,22 +135,3 @@ export const msToTime = (ms: number, includeMs = false): string => {
     }
     return formattedTime;
 };
-
-// -------------------------------------------------------------------------------------------------
-// Misc. utilities
-// -------------------------------------------------------------------------------------------------
-
-export const findNearestPoints = (value: number, arr: number[]): { lower: number; upper: number } => {
-    if (arr.length === 1) return { lower: arr[0], upper: arr[0] };
-
-    if (value <= arr[0]) return { lower: arr[0], upper: arr[1] };
-    if (value > arr[arr.length - 1])
-        return { lower: arr[arr.length - 2], upper: arr[arr.length - 1] };
-
-    for (let i = 1; i < arr.length; i++) {
-        if (arr[i] >= value) return { lower: arr[i - 1], upper: arr[i] };
-    }
-    // Fallback, though logic should always return above
-    return { lower: arr[0], upper: arr[0] };
-};
-
