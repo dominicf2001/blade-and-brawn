@@ -42,10 +42,7 @@ const server = Bun.serve({
                 const levelCalculator = new LevelCalculator(MAIN_STANDARDS);
 
                 return ClientResponse.json({
-                    levels: {
-                        attributes: levelCalculator.calculateAllAttributeLevels(player, activityPerformances),
-                        player: levelCalculator.calculatePlayerLevel(player, activityPerformances)
-                    }
+                    levels: levelCalculator.calculate(player, activityPerformances)
                 })
             }
         },

@@ -15,6 +15,11 @@ type LevelCalculatorConfig = {
     expandIters?: number;
 }
 
+type LevelCalculatorOutput = {
+    player: number,
+    attributes: Record<Attribute, number>
+}
+
 export class LevelCalculator {
     cfg: Required<LevelCalculatorConfig>;
     standards: Standards;
@@ -28,26 +33,38 @@ export class LevelCalculator {
     }
 
     // -------------------------------------------------------------------------------------------------
-    // Level calculations (public API)
+    // Level calculations
     // -------------------------------------------------------------------------------------------------
 
-    public calculatePlayerLevel(player: Player, activityPerformances: ActivityPerformance[]): number {
+    public calculate(player: Player, activityPerformances: ActivityPerformance[]): LevelCalculatorOutput {
+        const levels: LevelCalculatorOutput = {
+            player: 0,
+            attributes: {
+                [attributes.STRENGTH]: 0,
+                [attributes.POWER]: 0,
+                [attributes.ENDURANCE]: 0,
+                [attributes.AGILITY]: 0,
+            } as const
+        };
+
         for (const value of Object.values(player)) {
             if (!value)
-                return 0;
+                return levels;
         }
 
-        const attrLevels = this.calculateAllAttributeLevels(player, activityPerformances);
-        for (const level of Object.values(attrLevels)) {
+        levels.attributes = this.calculateAllAttributeLevels(player, activityPerformances);
+        for (const level of Object.values(levels.attributes)) {
             if (!level)
-                return 0;
+                return levels;
         }
 
-        const attrLevelsSum = Object.values(attrLevels).reduce((sum, lvl) => sum + lvl, 0);
-        return Math.round(attrLevelsSum / Object.keys(attributes).length);
+        const attrLevelsSum = Object.values(levels.attributes).reduce((sum, lvl) => sum + lvl, 0);
+        levels.player = Math.round(attrLevelsSum / Object.keys(attributes).length);
+
+        return levels;
     }
 
-    public calculateAllAttributeLevels(
+    private calculateAllAttributeLevels(
         player: Player,
         activityPerformances: ActivityPerformance[],
     ): Record<Attribute, number> {
@@ -55,7 +72,6 @@ export class LevelCalculator {
             [attributes.STRENGTH]: 0,
             [attributes.POWER]: 0,
             [attributes.ENDURANCE]: 0,
-            // [attributes.SPEED]: 0,
             [attributes.AGILITY]: 0,
         } as const;
 
@@ -75,7 +91,7 @@ export class LevelCalculator {
     }
 
 
-    public calculateAttributeLevel(
+    private calculateAttributeLevel(
         attribute: Attribute,
         player: Player,
         activityPerformances: ActivityPerformance[],
@@ -123,11 +139,12 @@ export class LevelCalculator {
             const standard = this.standards.byActivity(activity).getOne();
             if (standard.metrics.weight === -1) return standard.levels;
 
-            const { upper: upperAgeWeightStandard, lower: lowerAgeWeightStandard } = this.standards
+            const { lower: lowerAgeWeightStandard, upper: upperAgeWeightStandard } = this.standards
                 .byActivity(activity)
                 .byGender(metrics.gender)
                 .byAge(targetAge)
                 .getNearest("weight", metrics.weight);
+
             const weightLower = lowerAgeWeightStandard.metrics.weight;
             const weightUpper = upperAgeWeightStandard.metrics.weight;
 
@@ -146,9 +163,13 @@ export class LevelCalculator {
         const ageLower = lowerAgeStandard.metrics.age;
         const ageUpper = upperAgeStandard.metrics.age;
 
+        console.log(activity);
+        console.log("AGES: ", ageLower, ageUpper);
+
         // Interpolate by age and weight
         let ageRatio = ageUpper === ageLower ? 1 : (metrics.age - ageLower) / (ageUpper - ageLower);
         ageRatio = Math.max(0, Math.min(1, ageRatio));
+
         const interpolatedLevels = this.interpolateLevels(
             interpolateByWeight(ageLower),
             interpolateByWeight(ageUpper),

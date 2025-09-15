@@ -32,7 +32,7 @@ const computedPerformances: ActivityPerformance[] = [
     // ENDURANCE
     {
         activity: activities.RUN,
-        performance: minToMs(5) + secToMs(20),
+        performance: minToMs(6) + secToMs(11),
     },
     // AGILITY
     {
@@ -44,12 +44,7 @@ const computedPerformances: ActivityPerformance[] = [
 const standards = new Standards(rawStandards as StandardsMap);
 const levelCalculator = new LevelCalculator(standards);
 
-const levels = {
-    attributes: levelCalculator.calculateAllAttributeLevels(player, computedPerformances),
-    player: levelCalculator.calculatePlayerLevel(player, computedPerformances)
-};
-
-console.log(levels);
+console.log(levelCalculator.calculate(player, computedPerformances));
 
 // const newStandards: Standards = {
 //     "Back Squat": [],
