@@ -32,7 +32,7 @@ const computedPerformances: ActivityPerformance[] = [
     // ENDURANCE
     {
         activity: activities.RUN,
-        performance: minToMs(6) + secToMs(11),
+        performance: minToMs(5) + secToMs(20),
     },
     // AGILITY
     {

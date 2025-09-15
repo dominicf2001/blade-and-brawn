@@ -135,10 +135,6 @@ export class LevelCalculator {
         metrics: Metrics,
     ): Standard {
         const interpolateByWeight = (targetAge: number): Levels => {
-            // check if this is a weight calibrated activity
-            const standard = this.standards.byActivity(activity).getOne();
-            if (standard.metrics.weight === -1) return standard.levels;
-
             const { lower: lowerAgeWeightStandard, upper: upperAgeWeightStandard } = this.standards
                 .byActivity(activity)
                 .byGender(metrics.gender)
@@ -162,9 +158,6 @@ export class LevelCalculator {
 
         const ageLower = lowerAgeStandard.metrics.age;
         const ageUpper = upperAgeStandard.metrics.age;
-
-        console.log(activity);
-        console.log("AGES: ", ageLower, ageUpper);
 
         // Interpolate by age and weight
         let ageRatio = ageUpper === ageLower ? 1 : (metrics.age - ageLower) / (ageUpper - ageLower);
