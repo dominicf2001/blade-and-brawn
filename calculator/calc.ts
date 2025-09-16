@@ -1,4 +1,4 @@
-import { Activity, Attribute, attributes, ActivityPerformance, getActivityAttribute, getAttributeActivities, Player, StandardsMap, Levels, Standard, Metrics, Gender } from "./util";
+import { Activity, Attribute, Player, Gender, ActivityPerformance } from "./util";
 
 // SOURCES
 // Squat, Bench, Dead Lift: 
@@ -20,6 +20,26 @@ type LevelCalculatorOutput = {
     attributes: Record<Attribute, number>
 }
 
+export type Levels = Record<string, number>
+
+export interface Metrics {
+    age: number;
+    weight: number;
+    gender: Gender;
+};
+
+export interface Standard {
+    metrics: Metrics;
+    levels: Levels;
+}
+
+export type ActivityStandards = Record<Activity, {
+    metadata: {
+        attribute: Attribute
+    },
+    standards: Standard[]
+}>;
+
 export class LevelCalculator {
     cfg: Required<LevelCalculatorConfig>;
     standards: Standards;
@@ -40,10 +60,10 @@ export class LevelCalculator {
         const levels: LevelCalculatorOutput = {
             player: 0,
             attributes: {
-                [attributes.STRENGTH]: 0,
-                [attributes.POWER]: 0,
-                [attributes.ENDURANCE]: 0,
-                [attributes.AGILITY]: 0,
+                [Attribute.Strength]: 0,
+                [Attribute.Power]: 0,
+                [Attribute.Endurance]: 0,
+                [Attribute.Agility]: 0,
             } as const
         };
 
@@ -59,7 +79,7 @@ export class LevelCalculator {
         }
 
         const attrLevelsSum = Object.values(levels.attributes).reduce((sum, lvl) => sum + lvl, 0);
-        levels.player = Math.round(attrLevelsSum / Object.keys(attributes).length);
+        levels.player = Math.round(attrLevelsSum / Object.keys(Attribute).length);
 
         return levels;
     }
@@ -69,10 +89,10 @@ export class LevelCalculator {
         activityPerformances: ActivityPerformance[],
     ): Record<Attribute, number> {
         const attrLevels: Record<Attribute, number> = {
-            [attributes.STRENGTH]: 0,
-            [attributes.POWER]: 0,
-            [attributes.ENDURANCE]: 0,
-            [attributes.AGILITY]: 0,
+            [Attribute.Strength]: 0,
+            [Attribute.Power]: 0,
+            [Attribute.Endurance]: 0,
+            [Attribute.Agility]: 0,
         } as const;
 
         for (const value of Object.values(player)) {
@@ -80,9 +100,9 @@ export class LevelCalculator {
                 return attrLevels;
         }
 
-        (Object.values(attributes) as Attribute[]).forEach((attribute) => {
+        (Object.values(Attribute) as Attribute[]).forEach((attribute) => {
             const attrActivityPerformances = activityPerformances.filter(
-                (p) => getActivityAttribute(p.activity) === attribute,
+                (p) => this.standards.getActivityAttribute(p.activity) === attribute,
             );
             attrLevels[attribute] = this.calculateAttributeLevel(attribute, player, attrActivityPerformances);
         });
@@ -97,12 +117,12 @@ export class LevelCalculator {
         activityPerformances: ActivityPerformance[],
     ): number {
         // must be activities of the given attribute
-        if (activityPerformances.some((p) => getActivityAttribute(p.activity) !== attribute)) {
+        if (activityPerformances.some((p) => this.standards.getActivityAttribute(p.activity) !== attribute)) {
             throw new Error("Wrong activity performance attribute");
         }
 
         // must perform all of an attributes activities
-        for (const activity of getAttributeActivities(attribute)) {
+        for (const activity of this.standards.getAttributeActivities(attribute)) {
             const filteredActivites = activityPerformances.map((p) => p.activity);
             if (!filteredActivites.includes(activity))
                 return 0;
@@ -213,12 +233,12 @@ export class LevelCalculator {
 }
 
 export class Standards {
-    private standardsMap: StandardsMap;
+    private activityStandards: ActivityStandards;
 
-    constructor(standardsMap: StandardsMap) {
-        this.standardsMap = standardsMap;
-        for (const activity of Object.keys(this.standardsMap) as Activity[]) {
-            for (const standard of this.standardsMap[activity]) {
+    constructor(activityStandards: ActivityStandards) {
+        this.activityStandards = activityStandards;
+        for (const activity of Object.keys(this.activityStandards) as Activity[]) {
+            for (const standard of this.activityStandards[activity].standards) {
                 const expandedLevels = this.expandLevels(standard.levels, 5);
                 const compressedLevels = this.compressLevels(expandedLevels, 100);
                 standard.levels = compressedLevels;
@@ -237,7 +257,7 @@ export class Standards {
 
         const execMethods = {
             getAll: function() {
-                let filtered = [...self.standardsMap[activity]];
+                let filtered = [...self.activityStandards[activity].standards];
                 if (state.gender)
                     filtered = filtered.filter((s) => s.metrics.gender === state.gender);
                 if (state.age)
@@ -278,6 +298,21 @@ export class Standards {
         }
 
         return { byGender, ...execMethods }
+    }
+
+    getActivityAttribute(activity: Activity): Attribute {
+        return this.activityStandards[activity].metadata.attribute;
+    };
+
+    getAttributeActivities(attribute: Attribute): Activity[] {
+        const activities: Activity[] = [];
+        for (const activity in this.activityStandards) {
+            const activityStandard = this.activityStandards[activity] as ActivityStandards[Activity];
+            if (activityStandard.metadata.attribute === attribute) {
+                activities.push(activity as Activity);
+            }
+        }
+        return activities;
     }
 
     private expandLevels(

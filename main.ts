@@ -1,5 +1,5 @@
-import { LevelCalculator, Standards } from "./calculator/calc.ts";
-import { ActivityPerformance, Player, StandardsMap } from "./calculator/util.ts";
+import { ActivityStandards, LevelCalculator, Standards } from "./calculator/calc.ts";
+import { ActivityPerformance, Player } from "./calculator/util.ts";
 import { Printful } from "./commerce/printful.ts"
 import { Webflow } from "./commerce/webflow.ts";
 import rawStandards from "./data/standards.json" assert { type: "json" }
@@ -26,7 +26,7 @@ export class ClientResponse extends Response {
     }
 }
 
-const MAIN_STANDARDS = new Standards(rawStandards as StandardsMap);
+const MAIN_STANDARDS = new Standards(rawStandards as ActivityStandards);
 
 const server = Bun.serve({
     idleTimeout: 180,

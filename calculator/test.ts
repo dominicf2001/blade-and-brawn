@@ -1,47 +1,47 @@
-import { activities, ActivityPerformance, feetToCm, genders, inchesToCm, lbToKg, minToMs, Player, secToMs, StandardsMap } from "./util";
-import { LevelCalculator, Standards } from "./calc.ts";
+import { Activity, ActivityPerformance, feetToCm, Gender, inchesToCm, lbToKg, minToMs, Player, secToMs } from "./util";
+import { ActivityStandards, LevelCalculator, Standards } from "./calc.ts";
 import rawStandards from "../data/standards.json" assert { type: "json" }
 
 const player: Player = {
     metrics: {
         age: 25,
         weight: lbToKg(190),
-        gender: genders.MALE
+        gender: Gender.Male
     }
 };
 
 const computedPerformances: ActivityPerformance[] = [
     // STRENGTH
     {
-        activity: activities.BENCH_PRESS,
+        activity: Activity.BenchPress,
         performance: lbToKg(225)
     },
     {
-        activity: activities.DEADLIFT,
+        activity: Activity.Deadlift,
         performance: lbToKg(270),
     },
     {
-        activity: activities.BACK_SQUAT,
+        activity: Activity.BackSquat,
         performance: lbToKg(190),
     },
     // POWER
     {
-        activity: activities.BROAD_JUMP,
+        activity: Activity.BroadJump,
         performance: feetToCm(105) + inchesToCm(5),
     },
     // ENDURANCE
     {
-        activity: activities.RUN,
+        activity: Activity.Run,
         performance: minToMs(7) + secToMs(15),
     },
     // AGILITY
     {
-        activity: activities.CONE_DRILL,
+        activity: Activity.ConeDrill,
         performance: secToMs(9),
     },
 ];
 
-const standards = new Standards(rawStandards as StandardsMap);
+const standards = new Standards(rawStandards as ActivityStandards);
 const levelCalculator = new LevelCalculator(standards);
 
 console.log(levelCalculator.calculate(player, computedPerformances));

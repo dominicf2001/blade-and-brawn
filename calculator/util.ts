@@ -1,95 +1,38 @@
-// -------------------------------------------------------------------------------------------------
-// Attributes 
-// -------------------------------------------------------------------------------------------------
-
-export const attributes = Object.freeze({
-    STRENGTH: "Strength",
-    POWER: "Power",
-    ENDURANCE: "Endurance",
-    // SPEED: "Speed",
-    AGILITY: "Agility",
-} as const);
-export type Attribute = typeof attributes[keyof typeof attributes];
+import { Metrics } from "./calc";
 
 // -------------------------------------------------------------------------------------------------
-// Enumerations & basic value objects
+// DATA MODELS 
 // -------------------------------------------------------------------------------------------------
 
 export interface Player {
     metrics: Metrics;
 }
 
-export const activities = Object.freeze({
-    BACK_SQUAT: "Back Squat",
-    DEADLIFT: "Deadlift",
-    BENCH_PRESS: "Bench Press",
-    RUN: "Run",
-    DASH: "Dash",
-    TREADMILL_DASH: "Treadmill Dash",
-    BROAD_JUMP: "Broad Jump",
-    CONE_DRILL: "Cone Drill",
-} as const);
-
-export type Activity = typeof activities[keyof typeof activities];
-
-const activityAttrMap: Record<Activity, Attribute> = {
-    [activities.RUN]: attributes.ENDURANCE,
-    // [activities.TREADMILL_DASH]: attributes.SPEED,
-    // [activities.DASH]: attributes.SPEED,
-    [activities.DEADLIFT]: attributes.STRENGTH,
-    [activities.BACK_SQUAT]: attributes.STRENGTH,
-    [activities.BENCH_PRESS]: attributes.STRENGTH,
-    [activities.BROAD_JUMP]: attributes.POWER,
-    [activities.CONE_DRILL]: attributes.AGILITY,
-} as const;
-
-export const getActivityAttribute = (activity: Activity): Attribute => {
-    const attribute = activityAttrMap[activity];
-    if (!attribute) throw new Error(`${activity} does not have an associated attribute`);
-    return attribute;
-};
-
-export const getAttributeActivities = (attribute: Attribute): Activity[] => {
-    const activities: Activity[] = [];
-    for (const activity in activityAttrMap) {
-        if (activityAttrMap[activity] === attribute) {
-            activities.push(activity as Activity);
-        }
-    }
-    return activities;
+export enum Attribute {
+    Strength = "Strength",
+    Power = "Power",
+    Endurance = "Endurance",
+    Agility = "Agility",
 }
 
-export const genders = Object.freeze({
-    MALE: "male",
-    FEMALE: "female",
-} as const);
-export type Gender = typeof genders[keyof typeof genders];
+export enum Activity {
+    BackSquat = "BackSquat",
+    Deadlift = "Deadlift",
+    BenchPress = "BenchPress",
+    Run = "Run",
+    BroadJump = "BroadJump",
+    ConeDrill = "ConeDrill",
+}
 
-// -------------------------------------------------------------------------------------------------
-// Data model interfaces
-// -------------------------------------------------------------------------------------------------
 export interface ActivityPerformance {
     activity: Activity;
     performance: number;
 }
 
-export type Levels = Record<string, number>
-
-export interface Metrics {
-    age: number;
-    weight: number;
-    gender: Gender;
-};
-
-export interface Standard {
-    metrics: Metrics;
-    levels: Levels;
+export enum Gender {
+    Male = "Male",
+    Female = "Female"
 }
-
-export type StandardsMap = Record<
-    Activity,
-    Standard[]
->;
 
 // -------------------------------------------------------------------------------------------------
 // Conversion utilities
