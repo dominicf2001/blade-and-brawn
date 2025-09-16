@@ -1,4 +1,4 @@
-import { Activity, Attribute, Player, Gender, ActivityPerformance, lbToKg } from "./util";
+import { Activity, Attribute, Player, Gender, ActivityPerformance, lbToKg, clampToLevel } from "./util";
 
 // SOURCES
 // Squat, Bench, Dead Lift: 
@@ -193,29 +193,60 @@ export class Standards {
             }
 
             // generate data
-            // const allGenerators = this.activityStandards[activity].metadata.generators;
-            //
-            // const ageGenerators = allGenerators.filter(g => g.metric === "age");
-            // for (const ageGenerator of ageGenerators) {
-            // }
-            //
-            // const weightGenerators = allGenerators.filter(g => g.metric === "weight");
-            // for (const weightGenerator of weightGenerators) {
-            //     for (const gender of Object.values(Gender)) {
-            //         const referenceWeight = gender === Gender.Male ?
-            //             lbToKg(170) :
-            //             lbToKg(137);
-            //
-            //         const standardsByGender = this.byActivity(activity).byGender(gender).getAll();
-            //         const ages = [...new Set(standardsByGender.map(s => s.metrics.age))];
-            //
-            //         for (const age of ages) {
-            //             const levelCalculator = new LevelCalculator(this);
-            //             const referenceStandard = 
-            //         }
-            //     }
-            // }
+            const allGenerators = this.activityStandards[activity].metadata.generators;
+
+            const ageGenerators = allGenerators.filter(g => g.metric === "age");
+            for (const ageGenerator of ageGenerators) {
+            }
+
+            const weightGenerators = allGenerators.filter(g => g.metric === "weight");
+            for (const weightGenerator of weightGenerators) {
+                for (const gender of Object.values(Gender)) {
+                    const referenceWeight = gender === Gender.Male ?
+                        lbToKg(170) :
+                        lbToKg(137);
+
+                    const standardsByGender = this.byActivity(activity).byGender(gender).getAll();
+                    const ages = [...new Set(standardsByGender.map(s => s.metrics.age))];
+
+                    for (const age of ages) {
+                        const referenceStandard = this
+                            .byActivity(activity)
+                            .byMetrics({ weight: referenceWeight, gender: gender, age: age })
+                            .getInterpolated();
+
+                        const minWeight = referenceWeight - (referenceWeight * weightGenerator.spread);
+                        const maxWeight = referenceWeight + (referenceWeight * weightGenerator.spread);
+
+                        let currWeight = minWeight;
+                        while (currWeight <= maxWeight) {
+                            // apply allometric scaling
+                            const newStandardLevels: Levels = {};
+                            for (const lvl in referenceStandard.levels) {
+                                const scalingExponent = .125;
+                                const coefficient = weightGenerator.ratio === "inverse" ?
+                                    referenceWeight / currWeight :
+                                    currWeight / referenceWeight;
+                                newStandardLevels[lvl] = referenceStandard.levels[lvl] * (coefficient ** scalingExponent);
+                            }
+
+                            this.activityStandards[activity].standards.push({
+                                metrics: {
+                                    weight: currWeight,
+                                    age: age,
+                                    gender: gender
+                                },
+                                levels: newStandardLevels
+                            });
+
+                            currWeight += weightGenerator.step;
+                        }
+                    }
+                }
+            }
         }
+
+        Bun.write("./newStandards.json", JSON.stringify(this.activityStandards, null, 2));
     }
 
     public byActivity(activity: Activity) {
@@ -223,98 +254,106 @@ export class Standards {
 
         const state: Partial<Metrics> = {};
 
+        // EXEC METHODS
         const execMethods = {
-            getAll: function(): Standard[] {
-                let filtered = [...self.activityStandards[activity].standards];
-                if (state.gender)
-                    filtered = filtered.filter((s) => s.metrics.gender === state.gender);
-                if (state.age)
-                    filtered = filtered.filter((s) => s.metrics.age === state.age);
-                if (state.weight)
-                    filtered = filtered.filter((s) => s.metrics.weight === state.weight);
-                return filtered;
+            exact: {
+                // these will get EXACT matches
+                getAll: function(): Standard[] {
+                    let filtered = [...self.activityStandards[activity].standards];
+                    if (state.gender)
+                        filtered = filtered.filter((s) => s.metrics.gender === state.gender);
+                    if (state.age)
+                        filtered = filtered.filter((s) => s.metrics.age === state.age);
+                    if (state.weight)
+                        filtered = filtered.filter((s) => s.metrics.weight === state.weight);
+                    return filtered;
+                },
+                getOne: function(): Standard {
+                    return execMethods.exact.getAll()[0];
+                },
+                getNearest(metric: NumberMetric, target: number): { lower: Standard, upper: Standard } {
+                    const standards = execMethods.exact.getAll();
+                    const lower = [...standards]
+                        .sort((a, b) => a.metrics[metric] - b.metrics[metric])
+                        .reverse()
+                        .find((s) => s.metrics[metric] <= target) ?? standards.at(0)!;
+                    const upper = [...standards]
+                        .sort((a, b) => a.metrics[metric] - b.metrics[metric])
+                        .find((s) => s.metrics[metric] >= target) ?? standards.at(-1)!;
+                    return { lower, upper };
+                },
             },
-            getOne: function(): Standard {
-                return execMethods.getAll()[0];
-            },
-            getNearest(metric: NumberMetric, target: number): { lower: Standard, upper: Standard } {
-                const standards = execMethods.getAll();
-                const lower = [...standards]
-                    .sort((a, b) => a.metrics[metric] - b.metrics[metric])
-                    .reverse()
-                    .find((s) => s.metrics[metric] <= target) ?? standards.at(0)!;
-                const upper = [...standards]
-                    .sort((a, b) => a.metrics[metric] - b.metrics[metric])
-                    .find((s) => s.metrics[metric] >= target) ?? standards.at(-1)!;
-                return { lower, upper };
-            },
-        };
+            interpolated: {
+                getInterpolated: (): Standard => {
+                    const metrics: Metrics = state as Metrics;
 
-        const getInterpolated = (): Standard => {
-            const metrics: Metrics = state as Metrics;
+                    const interpolateByWeight = (targetAge: number): Levels => {
+                        const { lower: lowerAgeWeightStandard, upper: upperAgeWeightStandard } = this
+                            .byActivity(activity)
+                            .byGender(metrics.gender)
+                            .byAge(targetAge)
+                            .getNearest("weight", metrics.weight);
 
-            const interpolateByWeight = (targetAge: number): Levels => {
-                const { lower: lowerAgeWeightStandard, upper: upperAgeWeightStandard } = this
-                    .byActivity(activity)
-                    .byGender(metrics.gender)
-                    .byAge(targetAge)
-                    .getNearest("weight", metrics.weight);
+                        const weightLower = lowerAgeWeightStandard.metrics.weight;
+                        const weightUpper = upperAgeWeightStandard.metrics.weight;
 
-                const weightLower = lowerAgeWeightStandard.metrics.weight;
-                const weightUpper = upperAgeWeightStandard.metrics.weight;
+                        let weightRatio = weightUpper === weightLower ? 1 : (metrics.weight - weightLower) / (weightUpper - weightLower);
+                        weightRatio = Math.max(0, Math.min(1, weightRatio));
 
-                let weightRatio = weightUpper === weightLower ? 1 : (metrics.weight - weightLower) / (weightUpper - weightLower);
-                weightRatio = Math.max(0, Math.min(1, weightRatio));
+                        return this.interpolateLevels(lowerAgeWeightStandard.levels, upperAgeWeightStandard.levels, weightRatio);
+                    }
 
-                return this.interpolateLevels(lowerAgeWeightStandard.levels, upperAgeWeightStandard.levels, weightRatio);
+                    // Find nearest age standards
+                    const { lower: lowerAgeStandard, upper: upperAgeStandard } = this
+                        .byActivity(activity)
+                        .byGender(metrics.gender)
+                        .getNearest("age", metrics.age);
+
+                    const ageLower = lowerAgeStandard.metrics.age;
+                    const ageUpper = upperAgeStandard.metrics.age;
+
+                    // Interpolate by age and weight
+                    let ageRatio = ageUpper === ageLower ? 1 : (metrics.age - ageLower) / (ageUpper - ageLower);
+                    ageRatio = Math.max(0, Math.min(1, ageRatio));
+
+                    const interpolatedLevels = this.interpolateLevels(
+                        interpolateByWeight(ageLower),
+                        interpolateByWeight(ageUpper),
+                        ageRatio
+                    );
+
+                    return {
+                        metrics,
+                        levels: interpolatedLevels
+                    };
+                }
             }
-
-            // Find nearest age standards
-            const { lower: lowerAgeStandard, upper: upperAgeStandard } = this
-                .byActivity(activity)
-                .byGender(metrics.gender)
-                .getNearest("age", metrics.age);
-
-            const ageLower = lowerAgeStandard.metrics.age;
-            const ageUpper = upperAgeStandard.metrics.age;
-
-            // Interpolate by age and weight
-            let ageRatio = ageUpper === ageLower ? 1 : (metrics.age - ageLower) / (ageUpper - ageLower);
-            ageRatio = Math.max(0, Math.min(1, ageRatio));
-
-            const interpolatedLevels = this.interpolateLevels(
-                interpolateByWeight(ageLower),
-                interpolateByWeight(ageUpper),
-                ageRatio
-            );
-
-            return {
-                metrics,
-                levels: interpolatedLevels
-            };
         };
+
+        // QUERY METHODS
 
         const byGender = (gender: Gender) => {
             state.gender = gender;
-            return { byAge, ...execMethods };
+            return { byAge, ...execMethods.exact };
         }
 
         const byAge = (age: number) => {
             state.age = age;
-            return { byWeight, ...execMethods };
+            return { byWeight, ...execMethods.exact };
         }
 
         const byWeight = (weight: number) => {
             state.weight = weight;
-            return { ...execMethods, getInterpolated };
+            return { ...execMethods.exact, ...execMethods.interpolated };
         }
 
         const byMetrics = (metrics: Metrics) => {
             Object.assign(state, metrics);
-            return { ...execMethods, getInterpolated };
+            return { ...execMethods.exact, ...execMethods.interpolated };
         }
 
-        return { byGender, byMetrics, ...execMethods }
+        const initialMethods = { byGender, byMetrics, ...execMethods.exact };
+        return initialMethods;
     }
 
     getActivityAttribute(activity: Activity): Attribute {
