@@ -1,4 +1,4 @@
-import { Activity, Attribute, Player, Gender, ActivityPerformance, lbToKg, clampToLevel } from "./util";
+import { Activity, Attribute, Player, Gender, ActivityPerformance, lbToKg } from "./util";
 
 // SOURCES
 // Squat, Bench, Dead Lift: 
@@ -197,47 +197,53 @@ export class Standards {
 
             const ageGenerators = allGenerators.filter(g => g.metric === "age");
             for (const ageGenerator of ageGenerators) {
+                // TODO
             }
 
             const weightGenerators = allGenerators.filter(g => g.metric === "weight");
             for (const weightGenerator of weightGenerators) {
                 for (const gender of Object.values(Gender)) {
-                    const referenceWeight = gender === Gender.Male ?
-                        lbToKg(170) :
-                        lbToKg(137);
-
                     const standardsByGender = this.byActivity(activity).byGender(gender).getAll();
                     const ages = [...new Set(standardsByGender.map(s => s.metrics.age))];
 
                     for (const age of ages) {
-                        const referenceStandard = this
-                            .byActivity(activity)
-                            .byMetrics({ weight: referenceWeight, gender: gender, age: age })
-                            .getInterpolated();
-
-                        const minWeight = referenceWeight - (referenceWeight * weightGenerator.spread);
-                        const maxWeight = referenceWeight + (referenceWeight * weightGenerator.spread);
+                        const referenceWeight = gender === Gender.Male ?
+                            lbToKg(170) :
+                            lbToKg(137);
+                        const minWeight = referenceWeight - (weightGenerator.step * weightGenerator.spread);
+                        const maxWeight = referenceWeight + (weightGenerator.step * weightGenerator.spread);
 
                         let currWeight = minWeight;
                         while (currWeight <= maxWeight) {
-                            // apply allometric scaling
-                            const newStandardLevels: Levels = {};
-                            for (const lvl in referenceStandard.levels) {
-                                const scalingExponent = .125;
-                                const coefficient = weightGenerator.ratio === "inverse" ?
-                                    referenceWeight / currWeight :
-                                    currWeight / referenceWeight;
-                                newStandardLevels[lvl] = referenceStandard.levels[lvl] * (coefficient ** scalingExponent);
-                            }
-
-                            this.activityStandards[activity].standards.push({
+                            const newStandard: Standard = {
                                 metrics: {
                                     weight: currWeight,
                                     age: age,
                                     gender: gender
                                 },
-                                levels: newStandardLevels
-                            });
+                                levels: {}
+                            };
+
+                            // apply allometric scaling to generate levels
+                            const referenceStandard = this
+                                .byActivity(activity)
+                                .byMetrics({ weight: referenceWeight, gender: gender, age: age })
+                                .getInterpolated();
+                            for (const lvl in referenceStandard.levels) {
+                                const scalingExponent = .125;
+                                const coefficient = weightGenerator.ratio === "inverse" ?
+                                    referenceWeight / currWeight :
+                                    currWeight / referenceWeight;
+                                newStandard.levels[lvl] = referenceStandard.levels[lvl] * (coefficient ** scalingExponent);
+                            }
+
+                            // prefer real data over generated data
+                            const overlappingStandard = this
+                                .byActivity(activity)
+                                .byMetrics(newStandard.metrics)
+                                .getOne();
+                            if (!overlappingStandard)
+                                this.activityStandards[activity].standards.push(newStandard);
 
                             currWeight += weightGenerator.step;
                         }
@@ -268,7 +274,7 @@ export class Standards {
                         filtered = filtered.filter((s) => s.metrics.weight === state.weight);
                     return filtered;
                 },
-                getOne: function(): Standard {
+                getOne: function(): Standard | undefined {
                     return execMethods.exact.getAll()[0];
                 },
                 getNearest(metric: NumberMetric, target: number): { lower: Standard, upper: Standard } {

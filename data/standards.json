@@ -4733,7 +4733,7 @@
       "generators": [
         {
           "metric": "weight",
-          "spread": 0.5,
+          "spread": 4,
           "step": 12,
           "ratio": "inverse"
         }
