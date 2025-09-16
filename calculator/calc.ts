@@ -28,14 +28,24 @@ export interface Metrics {
     gender: Gender;
 };
 
+type DataMetric = Extract<keyof Metrics, "age" | "weight">;
+
 export interface Standard {
     metrics: Metrics;
     levels: Levels;
 }
 
+type StandardsGeneratorOptions = {
+    metric: DataMetric,
+    spread: number,
+    step: number,
+    ratio: "normal" | "inverse"
+}
+
 export type ActivityStandards = Record<Activity, {
     metadata: {
-        attribute: Attribute
+        attribute: Attribute,
+        standardsGeneratorOptions: StandardsGeneratorOptions[]
     },
     standards: Standard[]
 }>;
@@ -269,7 +279,7 @@ export class Standards {
             getOne: function() {
                 return execMethods.getAll()[0];
             },
-            getNearest(metric: "age" | "weight", target: number) {
+            getNearest(metric: DataMetric, target: number) {
                 const standards = execMethods.getAll();
                 const lower = [...standards]
                     .sort((a, b) => a.metrics[metric] - b.metrics[metric])
