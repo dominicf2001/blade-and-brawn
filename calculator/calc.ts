@@ -213,6 +213,11 @@ export class Standards {
                         const minWeight = referenceWeight - (weightGenerator.step * weightGenerator.spread);
                         const maxWeight = referenceWeight + (weightGenerator.step * weightGenerator.spread);
 
+                        const referenceStandard = this
+                            .byActivity(activity)
+                            .byMetrics({ weight: referenceWeight, gender: gender, age: age })
+                            .getInterpolated();
+
                         let currWeight = minWeight;
                         while (currWeight <= maxWeight) {
                             const newStandard: Standard = {
@@ -225,12 +230,8 @@ export class Standards {
                             };
 
                             // apply allometric scaling to generate levels
-                            const referenceStandard = this
-                                .byActivity(activity)
-                                .byMetrics({ weight: referenceWeight, gender: gender, age: age })
-                                .getInterpolated();
                             for (const lvl in referenceStandard.levels) {
-                                const scalingExponent = .125;
+                                const scalingExponent = .1;
                                 const coefficient = weightGenerator.ratio === "inverse" ?
                                     referenceWeight / currWeight :
                                     currWeight / referenceWeight;
@@ -249,7 +250,12 @@ export class Standards {
                         }
                     }
                 }
+
+                // now that we generated metric data, remove the old data
+                this.activityStandards[activity].standards = this.activityStandards[activity].standards
+                    .filter(s => s.metrics.weight !== -1);
             }
+
         }
 
         Bun.write("./newStandards.json", JSON.stringify(this.activityStandards, null, 2));
