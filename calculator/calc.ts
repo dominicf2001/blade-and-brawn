@@ -1,4 +1,4 @@
-import { Activity, Attribute, Player, Gender, ActivityPerformance } from "./util";
+import { Activity, Attribute, Player, Gender, ActivityPerformance, lbToKg } from "./util";
 
 // SOURCES
 // Squat, Bench, Dead Lift: 
@@ -28,15 +28,15 @@ export interface Metrics {
     gender: Gender;
 };
 
-type DataMetric = Extract<keyof Metrics, "age" | "weight">;
+type NumberMetric = Extract<keyof Metrics, "age" | "weight">;
 
 export interface Standard {
     metrics: Metrics;
     levels: Levels;
 }
 
-type StandardsGeneratorOptions = {
-    metric: DataMetric,
+type Generator = {
+    metric: NumberMetric,
     spread: number,
     step: number,
     ratio: "normal" | "inverse"
@@ -45,7 +45,7 @@ type StandardsGeneratorOptions = {
 export type ActivityStandards = Record<Activity, {
     metadata: {
         attribute: Attribute,
-        standardsGeneratorOptions: StandardsGeneratorOptions[]
+        generators: Generator[]
     },
     standards: Standard[]
 }>;
@@ -145,7 +145,10 @@ export class LevelCalculator {
         }
 
         const activityLevels = activityPerformances.map((p) => {
-            const interpolatedStandard = this.getInterpolatedStandard(p.activity, player.metrics);
+            const interpolatedStandard = this.standards
+                .byActivity(p.activity)
+                .byMetrics(player.metrics)
+                .getInterpolated();
             return this.findLevel(interpolatedStandard, p.performance);
         });
 
@@ -154,73 +157,6 @@ export class LevelCalculator {
         );
 
         return activityLevelsAvg;
-    }
-
-    // -------------------------------------------------------------------------------------------------
-    // Standards interpolation (heavy math bits)
-    // -------------------------------------------------------------------------------------------------
-
-    private getInterpolatedStandard(
-        activity: Activity,
-        metrics: Metrics,
-    ): Standard {
-        const interpolateByWeight = (targetAge: number): Levels => {
-            const { lower: lowerAgeWeightStandard, upper: upperAgeWeightStandard } = this.standards
-                .byActivity(activity)
-                .byGender(metrics.gender)
-                .byAge(targetAge)
-                .getNearest("weight", metrics.weight);
-
-            const weightLower = lowerAgeWeightStandard.metrics.weight;
-            const weightUpper = upperAgeWeightStandard.metrics.weight;
-
-            let weightRatio = weightUpper === weightLower ? 1 : (metrics.weight - weightLower) / (weightUpper - weightLower);
-            weightRatio = Math.max(0, Math.min(1, weightRatio));
-
-            return this.interpolateLevels(lowerAgeWeightStandard.levels, upperAgeWeightStandard.levels, weightRatio);
-        }
-
-        // Find nearest age standards
-        const { lower: lowerAgeStandard, upper: upperAgeStandard } = this.standards
-            .byActivity(activity)
-            .byGender(metrics.gender)
-            .getNearest("age", metrics.age);
-
-        const ageLower = lowerAgeStandard.metrics.age;
-        const ageUpper = upperAgeStandard.metrics.age;
-
-        // Interpolate by age and weight
-        let ageRatio = ageUpper === ageLower ? 1 : (metrics.age - ageLower) / (ageUpper - ageLower);
-        ageRatio = Math.max(0, Math.min(1, ageRatio));
-
-        const interpolatedLevels = this.interpolateLevels(
-            interpolateByWeight(ageLower),
-            interpolateByWeight(ageUpper),
-            ageRatio
-        );
-
-        return {
-            metrics: metrics,
-            levels: interpolatedLevels
-        };
-    }
-
-    private interpolateLevels(
-        lower: Levels,
-        upper: Levels,
-        ratio: number,
-    ): Levels {
-        if (Object.keys(lower).length !== Object.keys(upper).length)
-            throw new Error("Cannot interpolate between varying number of levels");
-
-        const lerp = (lvl: string) => (lower[lvl] as number) + ((upper[lvl] as number) - (lower[lvl] as number)) * ratio;
-
-        const interpolatedLevels = {};
-        for (const lvl in lower) {
-            interpolatedLevels[lvl] = lerp(lvl);
-        }
-
-        return interpolatedLevels;
     }
 
     // -------------------------------------------------------------------------------------------------
@@ -246,27 +182,49 @@ export class Standards {
     private activityStandards: ActivityStandards;
 
     constructor(activityStandards: ActivityStandards) {
+        // prepare data
         this.activityStandards = activityStandards;
         for (const activity of Object.keys(this.activityStandards) as Activity[]) {
+            // expand/compress
             for (const standard of this.activityStandards[activity].standards) {
                 const expandedLevels = this.expandLevels(standard.levels, 5);
                 const compressedLevels = this.compressLevels(expandedLevels, 100);
                 standard.levels = compressedLevels;
             }
+
+            // generate data
+            // const allGenerators = this.activityStandards[activity].metadata.generators;
+            //
+            // const ageGenerators = allGenerators.filter(g => g.metric === "age");
+            // for (const ageGenerator of ageGenerators) {
+            // }
+            //
+            // const weightGenerators = allGenerators.filter(g => g.metric === "weight");
+            // for (const weightGenerator of weightGenerators) {
+            //     for (const gender of Object.values(Gender)) {
+            //         const referenceWeight = gender === Gender.Male ?
+            //             lbToKg(170) :
+            //             lbToKg(137);
+            //
+            //         const standardsByGender = this.byActivity(activity).byGender(gender).getAll();
+            //         const ages = [...new Set(standardsByGender.map(s => s.metrics.age))];
+            //
+            //         for (const age of ages) {
+            //             const levelCalculator = new LevelCalculator(this);
+            //             const referenceStandard = 
+            //         }
+            //     }
+            // }
         }
     }
 
     public byActivity(activity: Activity) {
         const self = this;
 
-        const state: {
-            gender?: Gender;
-            age?: number;
-            weight?: number;
-        } = {};
+        const state: Partial<Metrics> = {};
 
         const execMethods = {
-            getAll: function() {
+            getAll: function(): Standard[] {
                 let filtered = [...self.activityStandards[activity].standards];
                 if (state.gender)
                     filtered = filtered.filter((s) => s.metrics.gender === state.gender);
@@ -276,10 +234,10 @@ export class Standards {
                     filtered = filtered.filter((s) => s.metrics.weight === state.weight);
                 return filtered;
             },
-            getOne: function() {
+            getOne: function(): Standard {
                 return execMethods.getAll()[0];
             },
-            getNearest(metric: DataMetric, target: number) {
+            getNearest(metric: NumberMetric, target: number): { lower: Standard, upper: Standard } {
                 const standards = execMethods.getAll();
                 const lower = [...standards]
                     .sort((a, b) => a.metrics[metric] - b.metrics[metric])
@@ -289,7 +247,51 @@ export class Standards {
                     .sort((a, b) => a.metrics[metric] - b.metrics[metric])
                     .find((s) => s.metrics[metric] >= target) ?? standards.at(-1)!;
                 return { lower, upper };
+            },
+        };
+
+        const getInterpolated = (): Standard => {
+            const metrics: Metrics = state as Metrics;
+
+            const interpolateByWeight = (targetAge: number): Levels => {
+                const { lower: lowerAgeWeightStandard, upper: upperAgeWeightStandard } = this
+                    .byActivity(activity)
+                    .byGender(metrics.gender)
+                    .byAge(targetAge)
+                    .getNearest("weight", metrics.weight);
+
+                const weightLower = lowerAgeWeightStandard.metrics.weight;
+                const weightUpper = upperAgeWeightStandard.metrics.weight;
+
+                let weightRatio = weightUpper === weightLower ? 1 : (metrics.weight - weightLower) / (weightUpper - weightLower);
+                weightRatio = Math.max(0, Math.min(1, weightRatio));
+
+                return this.interpolateLevels(lowerAgeWeightStandard.levels, upperAgeWeightStandard.levels, weightRatio);
             }
+
+            // Find nearest age standards
+            const { lower: lowerAgeStandard, upper: upperAgeStandard } = this
+                .byActivity(activity)
+                .byGender(metrics.gender)
+                .getNearest("age", metrics.age);
+
+            const ageLower = lowerAgeStandard.metrics.age;
+            const ageUpper = upperAgeStandard.metrics.age;
+
+            // Interpolate by age and weight
+            let ageRatio = ageUpper === ageLower ? 1 : (metrics.age - ageLower) / (ageUpper - ageLower);
+            ageRatio = Math.max(0, Math.min(1, ageRatio));
+
+            const interpolatedLevels = this.interpolateLevels(
+                interpolateByWeight(ageLower),
+                interpolateByWeight(ageUpper),
+                ageRatio
+            );
+
+            return {
+                metrics,
+                levels: interpolatedLevels
+            };
         };
 
         const byGender = (gender: Gender) => {
@@ -304,10 +306,15 @@ export class Standards {
 
         const byWeight = (weight: number) => {
             state.weight = weight;
-            return { ...execMethods };
+            return { ...execMethods, getInterpolated };
         }
 
-        return { byGender, ...execMethods }
+        const byMetrics = (metrics: Metrics) => {
+            Object.assign(state, metrics);
+            return { ...execMethods, getInterpolated };
+        }
+
+        return { byGender, byMetrics, ...execMethods }
     }
 
     getActivityAttribute(activity: Activity): Attribute {
@@ -376,5 +383,23 @@ export class Standards {
         }
 
         return compressedLevels;
+    }
+
+    private interpolateLevels(
+        lower: Levels,
+        upper: Levels,
+        ratio: number,
+    ): Levels {
+        if (Object.keys(lower).length !== Object.keys(upper).length)
+            throw new Error("Cannot interpolate between varying number of levels");
+
+        const lerp = (lvl: string) => (lower[lvl] as number) + ((upper[lvl] as number) - (lower[lvl] as number)) * ratio;
+
+        const interpolatedLevels = {};
+        for (const lvl in lower) {
+            interpolatedLevels[lvl] = lerp(lvl);
+        }
+
+        return interpolatedLevels;
     }
 }
