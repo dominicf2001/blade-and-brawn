@@ -1,3 +1,4 @@
 node_modules/
 .env
-database/data.db
+src/data/data.db
+src/view/.svelte-kit
