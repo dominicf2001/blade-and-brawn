@@ -20,7 +20,8 @@ RUN apt-get update -qq && \
 
 # Install node modules
 COPY --link package.json .
-RUN bun install --production
+# RUN bun install --production
+RUN bun install
 
 # Copy application code
 COPY --link . .
@@ -34,5 +35,5 @@ COPY --from=build /app /app
 RUN apt-get update && apt-get install -y sqlite3 && rm -rf /var/lib/apt/lists/*
 
 # Start the server by default, this can be overwritten at runtime
-CMD [ "bun", "run", "db:seed:prod" ]
-CMD [ "bun", "run", "start" ]
+CMD [ "bun", "--bun", "build" ]
+CMD [ "bun", "./build/index.js" ]

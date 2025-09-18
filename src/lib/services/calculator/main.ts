@@ -1,4 +1,4 @@
-import { Activity, Attribute, Player, Gender, ActivityPerformance, lbToKg, StandardUnit } from "./util";
+import { Activity, Attribute, Gender, lbToKg, type ActivityPerformance, type Player, type StandardUnit } from "./util";
 
 // SOURCES
 // Squat, Bench, Dead Lift: 
@@ -434,7 +434,7 @@ export class Standards {
             return levels;
         }
 
-        const newLevels = {};
+        const newLevels: Levels = {};
         let j = 1;
         for (let k = 0; k < Object.keys(levels).length; ++k) {
             const currLevel = Object.keys(levels)[k];
@@ -489,7 +489,7 @@ export class Standards {
 
         const lerp = (lvl: string) => (lower[lvl] as number) + ((upper[lvl] as number) - (lower[lvl] as number)) * ratio;
 
-        const interpolatedLevels = {};
+        const interpolatedLevels: Levels = {};
         for (const lvl in lower) {
             interpolatedLevels[lvl] = lerp(lvl);
         }

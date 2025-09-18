@@ -1,8 +1,10 @@
 <script lang="ts">
 	import {
 		Standards,
+		type ActivityStandards,
 		type Standard,
-	} from "../../../services/calculator/main";
+	} from "$lib/services/calculator/main";
+	import allStandardsRaw from "$lib/data/standards.json" assert { type: "json" };
 	import {
 		Activity,
 		Gender,
@@ -10,10 +12,7 @@
 		lbToKg,
 		msToTime,
 		range,
-	} from "../../../services/calculator/util";
-
-	// data
-	const { data } = $props();
+	} from "$lib/services/calculator/util";
 
 	const selected = $state({
 		activity: Activity.BenchPress,
@@ -24,7 +23,9 @@
 	});
 
 	const allStandards = $derived(
-		new Standards(data.allStandardsRaw, { maxLevel: selected.maxLevel }),
+		new Standards(allStandardsRaw as ActivityStandards, {
+			maxLevel: selected.maxLevel,
+		}),
 	);
 
 	const getFormattedLevelValue = (

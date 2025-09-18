@@ -1,4 +1,4 @@
-import { Printful } from "./printful"
+import { Printful } from "$lib/services/commerce/printful"
 
 export namespace Webflow {
     export const API_SITES_URL = `https://api.webflow.com/v2/sites/${Bun.env.WEBFLOW_SITE_ID}`;

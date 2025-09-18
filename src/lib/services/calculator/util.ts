@@ -1,4 +1,4 @@
-import { Metrics } from "../calculator/main";
+import { type Metrics } from "$lib/services/calculator/main";
 
 // -------------------------------------------------------------------------------------------------
 // DATA MODELS 

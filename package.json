@@ -11,14 +11,12 @@
     "vite": "^7.0.4"
   },
   "scripts": {
-    "db:seed:dev": "sqlite3 ./data/data.db < ./data/seed.sql",
-    "db:seed:prod": "sqlite3 /data/data.db < ./data/seed.sql",
-    "dev": "cd ./src/view && vite dev",
-    "build": "cd ./src/view && vite build",
-    "preview": "cd ./src/view && vite preview",
-    "prepare": "cd ./src/view && svelte-kit sync || echo ''",
-    "check": "cd ./src/view && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "cd ./src/view && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "prepare": "svelte-kit sync || echo ''",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.0",

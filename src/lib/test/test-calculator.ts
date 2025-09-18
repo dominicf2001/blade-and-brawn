@@ -1,6 +1,4 @@
-import { Activity, ActivityPerformance, feetToCm, Gender, inchesToCm, lbToKg, minToMs, Player, secToMs } from "../services/calculator/util";
-import { ActivityStandards, LevelCalculator, Standards } from "../services/calculator/main"
-import rawStandards from "../data/standards.json" assert { type: "json" }
+import { Activity, feetToCm, Gender, inchesToCm, lbToKg, minToMs, secToMs, type ActivityPerformance, type Player } from "$lib/services/calculator/util";
 
 const player: Player = {
     metrics: {
@@ -40,6 +38,8 @@ const computedPerformances: ActivityPerformance[] = [
         performance: secToMs(9),
     },
 ];
+
+const standards = new Stand();
 
 // const newStandards: Standards = {
 //     "Back Squat": [],
