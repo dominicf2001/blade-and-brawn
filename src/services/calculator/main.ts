@@ -1,4 +1,4 @@
-import { Activity, Attribute, Player, Gender, ActivityPerformance, lbToKg } from "./util";
+import { Activity, Attribute, Player, Gender, ActivityPerformance, lbToKg, StandardUnit } from "./util";
 
 // SOURCES
 // Squat, Bench, Dead Lift: 
@@ -45,7 +45,9 @@ type Generator = {
 export type ActivityStandards = Record<Activity, {
     metadata: {
         attribute: Attribute,
-        generators: Generator[]
+        generators: Generator[],
+        unit: StandardUnit,
+        name: string
     },
     standards: Standard[]
 }>;
@@ -112,7 +114,7 @@ export class LevelCalculator {
 
         (Object.values(Attribute) as Attribute[]).forEach((attribute) => {
             const attrActivityPerformances = activityPerformances.filter(
-                (p) => this.standards.getActivityAttribute(p.activity) === attribute,
+                (p) => this.standards.byActivity(p.activity).getMetadata().attribute === attribute,
             );
             attrLevels[attribute] = this.calculateAttributeLevel(attribute, player, attrActivityPerformances);
         });
@@ -127,7 +129,7 @@ export class LevelCalculator {
         activityPerformances: ActivityPerformance[],
     ): number {
         // must be activities of the given attribute
-        if (activityPerformances.some((p) => this.standards.getActivityAttribute(p.activity) !== attribute)) {
+        if (activityPerformances.some((p) => this.standards.byActivity(p.activity).getMetadata().attribute !== attribute)) {
             throw new Error("Wrong activity performance attribute");
         }
 
@@ -148,7 +150,7 @@ export class LevelCalculator {
             const interpolatedStandard = this.standards
                 .byActivity(p.activity)
                 .byMetrics(player.metrics)
-                .getInterpolated();
+                .getOneInterpolated();
             return this.findLevel(interpolatedStandard, p.performance);
         });
 
@@ -168,7 +170,9 @@ export class LevelCalculator {
         let resultLevelDiff = Infinity;
 
         for (const level in standard.levels) {
-            const diff = Math.abs(performance - standard.levels[level as unknown as number]);
+            if (!standard.levels[level]) continue;
+
+            const diff = Math.abs(performance - standard.levels[level]);
             if (diff < resultLevelDiff) {
                 resultLevel = +level;
                 resultLevelDiff = diff;
@@ -178,17 +182,26 @@ export class LevelCalculator {
     }
 }
 
+type StandardsConfig = {
+    maxLevel: number
+}
+
 export class Standards {
+    readonly cfg: StandardsConfig;
     private activityStandards: ActivityStandards;
 
-    constructor(activityStandards: ActivityStandards) {
+    constructor(activityStandards: ActivityStandards, cfg?: Partial<StandardsConfig>) {
+        this.cfg = {
+            maxLevel: cfg?.maxLevel ?? 100
+        };
+
         // prepare data
-        this.activityStandards = activityStandards;
+        this.activityStandards = structuredClone(activityStandards);
         for (const activity of Object.keys(this.activityStandards) as Activity[]) {
             // expand/compress
             for (const standard of this.activityStandards[activity].standards) {
                 const expandedLevels = this.expandLevels(standard.levels, 5);
-                const compressedLevels = this.compressLevels(expandedLevels, 100);
+                const compressedLevels = this.compressLevels(expandedLevels, this.cfg.maxLevel);
                 standard.levels = compressedLevels;
             }
 
@@ -216,7 +229,7 @@ export class Standards {
                         const referenceStandard = this
                             .byActivity(activity)
                             .byMetrics({ weight: referenceWeight, gender: gender, age: age })
-                            .getInterpolated();
+                            .getOneInterpolated();
 
                         let currWeight = minWeight;
                         while (currWeight <= maxWeight) {
@@ -231,6 +244,8 @@ export class Standards {
 
                             // apply allometric scaling to generate levels
                             for (const lvl in referenceStandard.levels) {
+                                if (!referenceStandard.levels[lvl]) continue;
+
                                 const scalingExponent = .1;
                                 const coefficient = weightGenerator.ratio === "inverse" ?
                                     referenceWeight / currWeight :
@@ -257,8 +272,6 @@ export class Standards {
             }
 
         }
-
-        Bun.write("./newStandards.json", JSON.stringify(this.activityStandards, null, 2));
     }
 
     public byActivity(activity: Activity) {
@@ -270,77 +283,111 @@ export class Standards {
         const execMethods = {
             exact: {
                 // these will get EXACT matches
-                getAll: function(): Standard[] {
-                    let filtered = [...self.activityStandards[activity].standards];
-                    if (state.gender)
-                        filtered = filtered.filter((s) => s.metrics.gender === state.gender);
-                    if (state.age)
-                        filtered = filtered.filter((s) => s.metrics.age === state.age);
-                    if (state.weight)
-                        filtered = filtered.filter((s) => s.metrics.weight === state.weight);
-                    return filtered;
+                getAll(): Standard[] {
+                    const src = self.activityStandards[activity].standards;
+
+                    const out: Standard[] = [];
+                    for (let i = 0; i < src.length; i++) {
+                        const s = src[i];
+                        if (state.gender != null && s.metrics.gender !== state.gender) continue;
+                        if (state.age != null && s.metrics.age !== state.age) continue;
+                        if (state.weight != null && s.metrics.weight !== state.weight) continue;
+                        out.push(s);
+                    }
+                    return out;
                 },
                 getOne: function(): Standard | undefined {
                     return execMethods.exact.getAll()[0];
                 },
-                getNearest(metric: NumberMetric, target: number): { lower: Standard, upper: Standard } {
+                getNearest(metric: NumberMetric, target: number): { lower: Standard; upper: Standard } {
                     const standards = execMethods.exact.getAll();
-                    const lower = [...standards]
-                        .sort((a, b) => a.metrics[metric] - b.metrics[metric])
-                        .reverse()
-                        .find((s) => s.metrics[metric] <= target) ?? standards.at(0)!;
-                    const upper = [...standards]
-                        .sort((a, b) => a.metrics[metric] - b.metrics[metric])
-                        .find((s) => s.metrics[metric] >= target) ?? standards.at(-1)!;
-                    return { lower, upper };
-                },
-            },
-            interpolated: {
-                getInterpolated: (): Standard => {
-                    const metrics: Metrics = state as Metrics;
+                    if (standards.length === 0) throw new Error('no standards');
 
-                    const interpolateByWeight = (targetAge: number): Levels => {
-                        const { lower: lowerAgeWeightStandard, upper: upperAgeWeightStandard } = this
-                            .byActivity(activity)
-                            .byGender(metrics.gender)
-                            .byAge(targetAge)
-                            .getNearest("weight", metrics.weight);
+                    let lower = standards[0];           // best <= target
+                    let upper = standards[0];           // best >= target
+                    let hasLower = false, hasUpper = false;
 
-                        const weightLower = lowerAgeWeightStandard.metrics.weight;
-                        const weightUpper = upperAgeWeightStandard.metrics.weight;
+                    for (const standard of standards) {
+                        const standardMetricValue = standard.metrics[metric];
 
-                        let weightRatio = weightUpper === weightLower ? 1 : (metrics.weight - weightLower) / (weightUpper - weightLower);
-                        weightRatio = Math.max(0, Math.min(1, weightRatio));
-
-                        return this.interpolateLevels(lowerAgeWeightStandard.levels, upperAgeWeightStandard.levels, weightRatio);
+                        if (standardMetricValue <= target) {
+                            if (!hasLower || standardMetricValue > lower.metrics[metric]) { lower = standard; hasLower = true; }
+                        }
+                        if (standardMetricValue >= target) {
+                            if (!hasUpper || standardMetricValue < upper.metrics[metric]) { upper = standard; hasUpper = true; }
+                        }
                     }
 
-                    // Find nearest age standards
-                    const { lower: lowerAgeStandard, upper: upperAgeStandard } = this
-                        .byActivity(activity)
-                        .byGender(metrics.gender)
-                        .getNearest("age", metrics.age);
-
-                    const ageLower = lowerAgeStandard.metrics.age;
-                    const ageUpper = upperAgeStandard.metrics.age;
-
-                    // Interpolate by age and weight
-                    let ageRatio = ageUpper === ageLower ? 1 : (metrics.age - ageLower) / (ageUpper - ageLower);
-                    ageRatio = Math.max(0, Math.min(1, ageRatio));
-
-                    const interpolatedLevels = this.interpolateLevels(
-                        interpolateByWeight(ageLower),
-                        interpolateByWeight(ageUpper),
-                        ageRatio
-                    );
-
-                    return {
-                        metrics,
-                        levels: interpolatedLevels
-                    };
+                    // clamp to ends if one side missing
+                    if (!hasLower) lower = standards[0];
+                    if (!hasUpper) upper = standards[standards.length - 1];
+                    return { lower, upper };
                 }
             }
         };
+
+        const interpolateByAgeAndWeight = (metrics: Metrics): Standard => {
+            const interpolateByWeight = (targetAge: number): Levels => {
+                const { lower: lowerAgeWeightStandard, upper: upperAgeWeightStandard } = this
+                    .byActivity(activity)
+                    .byGender(metrics.gender)
+                    .byAge(targetAge)
+                    .getNearest("weight", metrics.weight);
+
+                const weightLower = lowerAgeWeightStandard.metrics.weight;
+                const weightUpper = upperAgeWeightStandard.metrics.weight;
+
+                let weightRatio = weightUpper === weightLower ? 1 : (metrics.weight - weightLower) / (weightUpper - weightLower);
+                weightRatio = Math.max(0, Math.min(1, weightRatio));
+
+                return this.interpolateLevels(lowerAgeWeightStandard.levels, upperAgeWeightStandard.levels, weightRatio);
+            }
+
+            // Find nearest age standards
+            const { lower: lowerAgeStandard, upper: upperAgeStandard } = this
+                .byActivity(activity)
+                .byGender(metrics.gender)
+                .getNearest("age", metrics.age);
+
+            const ageLower = lowerAgeStandard.metrics.age;
+            const ageUpper = upperAgeStandard.metrics.age;
+
+            // Interpolate by age and weight
+            let ageRatio = ageUpper === ageLower ? 1 : (metrics.age - ageLower) / (ageUpper - ageLower);
+            ageRatio = Math.max(0, Math.min(1, ageRatio));
+
+            const interpolatedLevels = this.interpolateLevels(
+                interpolateByWeight(ageLower),
+                interpolateByWeight(ageUpper),
+                ageRatio
+            );
+
+            return {
+                metrics: metrics,
+                levels: interpolatedLevels
+            }
+        };
+
+        const getAllInterpolated = (): Standard[] => {
+            const metrics: Metrics = state as Metrics;
+
+            const weights = [... new Set(this
+                .byActivity(activity)
+                .byGender(metrics.gender)
+                .getAll().map((s) => s.metrics.weight))];
+
+            const interpolatedStandards: Standard[] = weights
+                .map((w) => interpolateByAgeAndWeight({ gender: metrics.gender, age: metrics.age, weight: w }));
+
+            return interpolatedStandards;
+        };
+
+        const getOneInterpolated = (): Standard => {
+            const metrics: Metrics = state as Metrics;
+            return interpolateByAgeAndWeight(metrics);
+        };
+
+        const getMetadata = () => this.activityStandards[activity].metadata;
 
         // QUERY METHODS
 
@@ -351,30 +398,26 @@ export class Standards {
 
         const byAge = (age: number) => {
             state.age = age;
-            return { byWeight, ...execMethods.exact };
+            return { byWeight, ...execMethods.exact, getAllInterpolated };
         }
 
         const byWeight = (weight: number) => {
             state.weight = weight;
-            return { ...execMethods.exact, ...execMethods.interpolated };
+            return { ...execMethods.exact, getOneInterpolated };
         }
 
         const byMetrics = (metrics: Metrics) => {
             Object.assign(state, metrics);
-            return { ...execMethods.exact, ...execMethods.interpolated };
+            return { ...execMethods.exact, getOneInterpolated };
         }
 
-        const initialMethods = { byGender, byMetrics, ...execMethods.exact };
+        const initialMethods = { byGender, byMetrics, getMetadata, ...execMethods.exact };
         return initialMethods;
     }
 
-    getActivityAttribute(activity: Activity): Attribute {
-        return this.activityStandards[activity].metadata.attribute;
-    };
-
-    getAttributeActivities(attribute: Attribute): Activity[] {
+    public getAttributeActivities(attribute: Attribute): Activity[] {
         const activities: Activity[] = [];
-        for (const activity in this.activityStandards) {
+        for (const activity of Object.keys(this.activityStandards) as Activity[]) {
             const activityStandard = this.activityStandards[activity] as ActivityStandards[Activity];
             if (activityStandard.metadata.attribute === attribute) {
                 activities.push(activity as Activity);

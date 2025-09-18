@@ -249,9 +249,9 @@ export namespace Webflow {
                     "skus": webflowVariants.slice(1)
                 })
             });
-            createSkuResponse = await createSkuResponse.json();
+            const createSkuObj = await createSkuResponse.json();
 
-            const responseSkus = [addProductResponse["sku"], ...createSkuResponse["skus"]];
+            const responseSkus = [addProductResponse["sku"], ...createSkuObj["skus"]];
 
             // SYNC WEBFLOW/PRINTFUL PRODUCT AND VARIANT IDs
             let modifyPrintfulProductResponse = await fetch(`${Printful.API_URL}/store/products/${printfulProductId}`, {

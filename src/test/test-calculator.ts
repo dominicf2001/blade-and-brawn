@@ -1,5 +1,5 @@
-import { Activity, ActivityPerformance, feetToCm, Gender, inchesToCm, lbToKg, minToMs, Player, secToMs } from "./util";
-import { ActivityStandards, LevelCalculator, Standards } from "./calc.ts";
+import { Activity, ActivityPerformance, feetToCm, Gender, inchesToCm, lbToKg, minToMs, Player, secToMs } from "../services/calculator/util";
+import { ActivityStandards, LevelCalculator, Standards } from "../services/calculator/main"
 import rawStandards from "../data/standards.json" assert { type: "json" }
 
 const player: Player = {
@@ -40,11 +40,6 @@ const computedPerformances: ActivityPerformance[] = [
         performance: secToMs(9),
     },
 ];
-
-const standards = new Standards(rawStandards as ActivityStandards);
-const levelCalculator = new LevelCalculator(standards);
-
-console.log(levelCalculator.calculate(player, computedPerformances));
 
 // const newStandards: Standards = {
 //     "Back Squat": [],

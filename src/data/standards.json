@@ -2,7 +2,9 @@
   "BackSquat": {
     "metadata": {
       "attribute": "Strength",
-      "generators": []
+      "generators": [],
+      "unit": "kg",
+      "name": "Squat"
     },
     "standards": [
       {
@@ -1578,7 +1580,9 @@
   "Deadlift": {
     "metadata": {
       "attribute": "Strength",
-      "generators": []
+      "generators": [],
+      "unit": "kg",
+      "name": "Deadlift"
     },
     "standards": [
       {
@@ -3154,7 +3158,9 @@
   "BenchPress": {
     "metadata": {
       "attribute": "Strength",
-      "generators": []
+      "generators": [],
+      "unit": "kg",
+      "name": "Bench Press"
     },
     "standards": [
       {
@@ -4737,7 +4743,9 @@
           "step": 12,
           "ratio": "inverse"
         }
-      ]
+      ],
+      "unit": "ms",
+      "name": "Mile Run"
     },
     "standards": [
       {
@@ -5221,7 +5229,9 @@
   "BroadJump": {
     "metadata": {
       "attribute": "Power",
-      "generators": []
+      "generators": [],
+      "unit": "cm",
+      "name": "Broad Jump"
     },
     "standards": [
       {
@@ -5257,7 +5267,9 @@
   "ConeDrill": {
     "metadata": {
       "attribute": "Agility",
-      "generators": []
+      "generators": [],
+      "unit": "ms",
+      "name": "3 Cone Drill"
     },
     "standards": [
       {

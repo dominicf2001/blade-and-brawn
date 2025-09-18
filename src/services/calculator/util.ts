@@ -1,4 +1,4 @@
-import { Metrics } from "./calc";
+import { Metrics } from "../calculator/main";
 
 // -------------------------------------------------------------------------------------------------
 // DATA MODELS 
@@ -37,35 +37,18 @@ export enum Gender {
 // -------------------------------------------------------------------------------------------------
 // Conversion utilities
 // -------------------------------------------------------------------------------------------------
+
+export type StandardUnit = "ms" | "cm" | "kg";
+
 export const lbToKg = (lb: number | string): number => +lb * 0.453592;
 export const kgToLb = (kg: number | string): number => +kg * 2.20462;
 
-export const minToMs = (min) => min * 60000;
-export const secToMs = (sec) => sec * 1000;
+export const minToMs = (min: number) => min * 60000;
+export const secToMs = (sec: number) => sec * 1000;
+export const msToMin = (ms: number) => ms / 60000;
 
-export const feetToCm = (feet) => feet * 30.48;
-export const inchesToCm = (inches) => inches * 2.54;
-
-export const mphToMtrsPerMs = (mph: number): number => (mph * 0.44704) / 1000;
-
-export const timeToMs = (time: string): number => {
-    const [main, decimal = "0"] = time.split(".");
-    const milliseconds = Number(decimal.padEnd(3, "0").slice(0, 3));
-
-    const parts = main.split(":").map(Number);
-    let minutes = 0,
-        seconds = 0;
-
-    if (parts.length === 1) {
-        seconds = parts[0];
-    } else if (parts.length === 2) {
-        [minutes, seconds] = parts as [number, number];
-    } else {
-        throw new Error("Invalid time format");
-    }
-
-    return (minutes * 60 + seconds) * 1000 + milliseconds;
-};
+export const feetToCm = (feet: number) => feet * 30.48;
+export const inchesToCm = (inches: number) => inches * 2.54;
 
 export const msToTime = (ms: number, includeMs = false): string => {
     const minutes = Math.floor(ms / 60000);
@@ -78,3 +61,7 @@ export const msToTime = (ms: number, includeMs = false): string => {
     }
     return formattedTime;
 };
+
+export const range = (length: number) => Array.from({ length: length }, (_, i) => i + 1);
+
+
