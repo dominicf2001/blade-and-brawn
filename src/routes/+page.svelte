@@ -7,6 +7,7 @@
 	import allStandardsRaw from "$lib/data/standards.json" assert { type: "json" };
 	import {
 		Activity,
+		cmToIn,
 		Gender,
 		kgToLb,
 		lbToKg,
@@ -37,9 +38,10 @@
 		const unit = allStandards.byActivity(activity).getMetadata().unit;
 		switch (unit) {
 			case "ms":
-				return msToTime(rawValue);
-			case "cm":
-				return String(Math.round(rawValue));
+				return msToTime(rawValue, activity === Activity.ConeDrill);
+			case "cm": {
+				return String(Math.round(cmToIn(rawValue) * 10) / 10);
+			}
 			case "kg":
 				return String(Math.round(kgToLb(rawValue)));
 			default:

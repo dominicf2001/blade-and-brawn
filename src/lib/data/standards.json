@@ -4739,7 +4739,7 @@
       "generators": [
         {
           "metric": "weight",
-          "spread": 4,
+          "spread": 3,
           "step": 12,
           "ratio": "inverse"
         }
@@ -5229,7 +5229,14 @@
   "BroadJump": {
     "metadata": {
       "attribute": "Power",
-      "generators": [],
+      "generators": [
+        {
+          "metric": "weight",
+          "spread": 3,
+          "step": 12,
+          "ratio": "inverse"
+        }
+      ],
       "unit": "cm",
       "name": "Broad Jump"
     },
@@ -5267,7 +5274,14 @@
   "ConeDrill": {
     "metadata": {
       "attribute": "Agility",
-      "generators": [],
+      "generators": [
+        {
+          "metric": "weight",
+          "spread": 3,
+          "step": 12,
+          "ratio": "inverse"
+        }
+      ],
       "unit": "ms",
       "name": "3 Cone Drill"
     },

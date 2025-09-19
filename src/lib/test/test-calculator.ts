@@ -1,4 +1,4 @@
-import { Activity, feetToCm, Gender, inchesToCm, lbToKg, minToMs, secToMs, type ActivityPerformance, type Player } from "$lib/services/calculator/util";
+import { Activity, feetToCm, Gender, getAvgWeight, inchesToCm, kgToLb, lbToKg, minToMs, secToMs, type ActivityPerformance, type Player } from "$lib/services/calculator/util";
 
 const player: Player = {
     metrics: {
@@ -39,7 +39,10 @@ const computedPerformances: ActivityPerformance[] = [
     },
 ];
 
-const standards = new Stand();
+for (let age = 15; age < 80; ++age) {
+    const avgWeightKG = getAvgWeight(Gender.Female, age);
+    console.log(`${age}: ${kgToLb(avgWeightKG).toFixed(1)}`);
+}
 
 // const newStandards: Standards = {
 //     "Back Squat": [],
