@@ -183,7 +183,10 @@ export class LevelCalculator {
 }
 
 export type StandardsConfig = {
-    maxLevel: number
+    maxLevel: number,
+    weightModifier: number,
+    weightSkew: number,
+    ageModifier: number,
 }
 
 export class Standards {
@@ -192,7 +195,10 @@ export class Standards {
 
     constructor(activityStandards: ActivityStandards, cfg?: Partial<StandardsConfig>) {
         this.cfg = {
-            maxLevel: cfg?.maxLevel ?? 100
+            maxLevel: cfg?.maxLevel ?? 100,
+            weightModifier: cfg?.weightModifier ?? .1,
+            weightSkew: cfg?.weightSkew ?? .1,
+            ageModifier: cfg?.ageModifier ?? .1,
         };
 
         // prepare data
@@ -213,9 +219,8 @@ export class Standards {
                 for (const gender of Object.values(Gender)) {
                     const referenceAge = 50;
 
-                    const skewRatio = 0; // 0 = normal, 1 = max skew
-                    const minAge = referenceAge - (ageGenerator.step * ageGenerator.spread * (1 - skewRatio));
-                    const maxAge = referenceAge + (ageGenerator.step * ageGenerator.spread * (1 + skewRatio));
+                    const minAge = referenceAge - (ageGenerator.step * ageGenerator.spread);
+                    const maxAge = referenceAge + (ageGenerator.step * ageGenerator.spread);
 
                     const referenceStandard = this
                         .byActivity(activity)
@@ -237,7 +242,7 @@ export class Standards {
                         for (const lvl in referenceStandard.levels) {
                             if (!referenceStandard.levels[lvl]) continue;
 
-                            const scalingExponent = .1;
+                            const scalingExponent = this.cfg.ageModifier;
                             const coefficient = ageGenerator.ratio === "inverse" ?
                                 referenceAge / currAge :
                                 currAge / referenceAge;
@@ -267,7 +272,7 @@ export class Standards {
                     for (const age of this.agesFor(activity, gender)) {
                         const referenceWeight = getAvgWeight(gender, age);
 
-                        const skewRatio = 0.4; // 0 = normal, 1 = max skew
+                        const skewRatio = this.cfg.weightSkew; // 0 = normal, 1 = max skew
                         const minWeight = referenceWeight - (weightGenerator.step * weightGenerator.spread * (1 - skewRatio));
                         const maxWeight = referenceWeight + (weightGenerator.step * weightGenerator.spread * (1 + skewRatio));
 
@@ -291,7 +296,7 @@ export class Standards {
                             for (const lvl in referenceStandard.levels) {
                                 if (!referenceStandard.levels[lvl]) continue;
 
-                                const scalingExponent = .1;
+                                const scalingExponent = this.cfg.weightModifier;
                                 const coefficient = weightGenerator.ratio === "inverse" ?
                                     referenceWeight / currWeight :
                                     currWeight / referenceWeight;
@@ -383,7 +388,6 @@ export class Standards {
         };
 
         const interpolateByAgeAndWeight = (metrics: Metrics): Standard => {
-            console.log(metrics);
             const interpolateByWeight = (targetAge: number): Levels => {
                 const { lower: lowerAgeWeightStandard, upper: upperAgeWeightStandard } = this
                     .byActivity(activity)
@@ -504,7 +508,6 @@ export class Standards {
             .byAge(closestAge)
             .getAll().map((s) => s.metrics.weight);
 
-        console.log({ age, closestAge, weights });
         return weights;
     }
 

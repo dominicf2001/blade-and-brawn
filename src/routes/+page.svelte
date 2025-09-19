@@ -26,6 +26,9 @@
 		},
 		cfg: {
 			maxLevel: "5",
+			weightModfier: ".1",
+			weightSkew: ".4",
+			ageModifier: ".1",
 		},
 	});
 
@@ -38,6 +41,9 @@
 		} as Metrics,
 		cfg: {
 			maxLevel: +input.cfg.maxLevel,
+			weightModifier: +input.cfg.weightModfier,
+			weightSkew: +input.cfg.weightSkew,
+			ageModifier: +input.cfg.ageModifier,
 		} as StandardsConfig,
 	});
 
@@ -135,20 +141,74 @@
 			<fieldset class="group">
 				<legend>Parameters</legend>
 
-				<label class="field w-24">
-					<span>Max level</span>
-					<input
-						type="number"
-						min="1"
-						max="100"
-						placeholder="5"
-						bind:value={input.cfg.maxLevel}
-					/>
-				</label>
+				<fieldset class="group">
+					<legend>General</legend>
+					<label class="field parameter">
+						<span>Max level</span>
+						<input
+							type="number"
+							min="1"
+							max="100"
+							placeholder="5"
+							bind:value={input.cfg.maxLevel}
+						/>
+					</label>
+				</fieldset>
+
+				<fieldset class="group">
+					<legend>Data generation</legend>
+					<label class="field parameter">
+						<span>Weight modifier</span>
+						<input
+							type="number"
+							min="0"
+							max="1"
+							step=".05"
+							placeholder=".1"
+							bind:value={input.cfg.weightModfier}
+						/>
+					</label>
+					<label class="field parameter">
+						<span>Weight skew</span>
+						<input
+							type="number"
+							min="0"
+							max="1"
+							step=".05"
+							placeholder=".1"
+							bind:value={input.cfg.weightSkew}
+						/>
+					</label>
+					<label class="field parameter">
+						<span>Age modifier</span>
+						<input
+							type="number"
+							min="0"
+							max="1"
+							step=".05"
+							placeholder=".1"
+							bind:value={input.cfg.ageModifier}
+						/>
+					</label>
+				</fieldset>
 			</fieldset>
 		</div>
 
 		<h1>{allStandards.byActivity(selected.activity).getMetadata().name}</h1>
+		{#if allStandards
+			.byActivity(selected.activity)
+			.getMetadata().generators.length}
+			<p class="description">
+				(Generated data: {allStandards
+					.byActivity(selected.activity)
+					.getMetadata()
+					.generators.map((g) => g.metric)
+					.join(", ")})
+			</p>
+		{:else}
+			<p class="description">(Generated data: NONE)</p>
+		{/if}
+
 		<section class="gender-section">
 			<h2>{selected.metrics.gender}</h2>
 			{#if !selected.metrics.age}
@@ -246,6 +306,11 @@
 		font-weight: 600;
 	}
 
+	p {
+		font-size: 0.8rem;
+		color: var(--muted);
+	}
+
 	/* Toolbar container */
 	.toolbar {
 		display: grid;
@@ -286,6 +351,11 @@
 		grid-template-rows: auto auto;
 		gap: 6px;
 		min-width: 160px;
+	}
+
+	.parameter {
+		min-width: 100px;
+		max-width: 100px;
 	}
 
 	/* Label text */
