@@ -4751,7 +4751,7 @@
       {
         "metrics": {
           "age": 10,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -4765,7 +4765,7 @@
       {
         "metrics": {
           "age": 15,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -4779,7 +4779,7 @@
       {
         "metrics": {
           "age": 20,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -4793,7 +4793,7 @@
       {
         "metrics": {
           "age": 25,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -4807,7 +4807,7 @@
       {
         "metrics": {
           "age": 30,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -4821,7 +4821,7 @@
       {
         "metrics": {
           "age": 35,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -4835,7 +4835,7 @@
       {
         "metrics": {
           "age": 40,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -4849,7 +4849,7 @@
       {
         "metrics": {
           "age": 45,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -4863,7 +4863,7 @@
       {
         "metrics": {
           "age": 50,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -4877,7 +4877,7 @@
       {
         "metrics": {
           "age": 55,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -4891,7 +4891,7 @@
       {
         "metrics": {
           "age": 60,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -4905,7 +4905,7 @@
       {
         "metrics": {
           "age": 65,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -4919,7 +4919,7 @@
       {
         "metrics": {
           "age": 70,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -4933,7 +4933,7 @@
       {
         "metrics": {
           "age": 75,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -4947,7 +4947,7 @@
       {
         "metrics": {
           "age": 80,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -4961,7 +4961,7 @@
       {
         "metrics": {
           "age": 85,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -4975,7 +4975,7 @@
       {
         "metrics": {
           "age": 90,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -4989,7 +4989,7 @@
       {
         "metrics": {
           "age": 10,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5003,7 +5003,7 @@
       {
         "metrics": {
           "age": 15,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5017,7 +5017,7 @@
       {
         "metrics": {
           "age": 20,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5031,7 +5031,7 @@
       {
         "metrics": {
           "age": 25,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5045,7 +5045,7 @@
       {
         "metrics": {
           "age": 30,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5059,7 +5059,7 @@
       {
         "metrics": {
           "age": 35,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5073,7 +5073,7 @@
       {
         "metrics": {
           "age": 40,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5087,7 +5087,7 @@
       {
         "metrics": {
           "age": 45,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5101,7 +5101,7 @@
       {
         "metrics": {
           "age": 50,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5115,7 +5115,7 @@
       {
         "metrics": {
           "age": 55,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5129,7 +5129,7 @@
       {
         "metrics": {
           "age": 60,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5143,7 +5143,7 @@
       {
         "metrics": {
           "age": 65,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5157,7 +5157,7 @@
       {
         "metrics": {
           "age": 70,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5171,7 +5171,7 @@
       {
         "metrics": {
           "age": 75,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5185,7 +5185,7 @@
       {
         "metrics": {
           "age": 80,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5199,7 +5199,7 @@
       {
         "metrics": {
           "age": 85,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5213,7 +5213,7 @@
       {
         "metrics": {
           "age": 90,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5231,6 +5231,12 @@
       "attribute": "Power",
       "generators": [
         {
+          "metric": "age",
+          "spread": 4,
+          "step": 10,
+          "ratio": "inverse"
+        },
+        {
           "metric": "weight",
           "spread": 3,
           "step": 12,
@@ -5243,8 +5249,8 @@
     "standards": [
       {
         "metrics": {
-          "age": 18,
-          "weight": -1,
+          "age": 20,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -5258,7 +5264,7 @@
       {
         "metrics": {
           "age": 18,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {
@@ -5289,7 +5295,7 @@
       {
         "metrics": {
           "age": 18,
-          "weight": -1,
+          "weight": 0,
           "gender": "Male"
         },
         "levels": {
@@ -5303,7 +5309,7 @@
       {
         "metrics": {
           "age": 18,
-          "weight": -1,
+          "weight": 0,
           "gender": "Female"
         },
         "levels": {

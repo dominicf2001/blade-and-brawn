@@ -1,4 +1,6 @@
-import { Activity, feetToCm, Gender, getAvgWeight, inchesToCm, kgToLb, lbToKg, minToMs, secToMs, type ActivityPerformance, type Player } from "$lib/services/calculator/util";
+import { Standards, type ActivityStandards } from "$lib/services/calculator/main";
+import { Activity, ftToCm, Gender, getAvgWeight, inToCm, kgToLb, lbToKg, minToMs, secToMs, type ActivityPerformance, type Player } from "$lib/services/calculator/util";
+import allStandardsRaw from "$lib/data/standards.json" assert { type: "json" };
 
 const player: Player = {
     metrics: {
@@ -25,7 +27,7 @@ const computedPerformances: ActivityPerformance[] = [
     // POWER
     {
         activity: Activity.BroadJump,
-        performance: feetToCm(105) + inchesToCm(5),
+        performance: ftToCm(105) + inToCm(5),
     },
     // ENDURANCE
     {
@@ -39,10 +41,7 @@ const computedPerformances: ActivityPerformance[] = [
     },
 ];
 
-for (let age = 15; age < 80; ++age) {
-    const avgWeightKG = getAvgWeight(Gender.Female, age);
-    console.log(`${age}: ${kgToLb(avgWeightKG).toFixed(1)}`);
-}
+const standards = new Standards(allStandardsRaw as ActivityStandards, { maxLevel: 10 });
 
 // const newStandards: Standards = {
 //     "Back Squat": [],

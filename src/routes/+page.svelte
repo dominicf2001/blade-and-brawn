@@ -2,7 +2,9 @@
 	import {
 		Standards,
 		type ActivityStandards,
+		type Metrics,
 		type Standard,
+		type StandardsConfig,
 	} from "$lib/services/calculator/main";
 	import allStandardsRaw from "$lib/data/standards.json" assert { type: "json" };
 	import {
@@ -15,21 +17,39 @@
 		range,
 	} from "$lib/services/calculator/util";
 
-	const selected = $state({
+	const input = $state({
 		activity: Activity.BenchPress,
-		gender: Gender.Male,
-		age: 18,
-		weight: 0,
-		maxLevel: 5,
+		metrics: {
+			gender: Gender.Male,
+			age: "",
+			weight: "",
+		},
+		cfg: {
+			maxLevel: "5",
+		},
+	});
+
+	const selected = $derived({
+		activity: input.activity,
+		metrics: {
+			gender: input.metrics.gender,
+			age: +input.metrics.age,
+			weight: lbToKg(+input.metrics.weight),
+		} as Metrics,
+		cfg: {
+			maxLevel: +input.cfg.maxLevel,
+		} as StandardsConfig,
+	});
+
+	$effect(() => {
+		if (!input.metrics.age) input.metrics.weight = "";
 	});
 
 	const allStandards = $derived(
-		new Standards(allStandardsRaw as ActivityStandards, {
-			maxLevel: selected.maxLevel,
-		}),
+		new Standards(allStandardsRaw as ActivityStandards, selected.cfg),
 	);
 
-	const getFormattedLevelValue = (
+	const getLvlValue = (
 		activity: Activity,
 		standard: Standard,
 		lvl: number,
@@ -55,13 +75,12 @@
 		<div class="toolbar">
 			<fieldset class="group">
 				<legend>Metrics</legend>
-
 				<label class="field">
 					<span>Activity</span>
 					<select
 						class="select"
 						name="activities"
-						bind:value={selected.activity}
+						bind:value={input.activity}
 					>
 						{#each Object.values(Activity) as activity}
 							<option value={activity}
@@ -78,7 +97,7 @@
 					<select
 						class="select"
 						name="genders"
-						bind:value={selected.gender}
+						bind:value={input.metrics.gender}
 					>
 						{#each Object.values(Gender) as gender}
 							<option value={gender}>{gender}</option>
@@ -93,19 +112,23 @@
 						min="0"
 						max="100"
 						placeholder="18"
-						bind:value={selected.age}
+						bind:value={input.metrics.age}
 					/>
 				</label>
 
 				<label class="field w-24">
 					<span>Weight (lb)</span>
-					<input
-						type="number"
-						min="0"
-						max="600"
-						placeholder="170"
-						bind:value={selected.weight}
-					/>
+					{#if selected.metrics.age}
+						<input
+							type="number"
+							min="0"
+							max="600"
+							placeholder="170"
+							bind:value={input.metrics.weight}
+						/>
+					{:else}
+						<p style="margin: 0;">Requires age</p>
+					{/if}
 				</label>
 			</fieldset>
 
@@ -119,94 +142,77 @@
 						min="1"
 						max="100"
 						placeholder="5"
-						bind:value={selected.maxLevel}
+						bind:value={input.cfg.maxLevel}
 					/>
 				</label>
 			</fieldset>
 		</div>
 
-		{#if !selected.gender || !selected.age}
-			<p>Not enough info entered</p>
-		{:else}
-			{@render standardsTable(
-				selected.gender,
-				selected.age,
-				selected.weight,
-			)}
-		{/if}
+		<h1>{allStandards.byActivity(selected.activity).getMetadata().name}</h1>
+		<section class="gender-section">
+			<h2>{selected.metrics.gender}</h2>
+			{#if !selected.metrics.age}
+				{#each allStandards.agesFor(selected.activity, selected.metrics.gender) as age}
+					{@render standardsTable(selected.activity, {
+						...selected.metrics,
+						age,
+					})}
+				{/each}
+			{:else}
+				{@render standardsTable(selected.activity, selected.metrics)}
+			{/if}
+		</section>
 	</div>
 </div>
 
-{#snippet standardsTable(gender: Gender, age: number, weight: number)}
-	<section class="gender-section">
-		<div class="age-section">
-			<div class="standards-table">
-				<div class="scroll">
-					<table>
-						<thead>
-							<tr>
-								<th class="levels-th">Body weight</th>
-								{#each range(selected.maxLevel) as lvl}
-									<th class="levels-th">{lvl}</th>
-								{/each}
-							</tr>
-						</thead>
-						<tbody>
-							{#if weight}
-								{@const standard = allStandards
-									.byActivity(selected.activity)
-									.byGender(gender)
-									.byAge(age)
-									.byWeight(lbToKg(weight))
-									.getOneInterpolated()}
-
-								<tr>
-									<th scope="row"
-										>{Math.round(
-											kgToLb(standard.metrics.weight),
-										)}</th
-									>
-									{#each range(selected.maxLevel) as lvl}
-										<td
-											>{getFormattedLevelValue(
-												selected.activity,
-												standard,
-												lvl,
-											)}</td
-										>
-									{/each}
-								</tr>
-							{:else}
-								{@const standards = allStandards
-									.byActivity(selected.activity)
-									.byGender(gender)
-									.byAge(age)
-									.getAllInterpolated()}
-								{#each standards as standard}
-									<tr>
-										<th scope="row"
-											>{Math.round(
-												kgToLb(standard.metrics.weight),
-											)}</th
-										>
-										{#each range(allStandards.cfg.maxLevel) as lvl}
-											<td
-												>{getFormattedLevelValue(
-													selected.activity,
-													standard,
-													lvl,
-												)}</td
-											>
-										{/each}
-									</tr>
-								{/each}
-							{/if}
-						</tbody>
-					</table>
-				</div>
+{#snippet standardsTable(activity: Activity, metrics: Metrics)}
+	{#snippet standardsTableRow(standard: Standard)}
+		<tr>
+			<th scope="row"
+				>{parseFloat(kgToLb(standard.metrics.weight).toFixed(2))}</th
+			>
+			{#each range(selected.cfg.maxLevel) as lvl}
+				<td>{getLvlValue(activity, standard, lvl)}</td>
+			{/each}
+		</tr>
+	{/snippet}
+	<div class="age-section">
+		<h3>{metrics.age}</h3>
+		<div class="standards-table">
+			<div class="scroll">
+				<table>
+					<thead>
+						<tr>
+							<th class="levels-th">Body weight</th>
+							{#each range(selected.cfg.maxLevel) as lvl}
+								<th class="levels-th">{lvl}</th>
+							{/each}
+						</tr>
+					</thead>
+					<tbody>
+						{#if metrics.weight}
+							{@const standard = allStandards
+								.byActivity(activity)
+								.byGender(metrics.gender)
+								.byAge(metrics.age)
+								.byWeight(metrics.weight)
+								.getOneInterpolated()}
+							{@render standardsTableRow(standard)}
+						{:else}
+							{@const standards = allStandards
+								.byActivity(activity)
+								.byGender(metrics.gender)
+								.byAge(metrics.age)
+								.getAllInterpolated({ normalizeForLb: true })}
+							{#each standards as standard}
+								{@render standardsTableRow(standard)}
+							{/each}
+						{/if}
+					</tbody>
+				</table>
 			</div>
 		</div>
-	</section>
+	</div>
 {/snippet}
 
 <style>
