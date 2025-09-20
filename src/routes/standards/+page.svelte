@@ -76,89 +76,82 @@
 	};
 </script>
 
-<div class="container m-auto">
-	<section
-		class="w-full flex flex-col md:flex-row justify-between gap-2 pt-10"
-	>
-		<fieldset class="fieldset bg-base-200 p-6 max-w-lg">
-			<legend class="fieldset-legend text-lg font-semibold">
-				Metrics
-			</legend>
+<section class="w-full flex justify-between gap-2 pt-10 items-center">
+	<fieldset class="fieldset bg-base-200 p-6 max-w-lg">
+		<legend class="fieldset-legend text-lg font-semibold"> Metrics </legend>
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+			<label>
+				<span class="label mb-1">Activity</span>
+				<select
+					class="select w-full"
+					name="activities"
+					bind:value={input.activity}
+				>
+					{#each Object.values(Activity) as activity}
+						<option value={activity}>
+							{allStandards.byActivity(activity).getMetadata()
+								.name}
+						</option>
+					{/each}
+				</select>
+			</label>
 
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-				<label>
-					<span class="label mb-1">Activity</span>
-					<select
-						class="select w-full"
-						name="activities"
-						bind:value={input.activity}
-					>
-						{#each Object.values(Activity) as activity}
-							<option value={activity}>
-								{allStandards.byActivity(activity).getMetadata()
-									.name}
-							</option>
-						{/each}
-					</select>
-				</label>
+			<label>
+				<span class="label mb-1">Gender</span>
+				<select
+					class="select w-full"
+					name="genders"
+					bind:value={input.metrics.gender}
+				>
+					{#each Object.values(Gender) as gender}
+						<option value={gender}>{gender}</option>
+					{/each}
+				</select>
+			</label>
 
-				<label>
-					<span class="label mb-1">Gender</span>
-					<select
-						class="select w-full"
-						name="genders"
-						bind:value={input.metrics.gender}
-					>
-						{#each Object.values(Gender) as gender}
-							<option value={gender}>{gender}</option>
-						{/each}
-					</select>
-				</label>
+			<label>
+				<span class="label mb-1">Age</span>
+				<input
+					class="input w-full"
+					type="number"
+					min="0"
+					max="100"
+					placeholder="18"
+					bind:value={input.metrics.age}
+				/>
+			</label>
 
-				<label>
-					<span class="label mb-1">Age</span>
-					<input
-						class="input w-full"
-						type="number"
-						min="0"
-						max="100"
-						placeholder="18"
-						bind:value={input.metrics.age}
-					/>
-				</label>
+			<label>
+				<span class="label mb-1">Weight (lb)</span>
+				<input
+					class="input w-full"
+					type="number"
+					min="0"
+					max="600"
+					placeholder={selected.metrics.age ? "170" : "Requires age"}
+					bind:value={input.metrics.weight}
+					disabled={!selected.metrics.age}
+				/>
+			</label>
+		</div>
+	</fieldset>
 
-				<label>
-					<span class="label mb-1">Weight (lb)</span>
-					<input
-						class="input w-full"
-						type="number"
-						min="0"
-						max="600"
-						placeholder={selected.metrics.age
-							? "170"
-							: "Requires age"}
-						bind:value={input.metrics.weight}
-						disabled={!selected.metrics.age}
-					/>
-				</label>
-			</div>
-		</fieldset>
+	<fieldset class="fieldset bg-base-200 p-6 max-w-lg">
+		<legend class="fieldset-legend text-lg font-semibold">
+			Parameters
+		</legend>
 
-		<fieldset class="fieldset bg-base-200 p-6 max-w-lg">
-			<legend class="fieldset-legend text-lg font-semibold">
-				Parameters
-			</legend>
-
-			<fieldset class="fieldset bg-base-250 p-3 max-w-xl">
+		<div class="flex gap-4">
+			<fieldset class="fieldset bg-base-300 p-3 max-w-xl">
 				<legend class="fieldset-legend text-sm font-semibold">
 					General
 				</legend>
 
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<div class="grid grid-cols-1 gap-4">
 					<label>
 						<span class="label mb-1">Max level</span>
 						<input
-							class="input"
+							class="input w-full"
 							type="number"
 							min="1"
 							max="100"
@@ -169,7 +162,7 @@
 				</div>
 			</fieldset>
 
-			<fieldset class="fieldset bg-base-300 p-3 max-w-xl">
+			<fieldset class="fieldset bg-base-300 p-3 max-w-3xs">
 				<legend class="fieldset-legend text-sm font-semibold">
 					Data Generation
 				</legend>
@@ -178,7 +171,7 @@
 					<label>
 						<span class="label mb-1">Weight modifier</span>
 						<input
-							class="input"
+							class="input w-full"
 							type="number"
 							min="0"
 							max="1"
@@ -190,7 +183,7 @@
 					<label>
 						<span class="label mb-1">Weight skew</span>
 						<input
-							class="input"
+							class="input w-full"
 							type="number"
 							min="0"
 							max="1"
@@ -202,7 +195,7 @@
 					<label>
 						<span class="label mb-1">Age modifier</span>
 						<input
-							class="input"
+							class="input w-full"
 							type="number"
 							min="0"
 							max="1"
@@ -213,46 +206,42 @@
 					</label>
 				</div>
 			</fieldset>
-		</fieldset>
-	</section>
-
-	<div class="divider"></div>
-
-	<section>
-		<div>
-			<h1 class="text-2xl font-bold mb-2.5">
-				{allStandards.byActivity(selected.activity).getMetadata().name}
-			</h1>
-			<div class="flex items-center">
-				<h2 class="text-xl">{selected.metrics.gender}</h2>
-				<p class="text-xs label ml-2.5">
-					{#if allStandards
-						.byActivity(selected.activity)
-						.getMetadata().generators.length}
-						(Generated data: {allStandards
-							.byActivity(selected.activity)
-							.getMetadata()
-							.generators.map((g) => g.metric)
-							.join(", ")})
-					{:else}
-						(Generated data: NONE)
-					{/if}
-				</p>
-			</div>
 		</div>
+	</fieldset>
+</section>
 
-		{#if !selected.metrics.age}
-			{#each allStandards.agesFor(selected.activity, selected.metrics.gender) as age}
-				{@render standardsTable(selected.activity, {
-					...selected.metrics,
-					age,
-				})}
-			{/each}
-		{:else}
-			{@render standardsTable(selected.activity, selected.metrics)}
-		{/if}
-	</section>
-</div>
+<div class="divider"></div>
+
+<section class="w-full">
+	<div>
+		<div class="flex items-center">
+			<p class="text-xs label">
+				{#if allStandards
+					.byActivity(selected.activity)
+					.getMetadata().generators.length}
+					(Generated data: {allStandards
+						.byActivity(selected.activity)
+						.getMetadata()
+						.generators.map((g) => g.metric)
+						.join(", ")})
+				{:else}
+					(Generated data: NONE)
+				{/if}
+			</p>
+		</div>
+	</div>
+
+	{#if !selected.metrics.age}
+		{#each allStandards.agesFor(selected.activity, selected.metrics.gender) as age}
+			{@render standardsTable(selected.activity, {
+				...selected.metrics,
+				age,
+			})}
+		{/each}
+	{:else}
+		{@render standardsTable(selected.activity, selected.metrics)}
+	{/if}
+</section>
 
 {#snippet standardsTable(activity: Activity, metrics: Metrics)}
 	{#snippet standardsTableRow(standard: Standard)}
