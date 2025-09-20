@@ -5286,6 +5286,12 @@
           "spread": 3,
           "step": 12,
           "ratio": "inverse"
+        },
+        {
+          "metric": "age",
+          "spread": 4,
+          "step": 10,
+          "ratio": "inverse"
         }
       ],
       "unit": "ms",

@@ -35,5 +35,5 @@ COPY --from=build /app /app
 RUN apt-get update && apt-get install -y sqlite3 && rm -rf /var/lib/apt/lists/*
 
 # Start the server by default, this can be overwritten at runtime
-CMD [ "bun", "--bun", "build" ]
+CMD [ "bun", "--bun", "run", "build" ]
 CMD [ "bun", "./build/index.js" ]

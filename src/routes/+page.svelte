@@ -111,7 +111,7 @@
 					</select>
 				</label>
 
-				<label class="field w-20">
+				<label class="field">
 					<span>Age</span>
 					<input
 						type="number"
@@ -122,7 +122,7 @@
 					/>
 				</label>
 
-				<label class="field w-24">
+				<label class="field">
 					<span>Weight (lb)</span>
 					{#if selected.metrics.age}
 						<input
