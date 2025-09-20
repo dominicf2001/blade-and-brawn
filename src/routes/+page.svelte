@@ -76,32 +76,36 @@
 	};
 </script>
 
-<div id="activityTables">
-	<div class="activity-section">
-		<div class="toolbar">
-			<fieldset class="group">
-				<legend>Metrics</legend>
-				<label class="field">
-					<span>Activity</span>
+<div class="container m-auto">
+	<section
+		class="w-full flex flex-col md:flex-row justify-between gap-2 pt-10"
+	>
+		<fieldset class="fieldset bg-base-200 p-6 max-w-lg">
+			<legend class="fieldset-legend text-lg font-semibold">
+				Metrics
+			</legend>
+
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<label>
+					<span class="label mb-1">Activity</span>
 					<select
-						class="select"
+						class="select w-full"
 						name="activities"
 						bind:value={input.activity}
 					>
 						{#each Object.values(Activity) as activity}
-							<option value={activity}
-								>{allStandards
-									.byActivity(activity)
-									.getMetadata().name}</option
-							>
+							<option value={activity}>
+								{allStandards.byActivity(activity).getMetadata()
+									.name}
+							</option>
 						{/each}
 					</select>
 				</label>
 
-				<label class="field">
-					<span>Gender</span>
+				<label>
+					<span class="label mb-1">Gender</span>
 					<select
-						class="select"
+						class="select w-full"
 						name="genders"
 						bind:value={input.metrics.gender}
 					>
@@ -111,9 +115,10 @@
 					</select>
 				</label>
 
-				<label class="field">
-					<span>Age</span>
+				<label>
+					<span class="label mb-1">Age</span>
 					<input
+						class="input w-full"
 						type="number"
 						min="0"
 						max="100"
@@ -122,30 +127,38 @@
 					/>
 				</label>
 
-				<label class="field">
-					<span>Weight (lb)</span>
-					{#if selected.metrics.age}
-						<input
-							type="number"
-							min="0"
-							max="600"
-							placeholder="170"
-							bind:value={input.metrics.weight}
-						/>
-					{:else}
-						<p style="margin: 0;">Requires age</p>
-					{/if}
+				<label>
+					<span class="label mb-1">Weight (lb)</span>
+					<input
+						class="input w-full"
+						type="number"
+						min="0"
+						max="600"
+						placeholder={selected.metrics.age
+							? "170"
+							: "Requires age"}
+						bind:value={input.metrics.weight}
+						disabled={!selected.metrics.age}
+					/>
 				</label>
-			</fieldset>
+			</div>
+		</fieldset>
 
-			<fieldset class="group">
-				<legend>Parameters</legend>
+		<fieldset class="fieldset bg-base-200 p-6 max-w-lg">
+			<legend class="fieldset-legend text-lg font-semibold">
+				Parameters
+			</legend>
 
-				<fieldset class="group">
-					<legend>General</legend>
-					<label class="field parameter">
-						<span>Max level</span>
+			<fieldset class="fieldset bg-base-250 p-3 max-w-xl">
+				<legend class="fieldset-legend text-sm font-semibold">
+					General
+				</legend>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<label>
+						<span class="label mb-1">Max level</span>
 						<input
+							class="input"
 							type="number"
 							min="1"
 							max="100"
@@ -153,13 +166,19 @@
 							bind:value={input.cfg.maxLevel}
 						/>
 					</label>
-				</fieldset>
+				</div>
+			</fieldset>
 
-				<fieldset class="group">
-					<legend>Data generation</legend>
-					<label class="field parameter">
-						<span>Weight modifier</span>
+			<fieldset class="fieldset bg-base-300 p-3 max-w-xl">
+				<legend class="fieldset-legend text-sm font-semibold">
+					Data Generation
+				</legend>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<label>
+						<span class="label mb-1">Weight modifier</span>
 						<input
+							class="input"
 							type="number"
 							min="0"
 							max="1"
@@ -168,9 +187,10 @@
 							bind:value={input.cfg.weightModfier}
 						/>
 					</label>
-					<label class="field parameter">
-						<span>Weight skew</span>
+					<label>
+						<span class="label mb-1">Weight skew</span>
 						<input
+							class="input"
 							type="number"
 							min="0"
 							max="1"
@@ -179,9 +199,10 @@
 							bind:value={input.cfg.weightSkew}
 						/>
 					</label>
-					<label class="field parameter">
-						<span>Age modifier</span>
+					<label>
+						<span class="label mb-1">Age modifier</span>
 						<input
+							class="input"
 							type="number"
 							min="0"
 							max="1"
@@ -190,297 +211,91 @@
 							bind:value={input.cfg.ageModifier}
 						/>
 					</label>
-				</fieldset>
+				</div>
 			</fieldset>
+		</fieldset>
+	</section>
+
+	<div class="divider"></div>
+
+	<section>
+		<div>
+			<h1 class="text-2xl font-bold mb-2.5">
+				{allStandards.byActivity(selected.activity).getMetadata().name}
+			</h1>
+			<div class="flex items-center">
+				<h2 class="text-xl">{selected.metrics.gender}</h2>
+				<p class="text-xs label ml-2.5">
+					{#if allStandards
+						.byActivity(selected.activity)
+						.getMetadata().generators.length}
+						(Generated data: {allStandards
+							.byActivity(selected.activity)
+							.getMetadata()
+							.generators.map((g) => g.metric)
+							.join(", ")})
+					{:else}
+						(Generated data: NONE)
+					{/if}
+				</p>
+			</div>
 		</div>
 
-		<h1>{allStandards.byActivity(selected.activity).getMetadata().name}</h1>
-		{#if allStandards
-			.byActivity(selected.activity)
-			.getMetadata().generators.length}
-			<p class="description">
-				(Generated data: {allStandards
-					.byActivity(selected.activity)
-					.getMetadata()
-					.generators.map((g) => g.metric)
-					.join(", ")})
-			</p>
+		{#if !selected.metrics.age}
+			{#each allStandards.agesFor(selected.activity, selected.metrics.gender) as age}
+				{@render standardsTable(selected.activity, {
+					...selected.metrics,
+					age,
+				})}
+			{/each}
 		{:else}
-			<p class="description">(Generated data: NONE)</p>
+			{@render standardsTable(selected.activity, selected.metrics)}
 		{/if}
-
-		<section class="gender-section">
-			<h2>{selected.metrics.gender}</h2>
-			{#if !selected.metrics.age}
-				{#each allStandards.agesFor(selected.activity, selected.metrics.gender) as age}
-					{@render standardsTable(selected.activity, {
-						...selected.metrics,
-						age,
-					})}
-				{/each}
-			{:else}
-				{@render standardsTable(selected.activity, selected.metrics)}
-			{/if}
-		</section>
-	</div>
+	</section>
 </div>
 
 {#snippet standardsTable(activity: Activity, metrics: Metrics)}
 	{#snippet standardsTableRow(standard: Standard)}
-		<tr>
-			<th scope="row"
-				>{parseFloat(kgToLb(standard.metrics.weight).toFixed(2))}</th
-			>
+		<tr class="hover:bg-base-300">
+			<th>{parseFloat(kgToLb(standard.metrics.weight).toFixed(2))}</th>
 			{#each range(selected.cfg.maxLevel) as lvl}
 				<td>{getLvlValue(activity, standard, lvl)}</td>
 			{/each}
 		</tr>
 	{/snippet}
-	<div class="age-section">
-		<h3>{metrics.age}</h3>
-		<div class="standards-table">
-			<div class="scroll">
-				<table>
-					<thead>
-						<tr>
-							<th class="levels-th">Body weight</th>
-							{#each range(selected.cfg.maxLevel) as lvl}
-								<th class="levels-th">{lvl}</th>
-							{/each}
-						</tr>
-					</thead>
-					<tbody>
-						{#if metrics.weight}
-							{@const standard = allStandards
-								.byActivity(activity)
-								.byGender(metrics.gender)
-								.byAge(metrics.age)
-								.byWeight(metrics.weight)
-								.getOneInterpolated()}
+	<div class="mt-5">
+		<h3 class="text-lg italic font-semibold">{metrics.age}</h3>
+		<div class="overflow-x-auto">
+			<table class="table table-zebra table-pin-cols">
+				<thead>
+					<tr>
+						<th>Body weight</th>
+						{#each range(selected.cfg.maxLevel) as lvl}
+							<td>{lvl}</td>
+						{/each}
+					</tr>
+				</thead>
+				<tbody>
+					{#if metrics.weight}
+						{@const standard = allStandards
+							.byActivity(activity)
+							.byGender(metrics.gender)
+							.byAge(metrics.age)
+							.byWeight(metrics.weight)
+							.getOneInterpolated()}
+						{@render standardsTableRow(standard)}
+					{:else}
+						{@const standards = allStandards
+							.byActivity(activity)
+							.byGender(metrics.gender)
+							.byAge(metrics.age)
+							.getAllInterpolated({ normalizeForLb: true })}
+						{#each standards as standard}
 							{@render standardsTableRow(standard)}
-						{:else}
-							{@const standards = allStandards
-								.byActivity(activity)
-								.byGender(metrics.gender)
-								.byAge(metrics.age)
-								.getAllInterpolated({ normalizeForLb: true })}
-							{#each standards as standard}
-								{@render standardsTableRow(standard)}
-							{/each}
-						{/if}
-					</tbody>
-				</table>
-			</div>
+						{/each}
+					{/if}
+				</tbody>
+			</table>
 		</div>
 	</div>
 {/snippet}
-
-<style>
-	#activityTables {
-		max-width: 1600px;
-		margin: 24px auto;
-		padding: 0 16px;
-	}
-
-	h1,
-	h2,
-	h3 {
-		line-height: 1.2;
-		margin: 0 0 8px;
-		color: var(--accent);
-	}
-
-	h1 {
-		font-size: 1.4rem;
-		margin-top: 24px;
-	}
-
-	h2 {
-		font-size: 1.1rem;
-		margin-top: 16px;
-	}
-
-	h3 {
-		font-size: 1rem;
-		color: var(--muted);
-		font-weight: 600;
-	}
-
-	p {
-		font-size: 0.8rem;
-		color: var(--muted);
-	}
-
-	/* Toolbar container */
-	.toolbar {
-		display: grid;
-		grid-template-columns: 1fr auto; /* metrics | params */
-		gap: 16px;
-		align-items: start;
-	}
-
-	/* Stack groups on small screens */
-	@media (max-width: 840px) {
-		.toolbar {
-			grid-template-columns: 1fr;
-		}
-	}
-
-	/* Group card */
-	.group {
-		margin: 0;
-		padding: 12px;
-		border: 1px solid var(--border);
-		background: var(--card);
-		display: flex;
-		flex-wrap: wrap;
-		gap: 12px 16px;
-	}
-
-	/* Group title */
-	.group > legend {
-		font-size: 12px;
-		font-weight: 700;
-		color: var(--muted);
-		padding: 0 6px;
-	}
-
-	/* Field (label+control) */
-	.field {
-		display: grid;
-		grid-template-rows: auto auto;
-		gap: 6px;
-		min-width: 160px;
-	}
-
-	.parameter {
-		min-width: 100px;
-		max-width: 100px;
-	}
-
-	/* Label text */
-	.field > span {
-		font-size: 12px;
-		font-weight: 600;
-		color: var(--muted);
-	}
-
-	/* Inputs/selects inherit your existing styles.
-   If you used the "select-as-title" style, keep it;
-   otherwise add a minimal baseline here: */
-	.field input[type="number"],
-	.field .select {
-		font-size: 1rem;
-		color: var(--fg);
-		background: transparent;
-		border: none;
-		border-bottom: 2px solid var(--border);
-		padding: 6px 0;
-		outline: none;
-	}
-
-	/* Focus */
-	.field input[type="number"]:focus,
-	.field .select:focus {
-		border-bottom-color: var(--accent);
-	}
-
-	/* Width helpers */
-	.w-20 {
-		width: 8rem;
-	} /* ~128px */
-	.w-24 {
-		width: 10rem;
-	} /* ~160px */
-
-	.activity-section {
-		padding: 16px;
-		margin: 16px 0;
-		background: var(--card);
-		border: 1px solid var(--border);
-		box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
-	}
-
-	.gender-section {
-		margin-top: 8px;
-	}
-
-	.age-section {
-		margin: 12px 0 20px;
-	}
-
-	.standards-table {
-		margin-top: 8px;
-		border: 1px solid var(--border);
-		overflow: hidden;
-	}
-
-	/* Horizontal scroll wrapper for very wide tables */
-	.standards-table > .scroll {
-		overflow-x: auto;
-		-webkit-overflow-scrolling: touch;
-	}
-
-	/* Table */
-	.standards-table table {
-		width: max-content;
-		/* prevents squish; enables horizontal scroll */
-		min-width: 100%;
-		/* fill container if not too wide */
-		border-collapse: separate;
-		border-spacing: 0;
-		font-variant-numeric: tabular-nums;
-	}
-
-	.standards-table th,
-	.standards-table td {
-		padding: 6px 10px;
-		border-bottom: 1px solid var(--border);
-		border-right: 1px solid var(--border);
-		text-align: center;
-		white-space: nowrap;
-	}
-
-	.standards-table th:first-child,
-	.standards-table td:first-child {
-		border-left: 1px solid var(--border);
-	}
-
-	/* Header row */
-	.standards-table thead th {
-		position: sticky;
-		top: 0;
-		z-index: 2;
-		background: var(--bg);
-		font-weight: 700;
-	}
-
-	.standards-table thead th:first-child {
-		left: 0;
-		z-index: 3;
-	}
-
-	/* Row header (first column) */
-	.standards-table tbody th[scope="row"],
-	.standards-table tbody td:first-child {
-		position: sticky;
-		left: 0;
-		background: var(--card);
-		text-align: left;
-		font-weight: 600;
-	}
-
-	.standards-table tbody tr:nth-child(even) td {
-		background: rgba(0, 0, 0, 0.02);
-	}
-
-	.standards-table tbody tr:hover td {
-		background: rgba(0, 128, 255, 0.06);
-	}
-
-	/* Compact header for the “levels” row */
-	.levels-th {
-		font-size: 12px;
-		color: var(--muted);
-	}
-</style>

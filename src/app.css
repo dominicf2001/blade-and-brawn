@@ -1,11 +1,5 @@
-:root {
-    --bg: #0b0f14;
-    --fg: #e5e7eb;
-    --muted: #9ca3af;
-    --card: #0f141a;
-    --border: #1f2937;
-    --accent: #e5e7eb;
-}
+@import "tailwindcss";
+@plugin "daisyui";
 
 * {
     box-sizing: border-box;
@@ -15,8 +9,6 @@ html,
 body {
     margin: 0;
     padding: 0;
-    background: var(--bg);
-    color: var(--fg);
     font:
         14px/1.45 system-ui,
         -apple-system,
