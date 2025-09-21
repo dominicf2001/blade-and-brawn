@@ -54,6 +54,11 @@ export namespace Printful {
         export interface MetaDataMulti<T = any> {
             code: number;
             result: T[];
+            paging: {
+                total: number,
+                offset: number,
+                limit: number
+            }
         }
 
         interface Option {
@@ -117,7 +122,6 @@ export namespace Printful {
                 size: string;
                 color: string;
                 availability_status: string;
-
             }[]
         }
 
@@ -135,22 +139,32 @@ export namespace Printful {
             return payload.result;
         }
 
-        export async function getAll(): Promise<SyncProduct[]> {
-            const payload: MetaDataMulti<SyncProduct["sync_product"]> = await (
-                await fetch(`${Printful.API_URL}/store/products`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${Bun.env.PRINTFUL_AUTH}`,
-                        "X-PF-Store-Id": `${Bun.env.PRINTFUL_STORE_ID}`
-                    }
-                })
-            ).json();
+        export async function getAll(offset: number = 0): Promise<SyncProduct["sync_product"][]> {
+            const allSyncProducts: SyncProduct["sync_product"][] = [];
 
-            // need to fetch variants
-            const syncProducts = await Promise.all(
-                payload.result.map(p => get(p.id))
-            );
-            return syncProducts;
+            while (true) {
+                try {
+                    const payload: MetaDataMulti<SyncProduct["sync_product"]> = await (
+                        await fetch(`${Printful.API_URL}/store/products?offset=${offset}`, {
+                            method: "GET",
+                            headers: {
+                                "Authorization": `Bearer ${Bun.env.PRINTFUL_AUTH}`,
+                                "X-PF-Store-Id": `${Bun.env.PRINTFUL_STORE_ID}`
+                            }
+                        })
+                    ).json();
+
+                    allSyncProducts.push(...payload.result);
+                    offset = allSyncProducts.length;
+
+                    if (allSyncProducts.length >= payload.paging.total)
+                        break;
+                } catch (error) {
+                    break;
+                }
+            }
+
+            return allSyncProducts;
         }
 
 

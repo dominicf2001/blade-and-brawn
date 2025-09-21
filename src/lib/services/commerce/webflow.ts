@@ -4,6 +4,8 @@ export namespace Webflow {
     export const API_SITES_URL = `https://api.webflow.com/v2/sites/${Bun.env.WEBFLOW_SITE_ID}`;
     export const API_COLLECTIONS_URL = `https://api.webflow.com/v2/collections/${Bun.env.WEBFLOW_COLLECTION_ID}`;
 
+    const authHeader = { "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}` };
+
     const formatSlug = (name: string): string => {
         return name
             .toLowerCase()
@@ -15,7 +17,18 @@ export namespace Webflow {
     };
 
     export namespace Products {
+        export interface Product {
+            id: string,
+            fieldData: {
+                name: string,
+                slug: string,
+                description: string
+            },
+            skus: Sku[]
+        }
+
         export interface Sku {
+            id?: string,
             fieldData: {
                 name: string;
                 slug: string;
@@ -52,8 +65,19 @@ export namespace Webflow {
             publishStatus?: "staging" | "live";
         }
 
+        export async function getAll(): Promise<Product[]> {
+            let res = await fetch(`${Webflow.API_SITES_URL}/products`, {
+                method: "GET",
+                headers: {
+                    ...authHeader,
+                }
+            });
+            const resObj = await res.json();
+            return resObj.items as Product[];
+        }
+
         export async function remove(webflowProductId: string) {
-            const res = await fetch(`${Webflow.API_COLLECTIONS_URL}/items/${webflowProductId}`, {
+            await fetch(`${Webflow.API_COLLECTIONS_URL}/items/${webflowProductId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",

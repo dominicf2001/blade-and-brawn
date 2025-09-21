@@ -29,14 +29,28 @@ export const app = new Elysia({ prefix: "/api" })
 
 	// COMMERCE
 
-	.post("/products/sync", async () => {
-		const printfulProducts = await Printful.Products.getAll();
-		for (const p of printfulProducts) {
-			const exists = await Webflow.Products.exists(p.sync_product.external_id);
-			if (exists) await Webflow.Products.updateUsingPrintful(p);
-			else await Webflow.Products.createUsingPrintful(p);
+	.post("/products/sync", async ({ body, set }) => {
+		console.log("Syncing...");
+		try {
+			const printfulProducts = await Printful.Products.getAll();
+			const webflowProducts = await Webflow.Products.getAll();
+			for (const p of printfulProducts) {
+				const exists = webflowProducts.some(wp => wp.id === p.external_id);
+
+				const fullPrintfulProduct = await Printful.Products.get(p.id);
+				if (exists)
+					await Webflow.Products.updateUsingPrintful(fullPrintfulProduct);
+				else
+					await Webflow.Products.createUsingPrintful(fullPrintfulProduct);
+			}
 		}
-		return {};
+		catch (error) {
+			console.error(error);
+			set.status = 500;
+			return { error: "internal_error" };
+		}
+		console.log("Done");
+		return "";
 	})
 
 	// WEBHOOKS
