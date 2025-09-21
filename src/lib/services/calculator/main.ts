@@ -187,6 +187,7 @@ export type StandardsConfig = {
     weightModifier: number,
     weightSkew: number,
     ageModifier: number,
+    disableGeneration: boolean
 }
 
 export class Standards {
@@ -199,6 +200,7 @@ export class Standards {
             weightModifier: cfg?.weightModifier ?? .1,
             weightSkew: cfg?.weightSkew ?? .1,
             ageModifier: cfg?.ageModifier ?? .1,
+            disableGeneration: cfg?.disableGeneration ?? false
         };
 
         // prepare data
@@ -212,7 +214,9 @@ export class Standards {
             }
 
             // generate data
-            const allGenerators = this.activityStandards[activity].metadata.generators;
+            const allGenerators = this.cfg.disableGeneration ?
+                [] :
+                this.activityStandards[activity].metadata.generators;
 
             const ageGenerators = allGenerators.filter(g => g.metric === "age");
             for (const ageGenerator of ageGenerators) {

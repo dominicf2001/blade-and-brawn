@@ -17,7 +17,7 @@
 		range,
 	} from "$lib/services/calculator/util";
 
-	const input = $state({
+	let input = $state({
 		activity: Activity.BenchPress,
 		metrics: {
 			gender: Gender.Male,
@@ -25,6 +25,7 @@
 			weight: "",
 		},
 		cfg: {
+			enableGeneration: true,
 			maxLevel: "5",
 			weightModfier: ".1",
 			weightSkew: ".4",
@@ -44,10 +45,12 @@
 			weightModifier: +input.cfg.weightModfier,
 			weightSkew: +input.cfg.weightSkew,
 			ageModifier: +input.cfg.ageModifier,
+			disableGeneration: !input.cfg.enableGeneration,
 		} as StandardsConfig,
 	});
 
 	$effect(() => {
+		console.log(selected);
 		if (!input.metrics.age) input.metrics.weight = "";
 	});
 
@@ -168,6 +171,13 @@
 				</legend>
 
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<label class="label">
+						<input
+							type="checkbox"
+							bind:checked={input.cfg.enableGeneration}
+							class="toggle toggle-lg m-auto"
+						/>
+					</label>
 					<label>
 						<span class="label mb-1">Weight modifier</span>
 						<input
@@ -178,6 +188,7 @@
 							step=".05"
 							placeholder=".1"
 							bind:value={input.cfg.weightModfier}
+							disabled={selected.cfg.disableGeneration}
 						/>
 					</label>
 					<label>
@@ -190,6 +201,7 @@
 							step=".05"
 							placeholder=".1"
 							bind:value={input.cfg.weightSkew}
+							disabled={selected.cfg.disableGeneration}
 						/>
 					</label>
 					<label>
@@ -202,6 +214,7 @@
 							step=".05"
 							placeholder=".1"
 							bind:value={input.cfg.ageModifier}
+							disabled={selected.cfg.disableGeneration}
 						/>
 					</label>
 				</div>
@@ -216,9 +229,9 @@
 	<div>
 		<div class="flex items-center">
 			<p class="text-xs label">
-				{#if allStandards
-					.byActivity(selected.activity)
-					.getMetadata().generators.length}
+				{#if !selected.cfg.disableGeneration && allStandards
+						.byActivity(selected.activity)
+						.getMetadata().generators.length}
 					(Generated data: {allStandards
 						.byActivity(selected.activity)
 						.getMetadata()
@@ -246,7 +259,11 @@
 {#snippet standardsTable(activity: Activity, metrics: Metrics)}
 	{#snippet standardsTableRow(standard: Standard)}
 		<tr class="hover:bg-base-300">
-			<th>{parseFloat(kgToLb(standard.metrics.weight).toFixed(2))}</th>
+			<th>
+				{standard.metrics.weight
+					? parseFloat(kgToLb(standard.metrics.weight).toFixed(2))
+					: "None"}</th
+			>
 			{#each range(selected.cfg.maxLevel) as lvl}
 				<td>{getLvlValue(activity, standard, lvl)}</td>
 			{/each}

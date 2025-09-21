@@ -17,7 +17,7 @@
 
 <div class="drawer lg:drawer-open">
 	<input id="sidebar" type="checkbox" class="drawer-toggle" />
-	<div class="drawer-content p-10 flex flex-col items-center justify-center">
+	<div class="drawer-content p-10 flex flex-col items-center">
 		{@render children?.()}
 		<label for="sidebar" class="btn btn-primary drawer-button lg:hidden">
 			Open drawer
