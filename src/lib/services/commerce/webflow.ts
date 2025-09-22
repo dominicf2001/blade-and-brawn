@@ -1,301 +1,322 @@
 import { Printful } from "$lib/services/commerce/printful"
+import { formatSlug, getProductImageUrls, type DeepPartial } from "./util";
 
 export namespace Webflow {
-    export const API_SITES_URL = `https://api.webflow.com/v2/sites/${Bun.env.WEBFLOW_SITE_ID}`;
-    export const API_COLLECTIONS_URL = `https://api.webflow.com/v2/collections/${Bun.env.WEBFLOW_COLLECTION_ID}`;
+    const SITE_ID = typeof Bun === "undefined" ? "" : Bun.env.WEBFLOW_SITE_ID;
+    const COLLECTIONS_ID = typeof Bun === "undefined" ? "" : Bun.env.WEBFLOW_COLLECTION_ID;
+    const AUTH_TOKEN = typeof Bun === "undefined" ? "" : Bun.env.WEBFLOW_AUTH;
 
-    const authHeader = { "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}` };
+    export const API_SITES_URL = `https://api.webflow.com/v2/sites/${SITE_ID}`;
+    export const API_COLLECTIONS_URL = `https://api.webflow.com/v2/collections/${COLLECTIONS_ID}`;
 
-    const formatSlug = (name: string): string => {
-        return name
-            .toLowerCase()
-            .replace(/[^a-z0-9-_]/g, '-')      // replace illegal chars with dashes
-            .replace(/^-+/, '')                // remove leading dashes
-            .replace(/-+$/, '')                // remove trailing dashes
-            .replace(/--+/g, '-')              // collapse multiple dashes
-            .replace(/^([^a-z0-9_])/, '_$1');  // if it starts with an invalid char, prefix underscore
-    };
+    const AUTH_HEADER = { "Authorization": `bearer ${AUTH_TOKEN}` };
 
     export namespace Products {
-        export interface Product {
-            id: string,
-            fieldData: {
-                name: string,
-                slug: string,
-                description: string
-            },
-            skus: Sku[]
-        }
-
-        export interface Sku {
-            id?: string,
-            fieldData: {
-                name: string;
-                slug: string;
-                "sku-values"?: Record<string, string>,
-                price: {
-                    value: number;
-                    unit: string;
-                    currency: string;
-                };
-                "main-image"?: string;
-            }
-        }
-
-        export interface UpsertProduct {
-            product: {
+        export namespace Skus {
+            export type Sku = {
+                id: string,
                 fieldData: {
                     name: string;
                     slug: string;
-                    description: string;
-                    shippable?: boolean;
-                    "tax-category"?: string;
-                    "sku-properties": {
-                        id: string;
-                        name: string;
-                        enum: {
-                            id: string;
-                            name: string;
-                            slug: string;
-                        }[];
-                    }[];
+                    "sku-values"?: Record<string, string>,
+                    price: {
+                        value: number;
+                        unit: string;
+                        currency: string;
+                    };
+                    "main-image"?: string;
+                    "more-images"?:
+                    {
+                        fileId?: string,
+                        url: string,
+                        alt?: string,
+                    }[]
                 }
-            };
-            sku: Sku;
-            publishStatus?: "staging" | "live";
-        }
-
-        export async function getAll(): Promise<Product[]> {
-            let res = await fetch(`${Webflow.API_SITES_URL}/products`, {
-                method: "GET",
-                headers: {
-                    ...authHeader,
-                }
-            });
-            const resObj = await res.json();
-            return resObj.items as Product[];
-        }
-
-        export async function remove(webflowProductId: string) {
-            await fetch(`${Webflow.API_COLLECTIONS_URL}/items/${webflowProductId}`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}`
-                },
-                body: JSON.stringify({})
-            });
-        }
-
-        export async function exists(webflowProductId: string): Promise<boolean> {
-            let findProductResponse = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}`,
-                }
-            });
-            return findProductResponse.status === 200;
-        }
-
-        export async function updateUsingPrintful(printfulProduct: Printful.Products.SyncProduct) {
-            const webflowProductId = printfulProduct.sync_product.external_id;
-
-            const printfulVariants = printfulProduct.sync_variants;
-            const webflowVariants: Products.Sku[] = [];
-            for (const printfulVariant of printfulVariants) {
-                webflowVariants.push({
-                    "fieldData": {
-                        "name": printfulVariant.name,
-                        "slug": formatSlug(printfulVariant.name),
-                        "sku-values": {
-                            "color": printfulVariant.color,
-                            "size": printfulVariant.size,
-                        },
-                        "price": {
-                            "value": +printfulVariant.retail_price * 100,
-                            "unit": printfulVariant.currency,
-                            "currency": printfulVariant.currency
-                        },
-                        "main-image": Printful.Products.getVariantPreviewUrl(printfulVariant)
-                    }
-                });
             }
 
-            const foundColors = Array.from(new Set(printfulVariants.map(v => v.color)));
-            const foundSizes = Array.from(new Set(printfulVariants.map(v => v.size)));
-
-            let updateProductResponse = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}`, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}`,
-                },
-                body: JSON.stringify({
-                    "product": {
-                        "fieldData": {
-                            "name": printfulProduct.sync_product.name,
-                            "slug": formatSlug(printfulProduct.sync_product.name),
-                            "shippable": true,
-                            "tax-category": "standard-taxable",
-                            "sku-properties": [
-                                {
-                                    "id": "color",
-                                    "name": "Color",
-                                    "enum": foundColors.map(color => ({
-                                        "id": color,
-                                        "slug": formatSlug(color),
-                                        "name": color
-                                    }))
-                                },
-                                {
-                                    "id": "size",
-                                    "name": "Size",
-                                    "enum": foundSizes.map(size => ({
-                                        "id": size,
-                                        "slug": formatSlug(size),
-                                        "name": size
-                                    }))
-                                },
-                            ]
-                        }
+            export async function create(webflowProductId: string, skus: DeepPartial<Sku>[]) {
+                const res = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}/skus`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        ...AUTH_HEADER
                     },
-                    "sku": webflowVariants[0],
-                } as Products.UpsertProduct)
-            });
-            updateProductResponse = await updateProductResponse.json();
+                    body: JSON.stringify({
+                        "skus": skus
+                    })
+                });
 
-            const getProductResponse = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}`
+                if (!res.ok) {
+                    console.error("Webflow product SKU create failed:", res.statusText);
+                    throw new Error("Failed to create Webflow product SKU");
                 }
-            });
-            const webflowProduct = await getProductResponse.json();
+            }
 
-            for (let i = 0; i < webflowProduct["skus"].length; ++i) {
-                const webflowSkuId = printfulVariants[i].external_id;
-
+            export async function update(webflowProductId: string, webflowSkuId: string, webflowSku: DeepPartial<Sku>) {
                 const res = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}/skus/${webflowSkuId}`, {
                     method: "PATCH",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}`
+                        ...AUTH_HEADER
                     },
                     body: JSON.stringify({
-                        "sku": webflowVariants[i]
+                        "sku": webflowSku
                     })
                 });
+                if (!res.ok) {
+                    console.error("Webflow product SKU update failed:", await res.json());
+                    throw new Error("Failed to update Webflow product SKU");
+                }
             }
         }
 
-        export async function createUsingPrintful(printfulProduct: Printful.Products.SyncProduct) {
-            const printfulVariants = printfulProduct.sync_variants;
-
-            const webflowVariants: Products.Sku[] = [];
-            for (const printfulVariant of printfulVariants) {
-                webflowVariants.push({
-                    "fieldData": {
-                        "name": printfulVariant.name,
-                        "slug": formatSlug(printfulVariant.name),
-                        "sku-values": {
-                            "color": printfulVariant.color,
-                            "size": printfulVariant.size,
-                        },
-                        "price": {
-                            "value": +printfulVariant.retail_price * 100,
-                            "unit": printfulVariant.currency,
-                            "currency": printfulVariant.currency
-                        },
-                        "main-image": Printful.Products.getVariantPreviewUrl(printfulVariant)
-                    }
-                });
+        export type Product = {
+            id: string,
+            fieldData: {
+                name: string;
+                slug: string;
+                description?: string;
+                shippable?: boolean;
+                "tax-category"?: string;
+                "sku-properties": {
+                    id: string;
+                    name: string;
+                    enum: {
+                        id: string;
+                        name: string;
+                        slug: string;
+                    }[];
+                }[];
             }
+        }
+
+        export interface ProductAndSkus {
+            product: Product
+            skus: Skus.Sku[]
+        }
+
+        export interface ProductAndSku {
+            product: Product;
+            sku: Skus.Sku;
+            publishStatus?: "staging" | "live";
+        }
+
+        export async function create(webflowProductAndSku: DeepPartial<ProductAndSku>) {
+            const res = await fetch(`${Webflow.API_SITES_URL}/products`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...AUTH_HEADER
+                },
+                body: JSON.stringify(webflowProductAndSku)
+            });
+
+            if (!res.ok) {
+                console.error("Webflow product create failed:", res.statusText);
+                console.log(await res.json());
+                throw new Error("Failed to create Webflow product");
+            }
+
+            const createdWebflowProduct = await res.json();
+            return createdWebflowProduct.product.id
+        }
+
+        export async function createUsingPrintful(printfulProduct: Printful.Products.Product): Promise<Webflow.Products.ProductAndSkus> {
+            const printfulVariants = printfulProduct.sync_variants;
+            const webflowVariants = Printful.Products.convertVariantsToWebflowSkus(printfulVariants);
 
             const foundColors = Array.from(new Set(printfulVariants.map(v => v.color)));
             const foundSizes = Array.from(new Set(printfulVariants.map(v => v.size)));
 
-            // CREATE WEBFLOW PRODUCT
-            let addProductResponse = await (await fetch(`${Webflow.API_SITES_URL}/products`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}`,
+            const webflowProductId = await Webflow.Products.create({
+                "product": {
+                    "fieldData": {
+                        "name": printfulProduct.sync_product.name,
+                        "slug": formatSlug(printfulProduct.sync_product.name),
+                        "shippable": true,
+                        "tax-category": "standard-taxable",
+                        "sku-properties": [
+                            {
+                                "id": "color",
+                                "name": "Color",
+                                "enum": foundColors.map(color => ({
+                                    "id": color,
+                                    "slug": formatSlug(color),
+                                    "name": color
+                                }))
+                            },
+                            {
+                                "id": "size",
+                                "name": "Size",
+                                "enum": foundSizes.map(size => ({
+                                    "id": size,
+                                    "slug": formatSlug(size),
+                                    "name": size
+                                }))
+                            },
+                        ]
+                    }
                 },
-                body: JSON.stringify({
-                    "product": {
-                        "fieldData": {
-                            "name": printfulProduct.sync_product.name,
-                            "slug": formatSlug(printfulProduct.sync_product.name),
-                            "shippable": true,
-                            "tax-category": "standard-taxable",
-                            "sku-properties": [
-                                {
-                                    "id": "color",
-                                    "name": "Color",
-                                    "enum": foundColors.map(color => ({
-                                        "id": color,
-                                        "slug": formatSlug(color),
-                                        "name": color
-                                    }))
-                                },
-                                {
-                                    "id": "size",
-                                    "name": "Size",
-                                    "enum": foundSizes.map(size => ({
-                                        "id": size,
-                                        "slug": formatSlug(size),
-                                        "name": size
-                                    }))
-                                },
-                            ]
-                        }
-                    },
-                    "sku": webflowVariants[0],
-                } as Products.UpsertProduct)
-            }))?.json();
+                "sku": webflowVariants[0],
+            });
 
-            if (!addProductResponse?.product?.id) {
-                console.error("Webflow product creation failed:", addProductResponse);
+            // CREATE WEBFLOW PRODUCT SKUs
+            await Webflow.Products.Skus.create(webflowProductId, webflowVariants.slice(1));
+
+            const webflowProduct = await Webflow.Products.get(webflowProductId);
+            if (!webflowProduct) {
+                console.error("Missing webflow product");
                 throw new Error("Failed to create Webflow product");
             }
 
-            const webflowProductId = addProductResponse["product"]["id"];
             const printfulProductId = printfulProduct.sync_product.id;
+            await Printful.Products.update(printfulProductId, {
+                "sync_product": {
+                    "external_id": String(webflowProductId)
+                },
+                "sync_variants": webflowProduct.skus.map((sku, i) => ({
+                    "id": Number(printfulVariants[i].id), // printful variant id
+                    "external_id": String(sku.id),     // webflow variant id
+                }))
+            });
 
-            // CREATE WEBFLOW PRODUCT SKUs
-            let createSkuResponse = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}/skus`, {
-                method: "POST",
+            return webflowProduct;
+        }
+
+        export async function getAll(): Promise<ProductAndSkus[]> {
+            const res = await fetch(`${Webflow.API_SITES_URL}/products`, {
+                method: "GET",
+                headers: {
+                    ...AUTH_HEADER,
+                }
+            });
+
+            if (!res.ok) {
+                console.error("Webflow product get all failed:", res.statusText);
+                throw new Error("Failed to get all Webflow products");
+            }
+
+            const payload = await res.json();
+            return payload.items as ProductAndSkus[];
+        }
+
+        export async function get(webflowProductId: string): Promise<ProductAndSkus | undefined> {
+            const res = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}`, {
+                method: "GET",
+                headers: {
+                    ...AUTH_HEADER,
+                }
+            });
+
+            if (res.status === 404 || res.status === 400) {
+                return;
+            }
+
+            if (!res.ok) {
+                console.error("Webflow product get failed:", res.statusText);
+                throw new Error("Failed to get Webflow product");
+            }
+
+            const payload = await res.json();
+            return payload as ProductAndSkus;
+        }
+
+        export async function update(webflowProductId: string, webflowProduct: DeepPartial<ProductAndSku>) {
+            const res = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}`, {
+                method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}`
+                    ...AUTH_HEADER
                 },
-                body: JSON.stringify({
-                    "skus": webflowVariants.slice(1)
-                })
+                body: JSON.stringify(webflowProduct)
             });
-            const createSkuObj = await createSkuResponse.json();
 
-            const responseSkus = [addProductResponse["sku"], ...createSkuObj["skus"]];
+            if (!res.ok) {
+                console.error("Webflow product update failed:", res.statusText);
+                throw new Error("Failed to update Webflow product");
+            }
+        }
 
-            // SYNC WEBFLOW/PRINTFUL PRODUCT AND VARIANT IDs
-            let modifyPrintfulProductResponse = await fetch(`${Printful.API_URL}/store/products/${printfulProductId}`, {
-                method: "PUT",
+        export async function updateUsingPrintful(printfulProduct: Printful.Products.Product) {
+            const webflowProductId = printfulProduct.sync_product.external_id;
+
+            const printfulVariants = printfulProduct.sync_variants;
+
+            const foundColors = Array.from(new Set(printfulVariants.map(v => v.color)));
+            const foundSizes = Array.from(new Set(printfulVariants.map(v => v.size)));
+
+            // Update product
+            Webflow.Products.update(webflowProductId, {
+                "product": {
+                    "fieldData": {
+                        "name": printfulProduct.sync_product.name,
+                        "slug": formatSlug(printfulProduct.sync_product.name),
+                        "shippable": true,
+                        "tax-category": "standard-taxable",
+                        "sku-properties": [
+                            {
+                                "id": "color",
+                                "name": "Color",
+                                "enum": foundColors.map(color => ({
+                                    "id": color,
+                                    "slug": formatSlug(color),
+                                    "name": color
+                                }))
+                            },
+                            {
+                                "id": "size",
+                                "name": "Size",
+                                "enum": foundSizes.map(size => ({
+                                    "id": size,
+                                    "slug": formatSlug(size),
+                                    "name": size
+                                }))
+                            },
+                        ]
+                    }
+                }
+            });
+
+            // Update SKUs
+            const webflowProduct = await Webflow.Products.get(webflowProductId);
+            if (!webflowProduct) {
+                console.error("Missing webflow product");
+                throw new Error("Failed to create Webflow product");
+            }
+
+            for (let i = 0; i < webflowProduct.skus.length; ++i) {
+                const webflowSkuId = printfulVariants[i].external_id;
+                await Webflow.Products.Skus.update(webflowProductId, webflowSkuId, webflowProduct.skus[i]);
+            }
+        }
+
+        export async function remove(webflowProductId: string) {
+            const res = await fetch(`${Webflow.API_COLLECTIONS_URL}/items/${webflowProductId}`, {
+                method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${Bun.env.PRINTFUL_AUTH}`,
-                    "X-PF-Store-Id": Bun.env.PRINTFUL_STORE_ID ?? ""
+                    ...AUTH_HEADER
                 },
-                body: JSON.stringify({
-                    "sync_product": {
-                        "external_id": String(webflowProductId)
-                    },
-                    "sync_variants": responseSkus.map((sku, i) => ({
-                        "id": Number(printfulVariants[i].id), // printful variant id
-                        "external_id": String(sku.id),     // webflow variant id
-                    }))
-                })
+                body: JSON.stringify({})
             });
-            modifyPrintfulProductResponse = await modifyPrintfulProductResponse.json();
+
+            if (!res.ok) {
+                console.error("Webflow product remove failed:", res.statusText);
+                throw new Error("Failed to remove Webflow product");
+            }
+        }
+
+        export async function syncImages(webflowProductAndSkus: ProductAndSkus) {
+            const productSlug = webflowProductAndSkus.product.fieldData.slug;
+            console.log(productSlug);
+            const productImageUrls = await getProductImageUrls(productSlug);
+            console.log(productImageUrls);
+            for (const sku of webflowProductAndSkus.skus) {
+                sku.fieldData["main-image"] = productImageUrls[0] ?? sku.fieldData["main-image"];
+                sku.fieldData["more-images"] = productImageUrls.slice(1).map(url => ({ url }));
+                console.log(sku.fieldData["more-images"]);
+                await Webflow.Products.Skus.update(webflowProductAndSkus.product.id, sku.id, sku);
+            }
         }
     }
 }

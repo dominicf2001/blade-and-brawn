@@ -1,5 +1,15 @@
+import { formatSlug, type DeepPartial } from "./util";
+import type { Webflow } from "./webflow";
+
 export namespace Printful {
     export const API_URL = "https://api.printful.com";
+    const AUTH_TOKEN = typeof Bun === "undefined" ? "" : Bun.env.PRINTFUL_AUTH;
+    const STORE_ID = typeof Bun === "undefined" ? "" : Bun.env.PRINTFUL_STORE_ID;
+
+    const AUTH_HEADERS = {
+        "Authorization": `Bearer ${AUTH_TOKEN}`,
+        "X-PF-Store-Id": `${STORE_ID}`
+    };
 
     export namespace Webhook {
         // meta
@@ -61,12 +71,12 @@ export namespace Printful {
             }
         }
 
-        interface Option {
+        type Option = {
             id: string;
             value: string;
         }
 
-        interface File {
+        type File = {
             type: string;
             id: number;
             url: string;
@@ -87,72 +97,63 @@ export namespace Printful {
             stitch_count_tier: string;
         }
 
-        export interface SyncProduct {
-            sync_product: {
-                id: number;
-                external_id: string;
-                name: string;
-                variants: number;
-                synced: number;
-                thumbnail_url: string;
-                is_ignored: boolean;
-            },
-            sync_variants: {
-                id: number;
-                external_id: string;
-                sync_product_id: number;
-                name: string;
-                synced: boolean;
+        export type Product = {
+            sync_product: SyncProduct,
+            sync_variants: SyncVariant[]
+        }
+
+        export type SyncProduct = {
+            id: number;
+            external_id: string;
+            name: string;
+            variants: number;
+            synced: number;
+            thumbnail_url: string;
+            is_ignored: boolean;
+        }
+
+        export type SyncVariant = {
+            id: number;
+            external_id: string;
+            sync_product_id: number;
+            name: string;
+            synced: boolean;
+            variant_id: number;
+            retail_price: string;
+            currency: string;
+            is_ignored: boolean;
+            sku: string;
+            product: {
                 variant_id: number;
-                retail_price: string;
-                currency: string;
-                is_ignored: boolean;
-                sku: string;
-                product: {
-                    variant_id: number;
-                    product_id: number;
-                    image: string;
-                    name: string;
-                };
-                files: File[];
-                options: Option[];
-                main_category_id: number;
-                warehouse_product_id: number;
-                warehouse_product_variant_id: number;
-                size: string;
-                color: string;
-                availability_status: string;
-            }[]
+                product_id: number;
+                image: string;
+                name: string;
+            };
+            files: File[];
+            options: Option[];
+            main_category_id: number;
+            warehouse_product_id: number;
+            warehouse_product_variant_id: number;
+            size: string;
+            color: string;
+            availability_status: string;
         }
 
-        export async function get(syncProductId: number): Promise<SyncProduct> {
-            const payload: MetaDataSingle<SyncProduct> = await (
-                await fetch(`${Printful.API_URL}/store/products/${syncProductId}`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${Bun.env.PRINTFUL_AUTH}`,
-                        "X-PF-Store-Id": `${Bun.env.PRINTFUL_STORE_ID}`
-                    }
-                })
-            ).json();
-
-            return payload.result;
-        }
-
-        export async function getAll(offset: number = 0): Promise<SyncProduct["sync_product"][]> {
-            const allSyncProducts: SyncProduct["sync_product"][] = [];
+        export async function getAll(offset: number = 0): Promise<SyncProduct[]> {
+            const allSyncProducts: SyncProduct[] = [];
 
             while (true) {
                 try {
-                    const payload: MetaDataMulti<SyncProduct["sync_product"]> = await (
-                        await fetch(`${Printful.API_URL}/store/products?offset=${offset}`, {
-                            method: "GET",
-                            headers: {
-                                "Authorization": `Bearer ${Bun.env.PRINTFUL_AUTH}`,
-                                "X-PF-Store-Id": `${Bun.env.PRINTFUL_STORE_ID}`
-                            }
-                        })
-                    ).json();
+                    const res = await fetch(`${Printful.API_URL}/store/products?offset=${offset}`, {
+                        method: "GET",
+                        headers: { ...AUTH_HEADERS }
+                    })
+
+                    if (!res.ok) {
+                        console.log(res.statusText);
+                    }
+
+                    const payload: MetaDataMulti<SyncProduct> = await res.json();
 
                     allSyncProducts.push(...payload.result);
                     offset = allSyncProducts.length;
@@ -160,17 +161,71 @@ export namespace Printful {
                     if (allSyncProducts.length >= payload.paging.total)
                         break;
                 } catch (error) {
-                    break;
+                    console.error("Printful product get all failed:", error);
+                    throw new Error("Failed to get all Printful products",);
                 }
             }
 
             return allSyncProducts;
         }
 
+        export async function get(printfulProductId: number): Promise<Product> {
+            const res = await fetch(`${Printful.API_URL}/store/products/${printfulProductId}`, {
+                method: "GET",
+                headers: { ...AUTH_HEADERS }
+            });
 
-        export function getVariantPreviewUrl(syncVariant: Printful.Products.SyncProduct["sync_variants"][number]): string {
-            const previewFile = syncVariant.files.find(f => f.type === "preview");
-            return previewFile?.preview_url ?? syncVariant.product.image;
+            if (!res.ok) {
+                console.error("Printful product update failed:", res.statusText);
+                throw new Error("Failed to update Printful product");
+            }
+
+            const payload: MetaDataSingle<Product> = await res.json();
+            return payload.result;
+        }
+
+        export async function update(printfulProductId: number, printfulProduct: DeepPartial<Product>) {
+            const res = await fetch(`${Printful.API_URL}/store/products/${printfulProductId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...AUTH_HEADERS
+                },
+                body: JSON.stringify(printfulProduct)
+            });
+
+            if (!res.ok) {
+                console.error("Printful product update failed:", res.statusText);
+                throw new Error("Failed to update Printful product");
+            }
+        }
+
+        export function convertVariantsToWebflowSkus(printfulVariants: SyncVariant[]) {
+            const getVariantMainImage = (syncVariant: SyncVariant): string => {
+                const previewFile = syncVariant.files.find(f => f.type === "preview");
+                return previewFile?.preview_url ?? syncVariant.product.image;
+            }
+
+            const webflowVariants: DeepPartial<Webflow.Products.Skus.Sku>[] = [];
+            for (const printfulVariant of printfulVariants) {
+                webflowVariants.push({
+                    "fieldData": {
+                        "name": printfulVariant.name,
+                        "slug": formatSlug(printfulVariant.name),
+                        "sku-values": {
+                            "color": printfulVariant.color,
+                            "size": printfulVariant.size,
+                        },
+                        "price": {
+                            "value": +printfulVariant.retail_price * 100,
+                            "unit": printfulVariant.currency,
+                            "currency": printfulVariant.currency
+                        },
+                        "main-image": getVariantMainImage(printfulVariant)
+                    }
+                });
+            }
+            return webflowVariants;
         }
     }
 }

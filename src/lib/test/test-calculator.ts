@@ -1,6 +1,5 @@
-import { Standards, type ActivityStandards } from "$lib/services/calculator/main";
 import { Activity, ftToCm, Gender, getAvgWeight, inToCm, kgToLb, lbToKg, minToMs, secToMs, type ActivityPerformance, type Player } from "$lib/services/calculator/util";
-import allStandardsRaw from "$lib/data/standards.json" assert { type: "json" };
+import { Webflow } from "$lib/services/commerce/webflow";
 
 const player: Player = {
     metrics: {
@@ -41,7 +40,55 @@ const computedPerformances: ActivityPerformance[] = [
     },
 ];
 
-const standards = new Standards(allStandardsRaw as ActivityStandards, { maxLevel: 10 });
+// const res = await fetch(`${Webflow.API_SITES_URL}/products/${}/skus/${"68d0154f97e90776a5680740"}`, {
+//     method: "PATCH",
+//     headers: {
+//         "Content-Type": "application/json",
+//         "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}`
+//     },
+//     body: JSON.stringify({
+//         "sku": webflowVariants[i]
+//     })
+// });
+
+const productId = "68d080a129f538cd565bf56d";
+
+
+const product = await Webflow.Products.get("68d080a129f538cd565bf56d");
+const products = await Webflow.Products.getAll();
+
+
+
+const skuId = "68d080a5d90e8263e52242e9";
+
+
+// const sku = product.skus[0];
+//
+// sku.fieldData["more-images"] = [
+//     {
+//         "url": "https://website-media.bladeandbrawn.com/product-images/henry-iv-flag-black-10.png",
+//     },
+//     {
+//         "url": "https://website-media.bladeandbrawn.com/product-images/henry-iv-flag-black-20.png",
+//     },
+// ];
+
+// console.log("Fetching...");
+// const res = await fetch(`${Webflow.API_SITES_URL}/products/${productId}/skus/${skuId}`, {
+//     method: "PATCH",
+//     headers: {
+//         "Content-Type": "application/json",
+//         "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}`
+//     },
+//     body: JSON.stringify({
+//         "sku": sku
+//     })
+// });
+// console.log(res);
+//
+// const productAfter = (await Webflow.Products.getAll())[0];
+//
+// console.log(productAfter.skus[0].fieldData["more-images"]);
 
 // const newStandards: Standards = {
 //     "Back Squat": [],

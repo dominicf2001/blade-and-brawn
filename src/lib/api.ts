@@ -7,6 +7,8 @@ import { Webflow } from "$lib/services/commerce/webflow";
 import { Printful } from "$lib/services/commerce/printful";
 import rawStandards from "$lib/data/standards.json" assert { type: "json" }
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export const app = new Elysia({ prefix: "/api" })
 	.use(cors({
 		origin: '*'
@@ -25,58 +27,78 @@ export const app = new Elysia({ prefix: "/api" })
 		const { player, activityPerformances } = body as CalcRequest;
 		const levelCalculator = new LevelCalculator(MAIN_STANDARDS);
 		return { levels: levelCalculator.calculate(player, activityPerformances) };
+	}, {
+		error({ error }) {
+			console.error(error);
+			return {
+				message: "Failed to calculate",
+				error
+			}
+		}
 	})
 
 	// COMMERCE
 
 	.post("/products/sync", async ({ body, set }) => {
 		console.log("Syncing...");
-		try {
-			const printfulProducts = await Printful.Products.getAll();
-			const webflowProducts = await Webflow.Products.getAll();
-			for (const p of printfulProducts) {
-				const exists = webflowProducts.some(wp => wp.id === p.external_id);
+		const printfulProducts = await Printful.Products.getAll();
+		const webflowProducts = await Webflow.Products.getAll();
+		for (const printfulProduct of printfulProducts) {
+			await sleep(2000);
+			console.log(printfulProduct.name, printfulProduct.id, printfulProduct.external_id);
+			const fullPrintfulProduct = await Printful.Products.get(printfulProduct.id);
 
-				const fullPrintfulProduct = await Printful.Products.get(p.id);
-				if (exists)
-					await Webflow.Products.updateUsingPrintful(fullPrintfulProduct);
-				else
-					await Webflow.Products.createUsingPrintful(fullPrintfulProduct);
-			}
-		}
-		catch (error) {
-			console.error(error);
-			set.status = 500;
-			return { error: "internal_error" };
+			let webflowProduct = webflowProducts
+				.find(webflowProduct => webflowProduct.product.id === printfulProduct.external_id);
+			if (webflowProduct)
+				await Webflow.Products.updateUsingPrintful(fullPrintfulProduct);
+			else
+				webflowProduct = await Webflow.Products.createUsingPrintful(fullPrintfulProduct);
+			await Webflow.Products.syncImages(webflowProduct);
 		}
 		console.log("Done");
 		return "";
+	}, {
+		error({ error }) {
+			console.error(error);
+			return {
+				message: "Failed to sync products",
+				error
+			}
+		}
 	})
 
 	// WEBHOOKS
 
 	.post("/webhook/printful", async ({ body, set }) => {
 		const payload = body as Printful.Webhook.EventPayload;
-		try {
-			switch (payload.type) {
-				case Printful.Webhook.Event.ProductUpdated: {
-					const prod = await Printful.Products.get(payload.data.sync_product.id);
-					const exists = await Webflow.Products.exists(prod.sync_product.external_id);
-					if (exists) await Webflow.Products.updateUsingPrintful(prod);
-					else await Webflow.Products.createUsingPrintful(prod);
-					break;
-				}
-				case Printful.Webhook.Event.ProductDeleted: {
-					await Webflow.Products.remove(payload.data.sync_product.external_id);
-					break;
-				}
+		switch (payload.type) {
+			case Printful.Webhook.Event.ProductUpdated: {
+				const printfulProduct = await Printful.Products.get(payload.data.sync_product.id);
+
+				let webflowProduct = await Webflow.Products.get(printfulProduct.sync_product.external_id);
+				if (webflowProduct)
+					await Webflow.Products.updateUsingPrintful(printfulProduct);
+				else
+					webflowProduct = await Webflow.Products.createUsingPrintful(printfulProduct);
+				await Webflow.Products.syncImages(webflowProduct);
+
+				break;
 			}
-		} catch (error) {
-			console.error(error);
-			set.status = 500;
-			return { error: "internal_error" };
+			case Printful.Webhook.Event.ProductDeleted: {
+				await Webflow.Products.remove(payload.data.sync_product.external_id);
+				break;
+			}
 		}
 		return "";
+	}, {
+		error({ error }) {
+			console.error(error);
+			return {
+				message: "Failed to execute webhook",
+				error
+			}
+		}
 	});
 
 export type App = typeof app;

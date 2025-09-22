@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { Printful } from "$lib/services/commerce/printful.js";
+	import { Printful } from "$lib/services/commerce/printful";
 
 	const { data } = $props();
 
 	let isSyncing = $state(false);
 
 	const isPrintfulProductSynced = async (
-		printfulProduct: Printful.Products.SyncProduct["sync_product"],
+		printfulProduct: Printful.Products.SyncProduct,
 	) => {
 		const webflowProducts = await data.products.webflow;
 		return webflowProducts.some(
-			(p) => p.id === printfulProduct.external_id,
+			(p) => p.product.id === printfulProduct.external_id,
 		);
 	};
 

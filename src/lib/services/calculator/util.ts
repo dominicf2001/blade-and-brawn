@@ -102,6 +102,7 @@ export const range = (length: number) => Array.from({ length: length }, (_, i) =
 //     return interpolatedAvg;
 // }
 
+
 export const getAvgWeight = (gender: Gender, age: number) => {
     type AvgWeightData = {
         metadata: {
