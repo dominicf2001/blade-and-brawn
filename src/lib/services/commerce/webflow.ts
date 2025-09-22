@@ -2,15 +2,6 @@ import { Printful } from "$lib/services/commerce/printful"
 import { formatSlug, getProductImageUrls, type DeepPartial } from "./util";
 
 export namespace Webflow {
-    const SITE_ID = typeof Bun === "undefined" ? "" : Bun.env.WEBFLOW_SITE_ID;
-    const COLLECTIONS_ID = typeof Bun === "undefined" ? "" : Bun.env.WEBFLOW_COLLECTION_ID;
-    const AUTH_TOKEN = typeof Bun === "undefined" ? "" : Bun.env.WEBFLOW_AUTH;
-
-    export const API_SITES_URL = `https://api.webflow.com/v2/sites/${SITE_ID}`;
-    export const API_COLLECTIONS_URL = `https://api.webflow.com/v2/collections/${COLLECTIONS_ID}`;
-
-    const AUTH_HEADER = { "Authorization": `bearer ${AUTH_TOKEN}` };
-
     export namespace Products {
         export namespace Skus {
             export type Sku = {
@@ -35,11 +26,11 @@ export namespace Webflow {
             }
 
             export async function create(webflowProductId: string, skus: DeepPartial<Sku>[]) {
-                const res = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}/skus`, {
+                const res = await fetch(`${env().API_SITES_URL}/products/${webflowProductId}/skus`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        ...AUTH_HEADER
+                        ...env().AUTH_HEADER
                     },
                     body: JSON.stringify({
                         "skus": skus
@@ -53,11 +44,11 @@ export namespace Webflow {
             }
 
             export async function update(webflowProductId: string, webflowSkuId: string, webflowSku: DeepPartial<Sku>) {
-                const res = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}/skus/${webflowSkuId}`, {
+                const res = await fetch(`${env().API_SITES_URL}/products/${webflowProductId}/skus/${webflowSkuId}`, {
                     method: "PATCH",
                     headers: {
                         "Content-Type": "application/json",
-                        ...AUTH_HEADER
+                        ...env().AUTH_HEADER
                     },
                     body: JSON.stringify({
                         "sku": webflowSku
@@ -102,11 +93,11 @@ export namespace Webflow {
         }
 
         export async function create(webflowProductAndSku: DeepPartial<ProductAndSku>) {
-            const res = await fetch(`${Webflow.API_SITES_URL}/products`, {
+            const res = await fetch(`${env().API_SITES_URL}/products`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    ...AUTH_HEADER
+                    ...env().AUTH_HEADER
                 },
                 body: JSON.stringify(webflowProductAndSku)
             });
@@ -184,10 +175,10 @@ export namespace Webflow {
         }
 
         export async function getAll(): Promise<ProductAndSkus[]> {
-            const res = await fetch(`${Webflow.API_SITES_URL}/products`, {
+            const res = await fetch(`${env().API_SITES_URL}/products`, {
                 method: "GET",
                 headers: {
-                    ...AUTH_HEADER,
+                    ...env().AUTH_HEADER,
                 }
             });
 
@@ -201,10 +192,10 @@ export namespace Webflow {
         }
 
         export async function get(webflowProductId: string): Promise<ProductAndSkus | undefined> {
-            const res = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}`, {
+            const res = await fetch(`${env().API_SITES_URL}/products/${webflowProductId}`, {
                 method: "GET",
                 headers: {
-                    ...AUTH_HEADER,
+                    ...env().AUTH_HEADER,
                 }
             });
 
@@ -222,11 +213,11 @@ export namespace Webflow {
         }
 
         export async function update(webflowProductId: string, webflowProduct: DeepPartial<ProductAndSku>) {
-            const res = await fetch(`${Webflow.API_SITES_URL}/products/${webflowProductId}`, {
+            const res = await fetch(`${env().API_SITES_URL}/products/${webflowProductId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
-                    ...AUTH_HEADER
+                    ...env().AUTH_HEADER
                 },
                 body: JSON.stringify(webflowProduct)
             });
@@ -291,11 +282,11 @@ export namespace Webflow {
         }
 
         export async function remove(webflowProductId: string) {
-            const res = await fetch(`${Webflow.API_COLLECTIONS_URL}/items/${webflowProductId}`, {
+            const res = await fetch(`${env().API_COLLECTIONS_URL}/items/${webflowProductId}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
-                    ...AUTH_HEADER
+                    ...env().AUTH_HEADER
                 },
                 body: JSON.stringify({})
             });
@@ -308,16 +299,32 @@ export namespace Webflow {
 
         export async function syncImages(webflowProductAndSkus: ProductAndSkus) {
             const productSlug = webflowProductAndSkus.product.fieldData.slug;
-            console.log(productSlug);
             const productImageUrls = await getProductImageUrls(productSlug);
-            console.log(productImageUrls);
             for (const sku of webflowProductAndSkus.skus) {
                 sku.fieldData["main-image"] = productImageUrls[0] ?? sku.fieldData["main-image"];
                 sku.fieldData["more-images"] = productImageUrls.slice(1).map(url => ({ url }));
-                console.log(sku.fieldData["more-images"]);
                 await Webflow.Products.Skus.update(webflowProductAndSkus.product.id, sku.id, sku);
             }
         }
     }
+
+    const env = () => {
+        if (typeof Bun === "undefined") {
+            throw new Error("Must be in a server context. Make sure to run using --bun.");
+        }
+
+        const vars = {
+            SITE_ID: Bun.env.WEBFLOW_SITE_ID,
+            COLLECTIONS_ID: Bun.env.WEBFLOW_COLLECTION_ID,
+            AUTH_TOKEN: Bun.env.WEBFLOW_AUTH,
+        };
+
+        return {
+            ...vars,
+            API_SITES_URL: `https://api.webflow.com/v2/sites/${vars.SITE_ID}`,
+            API_COLLECTIONS_URL: `https://api.webflow.com/v2/collections/${vars.COLLECTIONS_ID}`,
+            AUTH_HEADER: { "Authorization": `bearer ${vars.AUTH_TOKEN}` }
+        };
+    };
 }
 

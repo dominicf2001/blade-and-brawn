@@ -2,15 +2,6 @@ import { formatSlug, type DeepPartial } from "./util";
 import type { Webflow } from "./webflow";
 
 export namespace Printful {
-    export const API_URL = "https://api.printful.com";
-    const AUTH_TOKEN = typeof Bun === "undefined" ? "" : Bun.env.PRINTFUL_AUTH;
-    const STORE_ID = typeof Bun === "undefined" ? "" : Bun.env.PRINTFUL_STORE_ID;
-
-    const AUTH_HEADERS = {
-        "Authorization": `Bearer ${AUTH_TOKEN}`,
-        "X-PF-Store-Id": `${STORE_ID}`
-    };
-
     export namespace Webhook {
         // meta
         interface MetaData {
@@ -144,13 +135,14 @@ export namespace Printful {
 
             while (true) {
                 try {
-                    const res = await fetch(`${Printful.API_URL}/store/products?offset=${offset}`, {
+                    const res = await fetch(`${env().API_URL}/store/products?offset=${offset}`, {
                         method: "GET",
-                        headers: { ...AUTH_HEADERS }
+                        headers: { ...env().AUTH_HEADERS }
                     })
 
                     if (!res.ok) {
-                        console.log(res.statusText);
+                        console.log(await res.json());
+                        throw new Error("Failed to get all Printful products",);
                     }
 
                     const payload: MetaDataMulti<SyncProduct> = await res.json();
@@ -170,9 +162,9 @@ export namespace Printful {
         }
 
         export async function get(printfulProductId: number): Promise<Product> {
-            const res = await fetch(`${Printful.API_URL}/store/products/${printfulProductId}`, {
+            const res = await fetch(`${env().API_URL}/store/products/${printfulProductId}`, {
                 method: "GET",
-                headers: { ...AUTH_HEADERS }
+                headers: { ...env().AUTH_HEADERS }
             });
 
             if (!res.ok) {
@@ -185,11 +177,11 @@ export namespace Printful {
         }
 
         export async function update(printfulProductId: number, printfulProduct: DeepPartial<Product>) {
-            const res = await fetch(`${Printful.API_URL}/store/products/${printfulProductId}`, {
+            const res = await fetch(`${env().API_URL}/store/products/${printfulProductId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    ...AUTH_HEADERS
+                    ...env().AUTH_HEADERS
                 },
                 body: JSON.stringify(printfulProduct)
             });
@@ -228,4 +220,24 @@ export namespace Printful {
             return webflowVariants;
         }
     }
+
+    export const env = () => {
+        if (typeof Bun === "undefined") {
+            throw new Error("Must be in a server context. Make sure to run using --bun.");
+        }
+
+        const vars = {
+            API_URL: "https://api.printful.com",
+            AUTH_TOKEN: Bun.env.PRINTFUL_AUTH,
+            STORE_ID: Bun.env.PRINTFUL_STORE_ID
+        };
+
+        return {
+            ...vars,
+            AUTH_HEADERS: {
+                "Authorization": `Bearer ${vars.AUTH_TOKEN}`,
+                "X-PF-Store-Id": `${vars.STORE_ID}`
+            }
+        };
+    };
 }
