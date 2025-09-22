@@ -9,6 +9,15 @@ import rawStandards from "$lib/data/standards.json" assert { type: "json" }
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+const syncProduct = async (printfulProduct: Printful.Products.Product) => {
+	let webflowProduct = await Webflow.Products.get(printfulProduct.sync_product.external_id);
+	if (webflowProduct)
+		await Webflow.Products.updateUsingPrintful(printfulProduct);
+	else
+		webflowProduct = await Webflow.Products.createUsingPrintful(printfulProduct);
+	await Webflow.Products.syncImages(webflowProduct);
+};
+
 export const app = new Elysia({ prefix: "/api" })
 	.use(cors({
 		origin: '*'
@@ -18,7 +27,7 @@ export const app = new Elysia({ prefix: "/api" })
 
 	// CALCULATOR
 
-	.post("/calculate", async ({ body }) => {
+	.post("/calculate", async ({ body, store }) => {
 		const MAIN_STANDARDS = new Standards(rawStandards as ActivityStandards);
 		interface CalcRequest {
 			player: Player;
@@ -38,35 +47,68 @@ export const app = new Elysia({ prefix: "/api" })
 	})
 
 	// COMMERCE
+	.group("/products", app => app
+		.group("/sync", app => app
+			.state("job", {
+				isSyncing: false,
+				printfulProductId: undefined as undefined | number
+			})
+			.get("/", async ({ store }) => {
+				return store.job;
+			})
+			.post("/:printfulProductId?", async ({ params, store }) => {
+				if (store.job.isSyncing) return "";
+				store.job.isSyncing = true;
+				try {
+					if (params.printfulProductId) {
+						const printfulProductId = +params.printfulProductId;
 
-	.post("/products/sync", async ({ body, set }) => {
-		console.log("Syncing...");
-		const printfulProducts = await Printful.Products.getAll();
-		const webflowProducts = await Webflow.Products.getAll();
-		for (const printfulProduct of printfulProducts) {
-			await sleep(2000);
-			console.log(printfulProduct.name, printfulProduct.id, printfulProduct.external_id);
-			const fullPrintfulProduct = await Printful.Products.get(printfulProduct.id);
+						store.job.printfulProductId = printfulProductId;
 
-			let webflowProduct = webflowProducts
-				.find(webflowProduct => webflowProduct.product.id === printfulProduct.external_id);
-			if (webflowProduct)
-				await Webflow.Products.updateUsingPrintful(fullPrintfulProduct);
-			else
-				webflowProduct = await Webflow.Products.createUsingPrintful(fullPrintfulProduct);
-			await Webflow.Products.syncImages(webflowProduct);
-		}
-		console.log("Done");
-		return "";
-	}, {
-		error({ error }) {
-			console.error(error);
-			return {
-				message: "Failed to sync products",
-				error
-			}
-		}
-	})
+						const printfulProduct = await Printful.Products.get(printfulProductId);
+						await syncProduct(printfulProduct);
+					}
+					else {
+						console.log("Syncing all products...");
+
+						const printfulProducts = await Printful.Products.getAll();
+						const webflowProducts = await Webflow.Products.getAll();
+						for (const printfulProduct of printfulProducts) {
+							store.job.printfulProductId = printfulProduct.id;
+
+							await sleep(2000);
+							const fullPrintfulProduct = await Printful.Products.get(printfulProduct.id);
+
+							let webflowProduct = webflowProducts
+								.find(webflowProduct => webflowProduct.product.id === printfulProduct.external_id);
+							if (webflowProduct)
+								await Webflow.Products.updateUsingPrintful(fullPrintfulProduct);
+							else
+								webflowProduct = await Webflow.Products.createUsingPrintful(fullPrintfulProduct);
+							await Webflow.Products.syncImages(webflowProduct);
+						}
+					}
+					console.log("Done");
+					return "";
+				}
+				catch (error) {
+					throw error;
+				}
+				finally {
+					store.job.isSyncing = false;
+					store.job.printfulProductId = undefined;
+				}
+			}, {
+				error({ error }) {
+					console.error(error);
+					return {
+						message: "Failed to sync product(s)",
+						error
+					}
+				}
+			})
+		)
+	)
 
 	// WEBHOOKS
 
@@ -75,14 +117,7 @@ export const app = new Elysia({ prefix: "/api" })
 		switch (payload.type) {
 			case Printful.Webhook.Event.ProductUpdated: {
 				const printfulProduct = await Printful.Products.get(payload.data.sync_product.id);
-
-				let webflowProduct = await Webflow.Products.get(printfulProduct.sync_product.external_id);
-				if (webflowProduct)
-					await Webflow.Products.updateUsingPrintful(printfulProduct);
-				else
-					webflowProduct = await Webflow.Products.createUsingPrintful(printfulProduct);
-				await Webflow.Products.syncImages(webflowProduct);
-
+				await syncProduct(printfulProduct);
 				break;
 			}
 			case Printful.Webhook.Event.ProductDeleted: {
@@ -101,8 +136,5 @@ export const app = new Elysia({ prefix: "/api" })
 		}
 	});
 
-export type App = typeof app;
-
-const apiWrapper = treaty<App>(app);
-export const api = apiWrapper.api;
+export const api = treaty<typeof app>("localhost:5173").api;
 
