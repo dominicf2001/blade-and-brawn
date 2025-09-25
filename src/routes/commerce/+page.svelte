@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { api } from "$lib/api.js";
-	import type { Printful } from "$lib/services/commerce/printful";
+	import type { Printful } from "$lib/services/commerce/util/types.js";
 	import { onMount } from "svelte";
 
 	const { data } = $props();

@@ -1,4 +1,5 @@
 import { Activity, ftToCm, Gender, getAvgWeight, inToCm, kgToLb, lbToKg, minToMs, secToMs, type ActivityPerformance, type Player } from "$lib/services/calculator/util";
+import { Printful } from "$lib/services/commerce/printful";
 import { Webflow } from "$lib/services/commerce/webflow";
 
 const player: Player = {
@@ -61,6 +62,7 @@ const products = await Webflow.Products.getAll();
 
 const skuId = "68d080a5d90e8263e52242e9";
 
+const colors = ["Black", "White", "Red"];
 
 // const sku = product.skus[0];
 //

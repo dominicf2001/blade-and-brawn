@@ -5,7 +5,7 @@ import avgWeightDataRaw from "$lib/data/avg-weights.json"
 // DATA MODELS 
 // -------------------------------------------------------------------------------------------------
 
-export interface Player {
+export type Player = {
     metrics: Metrics;
 }
 
