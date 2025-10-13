@@ -41,8 +41,8 @@ export default class PrintfulService {
             });
 
             if (!res.ok) {
-                console.error("Printful product update failed:", res.statusText);
-                throw new Error("Failed to update Printful product");
+                console.error("Printful product get failed:", await res.json());
+                throw new Error("Failed to get Printful product");
             }
 
             const payload: Printful.Products.MetaDataSingle<Printful.Products.Product> = await res.json();
@@ -60,9 +60,16 @@ export default class PrintfulService {
             });
 
             if (!res.ok) {
-                console.error("Printful product update failed:", res.statusText);
+                console.error("Printful product update failed:", await res.json());
                 throw new Error("Failed to update Printful product");
             }
+        }
+    }
+
+    static Util = class {
+        static getVariantMainImage(syncVariant: Printful.Products.SyncVariant): string {
+            const previewFile = syncVariant.files.find(f => f.type === "preview");
+            return previewFile?.preview_url ?? syncVariant.product.image;
         }
     }
 }

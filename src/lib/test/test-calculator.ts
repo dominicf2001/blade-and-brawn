@@ -1,6 +1,11 @@
 import { Activity, ftToCm, Gender, getAvgWeight, inToCm, kgToLb, lbToKg, minToMs, secToMs, type ActivityPerformance, type Player } from "$lib/services/calculator/util";
-import { Printful } from "$lib/services/commerce/printful";
-import { Webflow } from "$lib/services/commerce/webflow";
+import PrintfulService from "$lib/services/commerce/printful";
+import SyncService from "$lib/services/commerce/sync";
+import type { DeepPartial } from "$lib/services/commerce/util/misc";
+import type { Printful } from "$lib/services/commerce/util/types";
+import WebflowService from "$lib/services/commerce/webflow";
+
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const player: Player = {
     metrics: {
@@ -52,12 +57,71 @@ const computedPerformances: ActivityPerformance[] = [
 //     })
 // });
 
-const productId = "68d080a129f538cd565bf56d";
+const p = await WebflowService.Products.get("68e66dc4633e577c91eda713");
+console.log(p);
 
+// const printfulProducts = await PrintfulService.Products.getAll();
+// const webflowProducts = await WebflowService.Products.getAll();
+//
+// for (const printfulProduct of printfulProducts) {
+//     const fullPrintfulProduct = await PrintfulService.Products.get(printfulProduct.id);
+//     console.log(fullPrintfulProduct.sync_product.name);
+//     const existingWebflowProduct = webflowProducts.find(p => fullPrintfulProduct.sync_product.name.includes(p.product.fieldData.name))
+//     if (!existingWebflowProduct) {
+//         continue;
+//     }
+//     console.log(existingWebflowProduct.product.fieldData.name);
+//
+//     console.log(existingWebflowProduct.skus.map(s => s.fieldData["sku-values"]));
+//     console.log(fullPrintfulProduct.sync_variants.map(s => ({ color: s.color, size: s.size })));
+//
+//     const newPrintfulVariants: DeepPartial<Printful.Products.SyncVariant>[] = [];
+//     for (const printfulVariant of fullPrintfulProduct.sync_variants) {
+//         const associatedWebflowSku = existingWebflowProduct.skus
+//             .find(sku => sku.fieldData["sku-values"]?.["color"] === printfulVariant.color &&
+//                 sku.fieldData["sku-values"]?.["size"] === printfulVariant.size);
+//         if (associatedWebflowSku) {
+//             newPrintfulVariants.push({
+//                 "id": printfulVariant.id,                       // printful variant id
+//                 "external_id": String(associatedWebflowSku.id), // webflow variant id
+//             });
+//         }
+//     }
+//
+//     if (!newPrintfulVariants.length) {
+//         continue;
+//     }
+//
+//     await sleep(10000);
+//     await PrintfulService.Products.update(printfulProduct.id, {
+//         "sync_product": {
+//             "id": printfulProduct.id,
+//             "external_id": existingWebflowProduct.product.id + "-" + SyncService.findColorInProductName(printfulProduct.name)
+//         },
+//         "sync_variants": newPrintfulVariants
+//     });
+// }
+// console.log("DONE");
 
-const product = await Webflow.Products.get("68d080a129f538cd565bf56d");
-const products = await Webflow.Products.getAll();
-
+//
+// await WebflowService.Products.update(wProduct?.product.id!, wProduct!);
+//
+// const sku = {
+//     "fieldData": {
+//         "name": "Test",
+//         "slug": "test-test",
+//         "sku-values": {
+//             "color": "black",
+//             "size": "L",
+//         },
+//         "price": {
+//             "value": +0 * 100,
+//             "unit": "USD",
+//         },
+//         "main-image": "https://cdn.prod.website-files.com/675a3fbe966e58ea9aa710e4/68d09d3d8e1e8bad26a9cf07_knight-title-tank-white-10.png"
+//     }
+// }
+//
 
 
 const skuId = "68d080a5d90e8263e52242e9";

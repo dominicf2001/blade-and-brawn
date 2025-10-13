@@ -6,8 +6,8 @@ import type { ActivityPerformance, Player } from "$lib/services/calculator/util"
 import rawStandards from "$lib/data/standards.json" assert { type: "json" }
 import { Printful } from "./services/commerce/util/types";
 import WebflowService from "./services/commerce/webflow";
-import PrintfulService from "./services/commerce/printful";
 import SyncService from "./services/commerce/sync";
+import PrintfulService from "./services/commerce/printful";
 
 export const app = new Elysia({ prefix: "/api" })
 	.use(cors({
@@ -42,17 +42,10 @@ export const app = new Elysia({ prefix: "/api" })
 		.group("/sync", app => app
 			.get("/", async ({ }) => SyncService.state)
 			.post("/:printfulProductId?", async ({ params }) => {
-				SyncService.state.isSyncing = true;
-				SyncService.state.printfulProductId = params.printfulProductId ?
+				const printfulProductId = params.printfulProductId ?
 					+params.printfulProductId :
 					undefined;
-
-				const printfulProducts = params.printfulProductId ?
-					[(await PrintfulService.Products.get(+params.printfulProductId)).sync_product] :
-					await PrintfulService.Products.getAll();
-
-				await SyncService.sync(printfulProducts);
-				return "";
+				await SyncService.sync(printfulProductId);
 			}, {
 				error({ error }) {
 					console.error(error);
@@ -63,6 +56,15 @@ export const app = new Elysia({ prefix: "/api" })
 				}
 			})
 		)
+		.get("/:printfulProductId", async ({ params }) => {
+			const printfulProductId = +params.printfulProductId;
+			const printfulProduct = await PrintfulService.Products.get(printfulProductId);
+
+			const webflowProductId = printfulProduct.sync_product.external_id.split("-")[0];
+			const webflowProduct = await WebflowService.Products.get(webflowProductId);
+
+			return { printfulProduct, webflowProduct };
+		})
 	)
 
 	// WEBHOOKS
@@ -71,7 +73,7 @@ export const app = new Elysia({ prefix: "/api" })
 		switch (payload.type) {
 			case Printful.Webhook.Event.ProductUpdated: {
 				const printfulProduct = payload.data.sync_product;
-				await SyncService.sync([printfulProduct]);
+				await SyncService.sync(printfulProduct.id);
 				break;
 			}
 			case Printful.Webhook.Event.ProductDeleted: {
@@ -79,7 +81,6 @@ export const app = new Elysia({ prefix: "/api" })
 				break;
 			}
 		}
-		return "";
 	}, {
 		error({ error }) {
 			console.error(error);

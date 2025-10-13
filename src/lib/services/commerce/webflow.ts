@@ -17,7 +17,7 @@ export default class WebflowService {
                 });
 
                 if (!res.ok) {
-                    console.error("Webflow product SKU create failed:", res.statusText);
+                    console.error("Webflow product SKU create failed:", await res.json());
                     throw new Error("Failed to create Webflow product SKU");
                 }
             }
@@ -109,7 +109,7 @@ export default class WebflowService {
             });
 
             if (!res.ok) {
-                console.error("Webflow product update failed:", res.statusText);
+                console.error("Webflow product update failed:", await res.json());
                 throw new Error("Failed to update Webflow product");
             }
         }

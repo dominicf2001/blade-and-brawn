@@ -7,12 +7,12 @@
 
 	const synchronizer = $state({
 		isSyncing: false,
-		printfulProductId: undefined as undefined | number,
+		syncingIds: [] as number[],
 		poll: async function () {
 			const res = await api.products.sync.get();
 			if (res.data) {
-				synchronizer.isSyncing = res.data.isSyncing;
-				synchronizer.printfulProductId = res.data.printfulProductId;
+				synchronizer.isSyncing = res.data.isSyncing ?? false;
+				synchronizer.syncingIds = res.data.syncingIds ?? [];
 			}
 		},
 		startPolling: () => {
@@ -27,9 +27,7 @@
 		},
 		sync: async (printfulProductId: number) => {
 			synchronizer.startPolling();
-			await api.products
-				.sync({ printfulProductId: String(printfulProductId) })
-				.post();
+			await api.products.sync({ printfulProductId }).post();
 		},
 	});
 
@@ -45,7 +43,7 @@
 	) => {
 		const webflowProducts = await data.products.webflow;
 		return webflowProducts.some(
-			(p) => p.product.id === printfulProduct.external_id,
+			(p) => p.product.id === printfulProduct.external_id.split("-")[0],
 		);
 	};
 </script>
@@ -58,7 +56,11 @@
 		onclick={() => synchronizer.syncAll()}
 		class="btn btn-xl mb-5"
 	>
-		Sync all
+		{#if synchronizer.isSyncing}
+			Syncing...
+		{:else}
+			Sync all
+		{/if}
 	</button>
 	<div class="w-full overflow-x-auto">
 		<table class="table">
@@ -72,10 +74,27 @@
 			<tbody>
 				{#each printfulProducts as printfulProduct}
 					<tr class="hover:bg-base-300">
-						<td>{printfulProduct.name}</td>
+						<td
+							><button
+								onclick={async () => {
+									const productData = await api
+										.products({
+											printfulProductId:
+												printfulProduct.id,
+										})
+										.get();
+									console.log(
+										await productData.response.json(),
+									);
+								}}
+								class="cursor-pointer underline"
+							>
+								{printfulProduct.name}
+							</button></td
+						>
 						<td>
 							{#await isProductSynced(printfulProduct) then isSynced}
-								{#if synchronizer.printfulProductId === printfulProduct.id}
+								{#if synchronizer.syncingIds.includes(printfulProduct.id)}
 									<div class="badge badge-warning">
 										Syncing...
 									</div>
