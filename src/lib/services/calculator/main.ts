@@ -15,7 +15,7 @@ type LevelCalculatorConfig = {
     compressTo?: number;
 }
 
-type LevelCalculatorOutput = {
+export type LevelCalculatorOutput = {
     player: number,
     attributes: Record<Attribute, number>
 }

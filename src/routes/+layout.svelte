@@ -4,7 +4,7 @@
 	import "../app.css";
 
 	const links = [
-		{ name: "Standards", path: "/standards" },
+		{ name: "Calculator", path: "/calculator" },
 		{ name: "Commerce", path: "/commerce" },
 	];
 

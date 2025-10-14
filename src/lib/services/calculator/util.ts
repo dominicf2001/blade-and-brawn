@@ -6,6 +6,7 @@ import avgWeightDataRaw from "$lib/data/avg-weights.json"
 // -------------------------------------------------------------------------------------------------
 
 export type Player = {
+    name?: string;
     metrics: Metrics;
 }
 
