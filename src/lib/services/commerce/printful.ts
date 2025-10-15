@@ -81,7 +81,7 @@ export default class PrintfulService {
             });
 
             if (!res.ok) {
-                throw await FetchError.createAndParse("Failed to update Printful product", printfulProduct.sync_product?.name, res);
+                throw await FetchError.createAndParse("Failed to update Printful product", res);
             }
         }
     }

@@ -8,7 +8,7 @@ import { Activity, Attribute, Gender, getAvgWeight, kgToLb, lbToKg, type Activit
 // Dash: 
 //  https://marathonhandbook.com/average-100-meter-time/
 // Broad Jump:
-//  
+//  https://nrpt.co.uk/training/tests/power/broad.htm
 
 type LevelCalculatorConfig = {
     expandIters?: number;

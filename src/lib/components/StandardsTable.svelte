@@ -35,7 +35,10 @@
 			case "ms":
 				return msToTime(rawValue, activity === Activity.ConeDrill);
 			case "cm": {
-				return String(Math.round(cmToIn(rawValue) * 10) / 10);
+				const totalInches = cmToIn(rawValue);
+				const feet = Math.floor(totalInches / 12);
+				const inches = Math.round(totalInches % 12);
+				return `${feet}'${inches}"`;
 			}
 			case "kg":
 				return String(Math.round(kgToLb(rawValue)));
