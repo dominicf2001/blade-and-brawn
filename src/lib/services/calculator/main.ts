@@ -53,14 +53,9 @@ export type ActivityStandards = Record<Activity, {
 }>;
 
 export class LevelCalculator {
-    cfg: Required<LevelCalculatorConfig>;
     standards: Standards;
 
-    public constructor(standards: Standards, cfg: LevelCalculatorConfig = {}) {
-        this.cfg = {
-            expandIters: cfg.expandIters ?? 5,
-            compressTo: cfg.compressTo ?? 100
-        }
+    public constructor(standards: Standards) {
         this.standards = standards;
     }
 

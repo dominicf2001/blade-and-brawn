@@ -9,6 +9,7 @@
 		Attribute,
 		Gender,
 		lbToKg,
+		range,
 		type ActivityPerformance,
 		type Player,
 	} from "$lib/services/calculator/util";
@@ -47,13 +48,15 @@
 		localStorage.setItem("calculations", JSON.stringify(calculations));
 	});
 
+	$inspect(calculations[0]);
+
 	const createCalculation = function (name: string) {
 		return {
 			player: {
 				name: name,
 				metrics: {
 					age: 18,
-					weight: 180,
+					weight: lbToKg(180),
 					gender: Gender.Male,
 				},
 			},
@@ -240,14 +243,16 @@
 
 						<label class="form-control">
 							<span class="label mb-1 text-xs">Weight</span>
-							<input
-								class="input input-bordered input-sm w-full"
-								type="number"
-								min="1"
-								max="500"
-								step="1"
+							<select
+								class="select select-bordered select-sm w-full"
 								bind:value={calculation.player.metrics.weight}
-							/>
+							>
+								{#each range(400) as weight}
+									<option value={String(lbToKg(weight))}
+										>{weight}</option
+									>
+								{/each}
+							</select>
 						</label>
 					</div>
 				</fieldset>
