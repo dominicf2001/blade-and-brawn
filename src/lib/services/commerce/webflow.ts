@@ -1,5 +1,5 @@
 import type { Webflow } from "./util/types";
-import { type DeepPartial } from "./util/misc";
+import { FetchError, type DeepPartial } from "./util/misc";
 
 export default class WebflowService {
     static Products = class {
@@ -17,8 +17,7 @@ export default class WebflowService {
                 });
 
                 if (!res.ok) {
-                    console.error("Webflow product SKU create failed:", await res.json());
-                    throw new Error("Failed to create Webflow product SKU");
+                    throw await FetchError.createAndParse("Failed to create Webflow product SKU", res);
                 }
             }
 
@@ -34,8 +33,7 @@ export default class WebflowService {
                     })
                 });
                 if (!res.ok) {
-                    console.error("Webflow product SKU update failed:", await res.json());
-                    throw new Error("Failed to update Webflow product SKU");
+                    throw await FetchError.createAndParse("Failed to update Webflow product SKU", res);
                 }
             }
         }
@@ -51,9 +49,7 @@ export default class WebflowService {
             });
 
             if (!res.ok) {
-                console.error("Webflow product create failed:", res.statusText);
-                console.log(await res.json());
-                throw new Error("Failed to create Webflow product");
+                throw await FetchError.createAndParse("Failed to create Webflow product", res);
             }
 
             const createdWebflowProduct = await res.json();
@@ -69,8 +65,7 @@ export default class WebflowService {
             });
 
             if (!res.ok) {
-                console.error("Webflow product get all failed:", res.statusText);
-                throw new Error("Failed to get all Webflow products");
+                throw await FetchError.createAndParse("Failed to get all Webflow products", res);
             }
 
             const payload = await res.json();
@@ -90,8 +85,7 @@ export default class WebflowService {
             }
 
             if (!res.ok) {
-                console.error("Webflow product get failed:", res.statusText);
-                throw new Error("Failed to get Webflow product");
+                throw await FetchError.createAndParse("Failed to get Webflow product", res);
             }
 
             const payload = await res.json();
@@ -109,8 +103,7 @@ export default class WebflowService {
             });
 
             if (!res.ok) {
-                console.error("Webflow product update failed:", await res.json());
-                throw new Error("Failed to update Webflow product");
+                throw await FetchError.createAndParse("Failed to update Webflow product", res);
             }
         }
 
@@ -125,8 +118,7 @@ export default class WebflowService {
             });
 
             if (!res.ok) {
-                console.error("Webflow product remove failed:", res.statusText);
-                throw new Error("Failed to remove Webflow product");
+                throw await FetchError.createAndParse("Failed to remove Webflow product", res);
             }
         }
     }

@@ -1,7 +1,7 @@
 import { Activity, ftToCm, Gender, getAvgWeight, inToCm, kgToLb, lbToKg, minToMs, secToMs, type ActivityPerformance, type Player } from "$lib/services/calculator/util";
 import PrintfulService from "$lib/services/commerce/printful";
 import SyncService from "$lib/services/commerce/sync";
-import type { DeepPartial } from "$lib/services/commerce/util/misc";
+import { FetchError, type DeepPartial } from "$lib/services/commerce/util/misc";
 import type { Printful } from "$lib/services/commerce/util/types";
 import WebflowService from "$lib/services/commerce/webflow";
 
@@ -46,64 +46,73 @@ const computedPerformances: ActivityPerformance[] = [
     },
 ];
 
-// const res = await fetch(`${Webflow.API_SITES_URL}/products/${}/skus/${"68d0154f97e90776a5680740"}`, {
-//     method: "PATCH",
-//     headers: {
-//         "Content-Type": "application/json",
-//         "Authorization": `bearer ${Bun.env.WEBFLOW_AUTH}`
-//     },
-//     body: JSON.stringify({
-//         "sku": webflowVariants[i]
-//     })
-// });
+// wProduct.product.fieldData.name = "Rogue Title Hoodie [White] / XS";
+//
+// WebflowService.Products.update("68e66dc4633e577c91eda727",);
 
-const p = await WebflowService.Products.get("68e66dc4633e577c91eda713");
-console.log(p);
+const printfulProducts = await PrintfulService.Products.getAll();
+const webflowProducts = await WebflowService.Products.getAll();
 
-// const printfulProducts = await PrintfulService.Products.getAll();
-// const webflowProducts = await WebflowService.Products.getAll();
-//
-// for (const printfulProduct of printfulProducts) {
-//     const fullPrintfulProduct = await PrintfulService.Products.get(printfulProduct.id);
-//     console.log(fullPrintfulProduct.sync_product.name);
-//     const existingWebflowProduct = webflowProducts.find(p => fullPrintfulProduct.sync_product.name.includes(p.product.fieldData.name))
-//     if (!existingWebflowProduct) {
-//         continue;
-//     }
-//     console.log(existingWebflowProduct.product.fieldData.name);
-//
-//     console.log(existingWebflowProduct.skus.map(s => s.fieldData["sku-values"]));
-//     console.log(fullPrintfulProduct.sync_variants.map(s => ({ color: s.color, size: s.size })));
-//
-//     const newPrintfulVariants: DeepPartial<Printful.Products.SyncVariant>[] = [];
-//     for (const printfulVariant of fullPrintfulProduct.sync_variants) {
-//         const associatedWebflowSku = existingWebflowProduct.skus
-//             .find(sku => sku.fieldData["sku-values"]?.["color"] === printfulVariant.color &&
-//                 sku.fieldData["sku-values"]?.["size"] === printfulVariant.size);
-//         if (associatedWebflowSku) {
-//             newPrintfulVariants.push({
-//                 "id": printfulVariant.id,                       // printful variant id
-//                 "external_id": String(associatedWebflowSku.id), // webflow variant id
-//             });
-//         }
-//     }
-//
-//     if (!newPrintfulVariants.length) {
-//         continue;
-//     }
-//
-//     await sleep(10000);
-//     await PrintfulService.Products.update(printfulProduct.id, {
-//         "sync_product": {
-//             "id": printfulProduct.id,
-//             "external_id": existingWebflowProduct.product.id + "-" + SyncService.findColorInProductName(printfulProduct.name)
-//         },
-//         "sync_variants": newPrintfulVariants
-//     });
-// }
-// console.log("DONE");
+for (const printfulProduct of printfulProducts) {
+    if (!printfulProduct.name.includes("T-Shirt") || printfulProduct.name.includes("[White]") || printfulProduct.name.includes("[Black]")) {
+        continue;
+    }
 
-//
+    console.log(printfulProduct.name);
+
+    const fullPrintfulProduct = await PrintfulService.Products.get(printfulProduct.id);
+    if (!fullPrintfulProduct) {
+        console.log("Could not get full product, skipped");
+        continue;
+    }
+
+    const existingWebflowProduct = webflowProducts.find(p => fullPrintfulProduct.sync_product.name.includes(p.product.fieldData.name))
+    if (!existingWebflowProduct) {
+        console.log("Could not get associated webflow product, skipped");
+        continue;
+    }
+
+    const newPrintfulVariants: DeepPartial<Printful.Products.SyncVariant>[] = [];
+    for (const printfulVariant of fullPrintfulProduct.sync_variants) {
+        console.log(printfulVariant.name);
+        const associatedWebflowSku = existingWebflowProduct.skus
+            .find(sku => sku.fieldData["sku-values"]?.["color"] === SyncService.findColorInProductName(printfulVariant.name) &&
+                sku.fieldData["sku-values"]?.["size"] === printfulVariant.size);
+        if (associatedWebflowSku) {
+            console.log('Found associated webflow sku: ' + associatedWebflowSku.fieldData.name);
+            newPrintfulVariants.push({
+                "id": printfulVariant.id,                       // printful variant id
+                "external_id": String(associatedWebflowSku.id), // webflow variant id
+            });
+        }
+        else {
+            console.log("Could not get associated webflow sku");
+        }
+    }
+
+    if (!newPrintfulVariants.length) {
+        console.log("No new printful variants, skipped");
+        continue;
+    }
+
+    await sleep(3000);
+    try {
+        await PrintfulService.Products.update(printfulProduct.id, {
+            "sync_product": {
+                "id": printfulProduct.id,
+                "external_id": existingWebflowProduct.product.id + "-" + SyncService.findColorInProductName(printfulProduct.name)
+            },
+            "sync_variants": newPrintfulVariants
+        });
+    } catch (err) {
+        if (err instanceof FetchError) {
+            console.error(err.message, err.payload);
+        }
+    }
+}
+console.log("DONE");
+
+
 // await WebflowService.Products.update(wProduct?.product.id!, wProduct!);
 //
 // const sku = {
@@ -122,11 +131,11 @@ console.log(p);
 //     }
 // }
 //
-
-
-const skuId = "68d080a5d90e8263e52242e9";
-
-const colors = ["Black", "White", "Red"];
+//
+//
+// const skuId = "68d080a5d90e8263e52242e9";
+//
+// const colors = ["Black", "White", "Red"];
 
 // const sku = product.skus[0];
 //

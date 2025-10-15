@@ -1,5 +1,5 @@
 import type { Printful, Webflow } from "./util/types";
-import { formatSlug, type DeepPartial } from "./util/misc";
+import { FetchError, formatSlug, type DeepPartial } from "./util/misc";
 import WebflowService from "./webflow";
 import PrintfulService from "./printful";
 
@@ -25,8 +25,10 @@ export default class SyncService {
     }
 
     static async sync(printfulProductId: number | undefined) {
-        console.log("Syncing...");
         this.state.isSyncing = true;
+
+        const mainPrintfulProducts: MainProduct[] = [];
+        const webflowProducts: Webflow.Products.ProductAndSkus[] = [];
         try {
             let printfulProducts = await PrintfulService.Products.getAll();
             if (printfulProductId) {
@@ -36,11 +38,10 @@ export default class SyncService {
                     printfulProducts = printfulProducts.filter(p => p.name.includes(mainProductName));
                 }
             }
-            const webflowProducts = await WebflowService.Products.getAll();
+            webflowProducts.push(...await WebflowService.Products.getAll());
 
             // Generate main printful products
             console.log("Generating main products...");
-            const mainPrintfulProducts: MainProduct[] = [];
             for (const printfulProduct of printfulProducts) {
                 const mainProductName = this.getMainProductName(printfulProduct.name);
 
@@ -59,15 +60,25 @@ export default class SyncService {
                 const productColor = this.findColorInProductName(printfulProduct.name);
                 mainPrintfulProduct.variants.push({
                     color: productColor,
-                    product: await PrintfulService.Products.get(printfulProduct.id)
+                    product: (await PrintfulService.Products.get(printfulProduct.id))!
                 });
                 mainPrintfulProduct.colors.add(productColor);
             }
+        }
+        catch (error) {
+            throw error;
+        }
+        finally {
+            this.state.isSyncing = false;
+            this.state.syncingIds = [];
+        }
 
-            // TODO: Validate main printful products
+        // TODO: Validate main printful products
 
-            // Sync the main printful products
-            for (const mainPrintfulProduct of mainPrintfulProducts) {
+        // Sync the main printful products
+        console.log("Syncing main products...");
+        for (const mainPrintfulProduct of mainPrintfulProducts) {
+            try {
                 this.state.isSyncing = true;
                 this.state.syncingIds = mainPrintfulProduct.variants.map(v => v.product.sync_product.id);
 
@@ -115,6 +126,12 @@ export default class SyncService {
                     .find(webflowProduct => webflowProduct.product.id === mainPrintfulProduct.externalId.split("-")[0]);
                 if (existingWebflowProduct) {
                     // SYNC PRODUCT UPDATE
+
+                    // do not update images
+                    for (const webflowSku of webflowSkus) {
+                        delete webflowSku.fieldData?.["main-image"];
+                    }
+
                     const webflowProductId = mainPrintfulProduct.externalId.split("-")[0];
                     WebflowService.Products.update(webflowProductId, {
                         "product": {
@@ -225,28 +242,29 @@ export default class SyncService {
                         });
                     }
                 }
+            }
 
-                // SYNC IMAGES
-                for (const sku of existingWebflowProduct.skus) {
-                    const skuColor = sku.fieldData["sku-values"]?.["color"]?.toLowerCase() ?? "None";
-                    const skuSlug = `${existingWebflowProduct.product.fieldData.slug}-${skuColor}`;
-                    const skuImageUrls = await this.getProductImageUrls(skuSlug);
-
-                    sku.fieldData["main-image"] = skuImageUrls[0] ?? sku.fieldData["main-image"];
-                    sku.fieldData["more-images"] = skuImageUrls.slice(1).map(url => ({ url }));
-
-                    await WebflowService.Products.Skus.update(existingWebflowProduct.product.id, sku.id, sku);
+            // SYNC IMAGES
+            // for (const sku of existingWebflowProduct.skus) {
+            //     const skuColor = sku.fieldData["sku-values"]?.["color"]?.toLowerCase() ?? "None";
+            //     const skuSlug = `${existingWebflowProduct.product.fieldData.slug}-${skuColor}`;
+            //     const skuImageUrls = await this.getProductImageUrls(skuSlug);
+            //
+            //     sku.fieldData["main-image"] = skuImageUrls[0] ?? sku.fieldData["main-image"];
+            //     sku.fieldData["more-images"] = skuImageUrls.slice(1).map(url => ({ url }));
+            //
+            //     await WebflowService.Products.Skus.update(existingWebflowProduct.product.id, sku.id, sku);
+            // }
+            //
+            catch (err) {
+                if (err instanceof FetchError) {
+                    console.error(err.message, err.payload);
                 }
             }
         }
-        catch (error) {
-            console.error(error);
-            throw error;
-        }
-        finally {
-            this.state.isSyncing = false;
-            this.state.syncingIds = [];
-        }
+        this.state.isSyncing = false;
+        this.state.syncingIds = [];
+        console.log("Done");
     }
 
     private static getProductImageUrls = async (slug: string) => {

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { api } from "$lib/api.js";
-	import type { Printful } from "$lib/services/commerce/util/types.js";
+	import { api } from "$lib/api";
+	import type { Printful } from "$lib/services/commerce/util/types";
 	import { onMount } from "svelte";
 
 	const { data } = $props();
@@ -10,9 +10,10 @@
 		syncingIds: [] as number[],
 		poll: async function () {
 			const res = await api.products.sync.get();
+
 			if (res.data) {
-				synchronizer.isSyncing = res.data.isSyncing ?? false;
-				synchronizer.syncingIds = res.data.syncingIds ?? [];
+				synchronizer.isSyncing = res.data.isSyncing;
+				synchronizer.syncingIds = res.data.syncingIds;
 			}
 		},
 		startPolling: () => {

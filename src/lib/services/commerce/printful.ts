@@ -1,8 +1,28 @@
 import type { Printful } from "./util/types";
-import { type DeepPartial } from "./util/misc";
+import { FetchError, type DeepPartial } from "./util/misc";
 
 export default class PrintfulService {
     static Products = class {
+        static Variants = class {
+            static async get(variantId: number | string): Promise<Printful.Products.SyncVariant | undefined> {
+                const res = await fetch(`${env().API_URL}/store/variants/${variantId}`, {
+                    method: "GET",
+                    headers: { ...env().AUTH_HEADERS }
+                });
+
+                if (res.status === 404 || res.status === 400) {
+                    return;
+                }
+
+                if (!res.ok) {
+                    throw await FetchError.createAndParse("Failed to get Printful variant", res);
+                }
+
+                const payload: Printful.Products.MetaDataSingle<Printful.Products.SyncVariant> = await res.json();
+                return payload.result;
+            }
+        }
+
         static async getAll(offset: number = 0): Promise<Printful.Products.SyncProduct[]> {
             const allSyncProducts: Printful.Products.SyncProduct[] = [];
 
@@ -14,8 +34,7 @@ export default class PrintfulService {
                     })
 
                     if (!res.ok) {
-                        console.log(await res.json());
-                        throw new Error("Failed to get all Printful products",);
+                        throw await FetchError.createAndParse("Failed to get all Printful products", res);
                     }
 
                     const payload: Printful.Products.MetaDataMulti<Printful.Products.SyncProduct> = await res.json();
@@ -26,23 +45,25 @@ export default class PrintfulService {
                     if (allSyncProducts.length >= payload.paging.total)
                         break;
                 } catch (error) {
-                    console.error("Printful product get all failed:", error);
-                    throw new Error("Failed to get all Printful products",);
+                    throw error;
                 }
             }
 
             return allSyncProducts;
         }
 
-        static async get(printfulProductId: number): Promise<Printful.Products.Product> {
-            const res = await fetch(`${env().API_URL}/store/products/${printfulProductId}`, {
+        static async get(productId: number | string): Promise<Printful.Products.Product | undefined> {
+            const res = await fetch(`${env().API_URL}/store/products/${productId}`, {
                 method: "GET",
                 headers: { ...env().AUTH_HEADERS }
             });
 
+            if (res.status === 404 || res.status === 400) {
+                return;
+            }
+
             if (!res.ok) {
-                console.error("Printful product get failed:", await res.json());
-                throw new Error("Failed to get Printful product");
+                throw await FetchError.createAndParse("Failed to get Printful product", res);
             }
 
             const payload: Printful.Products.MetaDataSingle<Printful.Products.Product> = await res.json();
@@ -60,8 +81,7 @@ export default class PrintfulService {
             });
 
             if (!res.ok) {
-                console.error("Printful product update failed:", await res.json());
-                throw new Error("Failed to update Printful product");
+                throw await FetchError.createAndParse("Failed to update Printful product", printfulProduct.sync_product?.name, res);
             }
         }
     }
