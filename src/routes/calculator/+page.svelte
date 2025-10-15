@@ -21,9 +21,9 @@
 		},
 		cfg: {
 			enableGeneration: true,
-			maxLevel: "5",
+			maxLevel: "100",
 			weightModfier: ".1",
-			weightSkew: ".4",
+			weightSkew: ".1",
 			ageModifier: ".1",
 		},
 	});
@@ -64,71 +64,6 @@
 </script>
 
 <section class="w-full flex justify-between gap-2 pt-10 items-center">
-	{#if activeTab === "standards"}
-		<fieldset class="fieldset bg-base-200 p-6 max-w-lg">
-			<legend class="fieldset-legend text-lg font-semibold">
-				Metrics
-			</legend>
-			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-				<label>
-					<span class="label mb-1">Activity</span>
-					<select
-						class="select w-full"
-						name="activities"
-						bind:value={input.activity}
-					>
-						{#each Object.values(Activity) as activity}
-							<option value={activity}>
-								{allStandards.byActivity(activity).getMetadata()
-									.name}
-							</option>
-						{/each}
-					</select>
-				</label>
-
-				<label>
-					<span class="label mb-1">Gender</span>
-					<select
-						class="select w-full"
-						name="genders"
-						bind:value={input.metrics.gender}
-					>
-						{#each Object.values(Gender) as gender}
-							<option value={gender}>{gender}</option>
-						{/each}
-					</select>
-				</label>
-
-				<label>
-					<span class="label mb-1">Age</span>
-					<input
-						class="input w-full"
-						type="number"
-						min="0"
-						max="100"
-						placeholder="18"
-						bind:value={input.metrics.age}
-					/>
-				</label>
-
-				<label>
-					<span class="label mb-1">Weight (lb)</span>
-					<input
-						class="input w-full"
-						type="number"
-						min="0"
-						max="600"
-						placeholder={selected.metrics.age
-							? "170"
-							: "Requires age"}
-						bind:value={input.metrics.weight}
-						disabled={!selected.metrics.age}
-					/>
-				</label>
-			</div>
-		</fieldset>
-	{/if}
-
 	<fieldset class="fieldset bg-base-200 p-6 max-w-lg">
 		<legend class="fieldset-legend text-lg font-semibold"> Data </legend>
 
@@ -209,6 +144,71 @@
 			</fieldset>
 		</div>
 	</fieldset>
+
+	{#if activeTab === "standards"}
+		<fieldset class="fieldset bg-base-200 p-6 max-w-lg">
+			<legend class="fieldset-legend text-lg font-semibold">
+				Metrics
+			</legend>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<label>
+					<span class="label mb-1">Activity</span>
+					<select
+						class="select w-full"
+						name="activities"
+						bind:value={input.activity}
+					>
+						{#each Object.values(Activity) as activity}
+							<option value={activity}>
+								{allStandards.byActivity(activity).getMetadata()
+									.name}
+							</option>
+						{/each}
+					</select>
+				</label>
+
+				<label>
+					<span class="label mb-1">Gender</span>
+					<select
+						class="select w-full"
+						name="genders"
+						bind:value={input.metrics.gender}
+					>
+						{#each Object.values(Gender) as gender}
+							<option value={gender}>{gender}</option>
+						{/each}
+					</select>
+				</label>
+
+				<label>
+					<span class="label mb-1">Age</span>
+					<input
+						class="input w-full"
+						type="number"
+						min="0"
+						max="100"
+						placeholder="18"
+						bind:value={input.metrics.age}
+					/>
+				</label>
+
+				<label>
+					<span class="label mb-1">Weight (lb)</span>
+					<input
+						class="input w-full"
+						type="number"
+						min="0"
+						max="600"
+						placeholder={selected.metrics.age
+							? "170"
+							: "Requires age"}
+						bind:value={input.metrics.weight}
+						disabled={!selected.metrics.age}
+					/>
+				</label>
+			</div>
+		</fieldset>
+	{/if}
 </section>
 
 <div class="divider"></div>
