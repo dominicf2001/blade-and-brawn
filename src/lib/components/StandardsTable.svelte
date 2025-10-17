@@ -1,10 +1,12 @@
 <script lang="ts">
-	import type {
-		Metrics,
-		Standard,
+	import {
 		Standards,
-		StandardsConfig,
+		type ActivityStandards,
+		type Metrics,
+		type Standard,
+		type StandardsConfig,
 	} from "$lib/services/calculator/main";
+	import allStandardsRaw from "$lib/data/standards.json" assert { type: "json" };
 	import {
 		Activity,
 		cmToIn,
@@ -23,6 +25,17 @@
 	}
 
 	const { selected, allStandards }: Props = $props();
+
+	const allAnchorStandards = $derived.by(() => {
+		const standardsCfg = structuredClone(selected.cfg);
+		for (const activityCfg of Object.values(standardsCfg.activity)) {
+			activityCfg.disableGeneration = true;
+		}
+		return new Standards(
+			allStandardsRaw as ActivityStandards,
+			standardsCfg,
+		);
+	});
 
 	const getLvlValue = (
 		activity: Activity,

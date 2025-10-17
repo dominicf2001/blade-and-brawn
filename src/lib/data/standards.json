@@ -4738,10 +4738,7 @@
       "attribute": "Endurance",
       "generators": [
         {
-          "metric": "weight",
-          "spread": 3,
-          "step": 12,
-          "ratio": "normal"
+          "metric": "weight"
         }
       ],
       "unit": "ms",
@@ -5231,16 +5228,10 @@
       "attribute": "Power",
       "generators": [
         {
-          "metric": "age",
-          "spread": 4,
-          "step": 10,
-          "ratio": "inverse"
+          "metric": "age"
         },
         {
-          "metric": "weight",
-          "spread": 3,
-          "step": 12,
-          "ratio": "inverse"
+          "metric": "weight"
         }
       ],
       "unit": "cm",
@@ -5282,16 +5273,10 @@
       "attribute": "Agility",
       "generators": [
         {
-          "metric": "weight",
-          "spread": 3,
-          "step": 12,
-          "ratio": "normal"
+          "metric": "weight"
         },
         {
-          "metric": "age",
-          "spread": 4,
-          "step": 10,
-          "ratio": "normal"
+          "metric": "age"
         }
       ],
       "unit": "ms",

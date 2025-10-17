@@ -67,43 +67,6 @@ export const msToTime = (ms: number, includeMs = false): string => {
 
 export const range = (length: number) => Array.from({ length: length }, (_, i) => i + 1);
 
-// export const getAvgWeight = (gender: Gender, age: number) => {
-//     type AvgWeightData = {
-//         metadata: {
-//             unit: StandardUnit
-//         },
-//         weights: Metrics[]
-//     }
-//     let avgWeightData = avgWeightDataRaw as AvgWeightData;
-//
-//     const avgWeights = avgWeightData.weights.filter(a => a.gender === gender);
-//
-//     let lower = avgWeights[0];           // best <= target
-//     let upper = avgWeights[0];           // best >= target
-//     let hasLower = false, hasUpper = false;
-//
-//     for (const avg of avgWeights) {
-//         if (avg.age <= age) {
-//             if (!hasLower || avg.age > lower.age) { lower = avg; hasLower = true; }
-//         }
-//         if (avg.age >= age) {
-//             if (!hasUpper || avg.age < upper.age) { upper = avg; hasUpper = true; }
-//         }
-//     }
-//
-//     // clamp to ends if one side missing
-//     if (!hasLower) lower = avgWeights[0];
-//     if (!hasUpper) upper = avgWeights[avgWeights.length - 1];
-//
-//     // lerp
-//     let ageRatio = upper === lower ? 1 : (age - lower.age) / (upper.age - lower.age);
-//     ageRatio = Math.max(0, Math.min(1, ageRatio));
-//     const interpolatedAvg = lower.weight + (upper.weight - lower.weight) * ageRatio;
-//
-//     return interpolatedAvg;
-// }
-
-
 export const getAvgWeight = (gender: Gender, age: number) => {
     type AvgWeightData = {
         metadata: {

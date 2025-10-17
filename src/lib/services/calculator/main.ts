@@ -10,11 +10,6 @@ import { Activity, Attribute, Gender, getAvgWeight, kgToLb, lbToKg, type Activit
 // Broad Jump:
 //  https://nrpt.co.uk/training/tests/power/broad.htm
 
-type LevelCalculatorConfig = {
-    expandIters?: number;
-    compressTo?: number;
-}
-
 export type LevelCalculatorOutput = {
     player: number,
     attributes: Record<Attribute, number>
@@ -36,10 +31,7 @@ export interface Standard {
 }
 
 type Generator = {
-    metric: NumberMetric,
-    spread: number,
-    step: number,
-    ratio: "normal" | "inverse"
+    metric: NumberMetric
 }
 
 export type ActivityStandards = Record<Activity, {
@@ -185,8 +177,8 @@ export type StandardsConfig = {
         weightModifier: number,
         weightSkew: number,
         ageModifier: number,
-        disableGeneration: boolean,
-        performanceSkew: number
+        enableGeneration: boolean,
+        difficultyModifier: number
     }>
 }
 
@@ -195,15 +187,18 @@ export class Standards {
     private activityStandards: ActivityStandards;
 
     constructor(activityStandards: ActivityStandards, cfg?: Partial<StandardsConfig>) {
+        // TODO: set these somewhere
         const defaultActivitiesConfig = Object.fromEntries(
             Object.values(Activity).map(activity => [
                 activity,
                 {
-                    disableGeneration: false,
-                    weightModifier: 0.1,
+                    enableGeneration: true,
+                    weightModifier: activity === Activity.BroadJump ?
+                        -0.1 :
+                        0.1,
                     weightSkew: 0,
                     ageModifier: 0.1,
-                    performanceSkew: 0
+                    difficultyModifier: 0
                 },
             ])
         ) as Record<Activity, StandardsConfig["activity"][Activity]>;
@@ -226,22 +221,24 @@ export class Standards {
 
                 // apply skew config
                 for (const level in standard.levels) {
-                    standard.levels[level] = standard.levels[level] * (1 + this.cfg.activity[activity].performanceSkew)
+                    standard.levels[level] = standard.levels[level] * (1 + this.cfg.activity[activity].difficultyModifier)
                 }
             }
 
             // generate data
-            const allGenerators = this.cfg.activity[activity].disableGeneration ?
-                [] :
-                this.activityStandards[activity].metadata.generators;
+            const allGenerators = this.cfg.activity[activity].enableGeneration ?
+                this.activityStandards[activity].metadata.generators :
+                [];
 
             const ageGenerators = allGenerators.filter(g => g.metric === "age");
             for (const ageGenerator of ageGenerators) {
                 for (const gender of Object.values(Gender)) {
-                    const referenceAge = 50;
+                    const ageStep = 10;
+                    const referenceAge = 25;
+                    const medianAge = 50;
 
-                    const minAge = referenceAge - (ageGenerator.step * ageGenerator.spread);
-                    const maxAge = referenceAge + (ageGenerator.step * ageGenerator.spread);
+                    const minAge = medianAge - (3 * ageStep);
+                    const maxAge = medianAge + (3 * ageStep);
 
                     const referenceStandard = this
                         .byActivity(activity)
@@ -264,9 +261,7 @@ export class Standards {
                             if (!referenceStandard.levels[lvl]) continue;
 
                             const scalingExponent = this.cfg.activity[activity].ageModifier;
-                            const coefficient = ageGenerator.ratio === "inverse" ?
-                                referenceAge / currAge :
-                                currAge / referenceAge;
+                            const coefficient = currAge / referenceAge;
                             newStandard.levels[lvl] = referenceStandard.levels[lvl] * (coefficient ** scalingExponent);
                         }
 
@@ -278,7 +273,7 @@ export class Standards {
                         if (!overlappingStandard)
                             this.activityStandards[activity].standards.push(newStandard);
 
-                        currAge += ageGenerator.step;
+                        currAge += ageStep;
                     }
                 }
 
@@ -291,11 +286,11 @@ export class Standards {
             for (const weightGenerator of weightGenerators) {
                 for (const gender of Object.values(Gender)) {
                     for (const age of this.agesFor(activity, gender)) {
+                        const weightStep = 12;
                         const referenceWeight = getAvgWeight(gender, age);
 
-                        const skewRatio = this.cfg.activity[activity].weightSkew; // 0 = normal, 1 = max skew
-                        const minWeight = referenceWeight - (weightGenerator.step * weightGenerator.spread * (1 - skewRatio));
-                        const maxWeight = referenceWeight + (weightGenerator.step * weightGenerator.spread * (1 + skewRatio));
+                        const minWeight = referenceWeight - (3 * weightStep);
+                        const maxWeight = referenceWeight + (3 * weightStep);
 
                         const referenceStandard = this
                             .byActivity(activity)
@@ -317,10 +312,8 @@ export class Standards {
                             for (const lvl in referenceStandard.levels) {
                                 if (!referenceStandard.levels[lvl]) continue;
 
-                                const scalingExponent = this.cfg.activity[activity].weightModifier;
-                                const coefficient = weightGenerator.ratio === "inverse" ?
-                                    referenceWeight / currWeight :
-                                    currWeight / referenceWeight;
+                                const scalingExponent = this.cfg.activity[activity].weightModifier
+                                const coefficient = currWeight / referenceWeight;
 
                                 newStandard.levels[lvl] = referenceStandard.levels[lvl] * (coefficient ** scalingExponent);
                             }
@@ -333,7 +326,7 @@ export class Standards {
                             if (!overlappingStandard)
                                 this.activityStandards[activity].standards.push(newStandard);
 
-                            currWeight += weightGenerator.step;
+                            currWeight += weightStep;
                         }
                     }
                 }
