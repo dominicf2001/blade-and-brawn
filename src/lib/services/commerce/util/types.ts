@@ -1,3 +1,5 @@
+import type { DeepPartial } from "./misc";
+
 export namespace Printful {
     export namespace Products {
         export interface MetaDataSingle<T = any> {
@@ -84,12 +86,37 @@ export namespace Printful {
         }
     }
 
+    export namespace Orders {
+        export type Order = {
+            external_id: string,
+            shipping: string
+            recipient: {
+                name: string
+                company?: string
+                address1: string
+                address2: string
+                city: string
+                state_code: string
+                state_name?: string
+                country_code: string
+                country_name?: string
+                zip: string
+                phone?: string
+                email?: string
+                tax_number?: string
+            }
+            items: Array<{ external_variant_id: string, quantity: number }>
+        }
+    }
+
     export namespace Webhook {
         // meta
-        interface MetaData {
+        interface MetaData<E extends Event, D> {
+            type: E;
             created: number;
             retries: number;
             store: number;
+            data: D
         }
 
         export enum Event {
@@ -98,32 +125,26 @@ export namespace Printful {
         }
 
         // product updated
-        export interface ProductUpdated extends MetaData {
-            type: Event.ProductUpdated,
-            data: {
-                sync_product: {
-                    id: number;
-                    external_id: string;
-                    name: string;
-                    variants: number;
-                    synced: number;
-                    thumbnail_url: string;
-                    is_ignored: boolean;
-                };
-            }
-        }
+        export interface ProductUpdated extends MetaData<Event.ProductUpdated, {
+            sync_product: {
+                id: number;
+                external_id: string;
+                name: string;
+                variants: number;
+                synced: number;
+                thumbnail_url: string;
+                is_ignored: boolean;
+            };
+        }> { }
 
         // product deleted
-        export interface ProductDeleted extends MetaData {
-            type: Event.ProductDeleted,
-            data: {
-                sync_product: {
-                    id: number;
-                    external_id: string;
-                    name: string;
-                };
-            }
-        }
+        export interface ProductDeleted extends MetaData<Event.ProductDeleted, {
+            sync_product: {
+                id: number;
+                external_id: string;
+                name: string;
+            };
+        }> { }
 
         export type EventPayload = ProductUpdated | ProductDeleted
     }
@@ -184,5 +205,188 @@ export namespace Webflow {
             sku: Skus.Sku;
             publishStatus?: "staging" | "live";
         }
+    }
+
+    export namespace Orders {
+        export type Order = {
+            orderId: string
+            status: string
+            comment: string
+            orderComment: string
+            acceptedOn: string
+            fulfilledOn: string | null
+            refundedOn: string | null
+            disputedOn: string | null
+            disputeUpdatedOn: string | null
+            disputeLastStatus: string | null
+            customerPaid: {
+                unit: string
+                value: string
+                string: string
+            }
+            netAmount: {
+                unit: string
+                value: string
+                string: string
+            }
+            applicationFee: {
+                unit: string
+                value: string
+                string: string
+            }
+            allAddresses: Array<{
+                type: string
+                addressee: string
+                line1: string
+                line2: string
+                city: string
+                state: string
+                country: string
+                postalCode: string
+            }>
+            shippingAddress: {
+                type: string
+                japanType: string
+                addressee: string
+                line1: string
+                line2: string
+                city: string
+                state: string
+                country: string
+                postalCode: string
+            }
+            billingAddress: {
+                type: string
+                addressee: string
+                line1: string
+                line2: string
+                city: string
+                state: string
+                country: string
+                postalCode: string
+            }
+            shippingProvider: string
+            shippingTracking: string
+            shippingTrackingURL: string
+            customerInfo: {
+                fullName: string
+                email: string
+            }
+            purchasedItems: Array<{
+                count: number
+                rowTotal: {
+                    unit: string
+                    value: string
+                    string: string
+                }
+                productId: string
+                productName: string
+                productSlug: string
+                variantId: string
+                variantName: string
+                variantSlug: string
+                variantSKU: string
+                variantImage: {
+                    url: string
+                    file: {
+                        size: number;
+                        originalFileName: string;
+                        createdOn: string;
+                        contentType: string;
+                        width: number;
+                        height: number;
+                        variants: {
+                            size: number;
+                            url: string,
+                            originalFileName: string;
+                            width: number;
+                            height: number;
+                        }[]
+                    }
+                }
+                variantPrice: {
+                    unit: string
+                    value: string
+                    string: string
+                }
+                weight: number
+                width: number
+                height: number
+                length: number
+            }>
+            purchasedItemsCount: number
+            stripeDetails: {
+                subscriptionId: string | null
+                paymentMethod: string
+                paymentIntentId: string
+                customerId: string
+                chargeId: string
+                disputeId: string | null
+                refundId: string
+                refundReason: string
+            }
+            stripeCard: {
+                last4: string
+                brand: string
+                ownerName: string
+                expires: {
+                    year: number
+                    month: number
+                }
+            }
+            paypalDetails: Object
+            customData: Array<Object>
+            metadata: {
+                isBuyNow: boolean
+                hasDownloads: boolean
+                paymentProcessor: string
+            }
+            isCustomerDeleted: boolean
+            isShippingRequired: boolean
+            totals: {
+                subtotal: {
+                    unit: string
+                    value: string
+                    string: string
+                }
+                extras: Array<{
+                    type: string
+                    name: string
+                    description: string
+                    price: {
+                        unit: string
+                        value: string
+                        string: string
+                    }
+                }>
+                total: {
+                    unit: string
+                    value: string
+                    string: string
+                }
+            }
+            downloadFiles: Array<{
+                id: string
+                name: string
+                url: string
+            }>
+        }
+    }
+
+    export namespace Webhook {
+        interface MetaData<E extends Event, D> {
+            triggerType: E;
+            payload: D
+        }
+
+        export enum Event {
+            OrderCreated = "ecomm_new_order",
+            OrderUpdated = "ecomm_order_changed"
+        }
+
+        export interface OrderCreated extends MetaData<Event.OrderCreated, Orders.Order> { }
+        export interface OrderUpdated extends MetaData<Event.OrderUpdated, Orders.Order> { }
+
+        export type EventPayload = OrderCreated | OrderUpdated;
     }
 }

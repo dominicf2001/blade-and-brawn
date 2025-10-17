@@ -178,11 +178,15 @@ export class LevelCalculator {
 }
 
 export type StandardsConfig = {
-    maxLevel: number,
-    weightModifier: number,
-    weightSkew: number,
-    ageModifier: number,
-    disableGeneration: boolean
+    global: {
+        maxLevel: number,
+    },
+    activity: Record<Activity, {
+        weightModifier: number,
+        weightSkew: number,
+        ageModifier: number,
+        disableGeneration: boolean
+    }>
 }
 
 export class Standards {
@@ -190,12 +194,23 @@ export class Standards {
     private activityStandards: ActivityStandards;
 
     constructor(activityStandards: ActivityStandards, cfg?: Partial<StandardsConfig>) {
+        const defaultActivitiesConfig = Object.fromEntries(
+            Object.values(Activity).map(activity => [
+                activity,
+                {
+                    disableGeneration: false,
+                    weightModifier: 0.1,
+                    weightSkew: 0,
+                    ageModifier: 0.1,
+                },
+            ])
+        ) as Record<Activity, StandardsConfig["activity"][Activity]>;
+
         this.cfg = {
-            maxLevel: cfg?.maxLevel ?? 100,
-            weightModifier: cfg?.weightModifier ?? .1,
-            weightSkew: cfg?.weightSkew ?? .1,
-            ageModifier: cfg?.ageModifier ?? .1,
-            disableGeneration: cfg?.disableGeneration ?? false
+            global: {
+                maxLevel: cfg?.global?.maxLevel ?? 100,
+            },
+            activity: Object.assign(defaultActivitiesConfig, cfg?.activity)
         };
 
         // prepare data
@@ -204,12 +219,12 @@ export class Standards {
             // expand/compress
             for (const standard of this.activityStandards[activity].standards) {
                 const expandedLevels = this.expandLevels(standard.levels, 5);
-                const compressedLevels = this.compressLevels(expandedLevels, this.cfg.maxLevel);
+                const compressedLevels = this.compressLevels(expandedLevels, this.cfg.global.maxLevel);
                 standard.levels = compressedLevels;
             }
 
             // generate data
-            const allGenerators = this.cfg.disableGeneration ?
+            const allGenerators = this.cfg.activity[activity].disableGeneration ?
                 [] :
                 this.activityStandards[activity].metadata.generators;
 
@@ -241,7 +256,7 @@ export class Standards {
                         for (const lvl in referenceStandard.levels) {
                             if (!referenceStandard.levels[lvl]) continue;
 
-                            const scalingExponent = this.cfg.ageModifier;
+                            const scalingExponent = this.cfg.activity[activity].ageModifier;
                             const coefficient = ageGenerator.ratio === "inverse" ?
                                 referenceAge / currAge :
                                 currAge / referenceAge;
@@ -271,7 +286,7 @@ export class Standards {
                     for (const age of this.agesFor(activity, gender)) {
                         const referenceWeight = getAvgWeight(gender, age);
 
-                        const skewRatio = this.cfg.weightSkew; // 0 = normal, 1 = max skew
+                        const skewRatio = this.cfg.activity[activity].weightSkew; // 0 = normal, 1 = max skew
                         const minWeight = referenceWeight - (weightGenerator.step * weightGenerator.spread * (1 - skewRatio));
                         const maxWeight = referenceWeight + (weightGenerator.step * weightGenerator.spread * (1 + skewRatio));
 
@@ -295,7 +310,7 @@ export class Standards {
                             for (const lvl in referenceStandard.levels) {
                                 if (!referenceStandard.levels[lvl]) continue;
 
-                                const scalingExponent = this.cfg.weightModifier;
+                                const scalingExponent = this.cfg.activity[activity].weightModifier;
                                 const coefficient = weightGenerator.ratio === "inverse" ?
                                     referenceWeight / currWeight :
                                     currWeight / referenceWeight;

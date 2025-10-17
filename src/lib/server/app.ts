@@ -3,11 +3,11 @@ import { cors } from "@elysiajs/cors";
 import { LevelCalculator, Standards, type ActivityStandards } from "$lib/services/calculator/main";
 import type { ActivityPerformance, Player } from "$lib/services/calculator/util";
 import rawStandards from "$lib/data/standards.json" assert { type: "json" }
-import { Printful } from "../services/commerce/util/types";
+import { Printful, Webflow } from "../services/commerce/util/types";
 import WebflowService from "../services/commerce/webflow";
 import SyncService from "../services/commerce/sync";
 import PrintfulService from "../services/commerce/printful";
-import { FetchError } from "../services/commerce/util/misc";
+import { FetchError, getStateFromZip } from "../services/commerce/util/misc";
 
 export const app = new Elysia({ prefix: "/api" })
 	.use(cors({ origin: '*' }))
@@ -16,10 +16,10 @@ export const app = new Elysia({ prefix: "/api" })
 		FetchError
 	})
 
-	.onError(({ code, error }) => {
+	.onError(async ({ code, error }) => {
 		switch (code) {
 			case "FetchError":
-				console.error(error.message, error.payload);
+				console.error(error.message, await error.parse());
 				return error;
 		}
 	})
@@ -75,6 +75,55 @@ export const app = new Elysia({ prefix: "/api" })
 			}
 			case Printful.Webhook.Event.ProductDeleted: {
 				await WebflowService.Products.remove(payload.data.sync_product.external_id);
+				break;
+			}
+		}
+	})
+	.post("/webhook/webflow", async ({ request, body, set }) => {
+		if (!WebflowService.Util.verifyWebflowSignature(request, body)) {
+			set.status = 400;
+			return "Invalid signature";
+		}
+
+		const payload = body as Webflow.Webhook.EventPayload;
+
+		console.log(payload.triggerType);
+		switch (payload.triggerType) {
+			case Webflow.Webhook.Event.OrderCreated: {
+				const webflowOrder = payload.payload;
+
+				console.log("Creating printful order...");
+				await PrintfulService.Orders.create({
+					external_id: webflowOrder.orderId,
+					// TODO: derive from webflow
+					shipping: "STANDARD",
+					recipient: {
+						name: webflowOrder.shippingAddress.addressee,
+						address1: webflowOrder.shippingAddress.line1,
+						address2: webflowOrder.shippingAddress.line2,
+						city: webflowOrder.shippingAddress.city,
+						state_code: getStateFromZip(webflowOrder.shippingAddress.postalCode),
+						country_code: webflowOrder.shippingAddress.country,
+						zip: webflowOrder.shippingAddress.postalCode
+					},
+					items: webflowOrder.purchasedItems.map(webflowOrderSku => ({
+						external_variant_id: webflowOrderSku.variantId,
+						quantity: webflowOrderSku.count
+					}))
+				});
+
+				// set webflow order to pending
+
+				console.log("Complete");
+
+				break;
+			}
+			case Webflow.Webhook.Event.OrderUpdated: {
+
+				// read printful order status
+
+				// set webflow order to fulfulled (if indeed printful order got confirmed)
+
 				break;
 			}
 		}

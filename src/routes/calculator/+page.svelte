@@ -20,11 +20,20 @@
 			weight: "",
 		},
 		cfg: {
-			enableGeneration: true,
-			maxLevel: "100",
-			weightModfier: ".1",
-			weightSkew: ".1",
-			ageModifier: ".1",
+			global: {
+				maxLevel: "100",
+			},
+			activity: Object.fromEntries(
+				Object.values(Activity).map((activity) => [
+					activity,
+					{
+						enableGeneration: true,
+						weightModfier: ".1",
+						weightSkew: "0",
+						ageModifier: ".1",
+					},
+				]),
+			),
 		},
 	});
 
@@ -36,11 +45,22 @@
 			weight: lbToKg(+input.metrics.weight),
 		} as Metrics,
 		cfg: {
-			maxLevel: +input.cfg.maxLevel,
-			weightModifier: +input.cfg.weightModfier,
-			weightSkew: +input.cfg.weightSkew,
-			ageModifier: +input.cfg.ageModifier,
-			disableGeneration: !input.cfg.enableGeneration,
+			global: {
+				maxLevel: +input.cfg.global.maxLevel,
+			},
+			activity: Object.fromEntries(
+				Object.values(Activity).map((activity) => [
+					activity,
+					{
+						weightModifier:
+							+input.cfg.activity[activity].weightModfier,
+						weightSkew: +input.cfg.activity[activity].weightSkew,
+						ageModifier: +input.cfg.activity[activity].ageModifier,
+						disableGeneration:
+							!input.cfg.activity[activity].enableGeneration,
+					},
+				]),
+			),
 		} as StandardsConfig,
 	});
 
@@ -82,7 +102,7 @@
 							min="1"
 							max="100"
 							placeholder="5"
-							bind:value={input.cfg.maxLevel}
+							bind:value={input.cfg.global.maxLevel}
 						/>
 					</label>
 				</div>
@@ -97,7 +117,10 @@
 					<label class="label">
 						<input
 							type="checkbox"
-							bind:checked={input.cfg.enableGeneration}
+							bind:checked={
+								input.cfg.activity[selected.activity]
+									.enableGeneration
+							}
 							class="toggle toggle-lg m-auto"
 						/>
 					</label>
@@ -110,8 +133,12 @@
 							max="1"
 							step=".05"
 							placeholder=".1"
-							bind:value={input.cfg.weightModfier}
-							disabled={selected.cfg.disableGeneration}
+							bind:value={
+								input.cfg.activity[selected.activity]
+									.weightModfier
+							}
+							disabled={selected.cfg.activity[selected.activity]
+								.disableGeneration}
 						/>
 					</label>
 					<label>
@@ -123,8 +150,11 @@
 							max="1"
 							step=".05"
 							placeholder=".1"
-							bind:value={input.cfg.weightSkew}
-							disabled={selected.cfg.disableGeneration}
+							bind:value={
+								input.cfg.activity[selected.activity].weightSkew
+							}
+							disabled={selected.cfg.activity[selected.activity]
+								.disableGeneration}
 						/>
 					</label>
 					<label>
@@ -136,8 +166,12 @@
 							max="1"
 							step=".05"
 							placeholder=".1"
-							bind:value={input.cfg.ageModifier}
-							disabled={selected.cfg.disableGeneration}
+							bind:value={
+								input.cfg.activity[selected.activity]
+									.ageModifier
+							}
+							disabled={selected.cfg.activity[selected.activity]
+								.disableGeneration}
 						/>
 					</label>
 				</div>

@@ -1,5 +1,6 @@
 import type { Webflow } from "./util/types";
 import { FetchError, type DeepPartial } from "./util/misc";
+import crypto from "node:crypto";
 
 export default class WebflowService {
     static Products = class {
@@ -17,7 +18,7 @@ export default class WebflowService {
                 });
 
                 if (!res.ok) {
-                    throw await FetchError.createAndParse("Failed to create Webflow product SKU", res);
+                    throw new FetchError("Failed to create Webflow product SKU", res);
                 }
             }
 
@@ -33,7 +34,7 @@ export default class WebflowService {
                     })
                 });
                 if (!res.ok) {
-                    throw await FetchError.createAndParse("Failed to update Webflow product SKU", res);
+                    throw new FetchError("Failed to update Webflow product SKU", res);
                 }
             }
         }
@@ -49,7 +50,7 @@ export default class WebflowService {
             });
 
             if (!res.ok) {
-                throw await FetchError.createAndParse("Failed to create Webflow product", res);
+                throw new FetchError("Failed to create Webflow product", res);
             }
 
             const createdWebflowProduct = await res.json();
@@ -65,7 +66,7 @@ export default class WebflowService {
             });
 
             if (!res.ok) {
-                throw await FetchError.createAndParse("Failed to get all Webflow products", res);
+                throw new FetchError("Failed to get all Webflow products", res);
             }
 
             const payload = await res.json();
@@ -85,7 +86,7 @@ export default class WebflowService {
             }
 
             if (!res.ok) {
-                throw await FetchError.createAndParse("Failed to get Webflow product", res);
+                throw new FetchError("Failed to get Webflow product", res);
             }
 
             const payload = await res.json();
@@ -103,7 +104,7 @@ export default class WebflowService {
             });
 
             if (!res.ok) {
-                throw await FetchError.createAndParse("Failed to update Webflow product", res);
+                throw new FetchError("Failed to update Webflow product", res);
             }
         }
 
@@ -118,8 +119,54 @@ export default class WebflowService {
             });
 
             if (!res.ok) {
-                throw await FetchError.createAndParse("Failed to remove Webflow product", res);
+                throw new FetchError("Failed to remove Webflow product", res);
             }
+        }
+    }
+
+    static Util = class {
+        static verifyWebflowSignature(request: Request, body: unknown) {
+            try {
+                const timestamp = request.headers.get("x-webflow-timestamp");
+                if (!timestamp) {
+                    throw new Error("No timestamp provided");
+                }
+                const providedSignature = request.headers.get("x-webflow-signature");
+                if (!providedSignature) {
+                    throw new Error("No signature provided");
+                }
+
+                const secret = env().WEBHOOK_SECRET;
+                if (!secret) {
+                    throw new Error("No secret provided");
+                }
+
+                if (!body) {
+                    throw new Error("Body is empty");
+                }
+
+                const requestTimestamp = parseInt(timestamp, 10);
+                const data = `${requestTimestamp}:${JSON.stringify(body)}`;
+                const hash = crypto.createHmac('sha256', secret)
+                    .update(data)
+                    .digest('hex');
+
+                if (!crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(providedSignature, 'hex'))) {
+                    throw new Error('Invalid signature');
+                }
+
+                const currentTime = Date.now();
+
+                if (currentTime - requestTimestamp > 300000) {
+                    throw new Error('Request is older than 5 minutes');
+                }
+                return true;
+
+            } catch (err) {
+                console.error(`Error verifying signature: ${err}`);
+                return false;
+            }
+
         }
     }
 }
@@ -133,6 +180,7 @@ const env = () => {
         SITE_ID: Bun.env.WEBFLOW_SITE_ID,
         COLLECTIONS_ID: Bun.env.WEBFLOW_COLLECTION_ID,
         AUTH_TOKEN: Bun.env.WEBFLOW_AUTH,
+        WEBHOOK_SECRET: Bun.env.WEBFLOW_WEBHOOK_SECRET
     };
 
     return {

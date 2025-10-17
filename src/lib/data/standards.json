@@ -4741,7 +4741,7 @@
           "metric": "weight",
           "spread": 3,
           "step": 12,
-          "ratio": "inverse"
+          "ratio": "normal"
         }
       ],
       "unit": "ms",
@@ -5285,13 +5285,13 @@
           "metric": "weight",
           "spread": 3,
           "step": 12,
-          "ratio": "inverse"
+          "ratio": "normal"
         },
         {
           "metric": "age",
           "spread": 4,
           "step": 10,
-          "ratio": "inverse"
+          "ratio": "normal"
         }
       ],
       "unit": "ms",

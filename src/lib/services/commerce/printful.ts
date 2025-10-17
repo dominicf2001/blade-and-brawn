@@ -15,7 +15,7 @@ export default class PrintfulService {
                 }
 
                 if (!res.ok) {
-                    throw await FetchError.createAndParse("Failed to get Printful variant", res);
+                    throw new FetchError("Failed to get Printful variant", res);
                 }
 
                 const payload: Printful.Products.MetaDataSingle<Printful.Products.SyncVariant> = await res.json();
@@ -34,7 +34,7 @@ export default class PrintfulService {
                     })
 
                     if (!res.ok) {
-                        throw await FetchError.createAndParse("Failed to get all Printful products", res);
+                        throw new FetchError("Failed to get all Printful products", res);
                     }
 
                     const payload: Printful.Products.MetaDataMulti<Printful.Products.SyncProduct> = await res.json();
@@ -63,7 +63,7 @@ export default class PrintfulService {
             }
 
             if (!res.ok) {
-                throw await FetchError.createAndParse("Failed to get Printful product", res);
+                throw new FetchError("Failed to get Printful product", res);
             }
 
             const payload: Printful.Products.MetaDataSingle<Printful.Products.Product> = await res.json();
@@ -81,7 +81,24 @@ export default class PrintfulService {
             });
 
             if (!res.ok) {
-                throw await FetchError.createAndParse("Failed to update Printful product", res);
+                throw new FetchError("Failed to update Printful product", res);
+            }
+        }
+    }
+
+    static Orders = class {
+        static async create(printfulOrder: Printful.Orders.Order) {
+            const res = await fetch(`${env().API_URL}/orders`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...env().AUTH_HEADERS
+                },
+                body: JSON.stringify(printfulOrder)
+            });
+
+            if (!res.ok) {
+                throw new FetchError("Failed to create printful order", res);
             }
         }
     }
