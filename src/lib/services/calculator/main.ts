@@ -242,9 +242,8 @@ export class Standards {
                     const peakAge = 27;
                     const ageStep = 10;
 
-                    const medianAge = 50;
-                    const minAge = Math.max(medianAge - (5 * ageStep), 0);
-                    const maxAge = medianAge + (5 * ageStep);
+                    const minAge = 0;
+                    const maxAge = 100;
 
                     const referenceStandard = this
                         .byActivity(activity)
