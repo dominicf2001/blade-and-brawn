@@ -243,8 +243,8 @@ export class Standards {
                     const ageStep = 10;
 
                     const medianAge = 50;
-                    const minAge = medianAge - (4 * ageStep);
-                    const maxAge = medianAge + (4 * ageStep);
+                    const minAge = Math.max(medianAge - (5 * ageStep), 0);
+                    const maxAge = medianAge + (5 * ageStep);
 
                     const referenceStandard = this
                         .byActivity(activity)
@@ -268,8 +268,8 @@ export class Standards {
 
                             const s = this.cfg.activity[activity].ageModifier;
 
-                            const youngFloor0 = 0.65;
-                            const oldFloor0 = 0.70;
+                            const youngFloor0 = 0.5;
+                            const oldFloor0 = 0.5;
 
                             const youngFloor = 1 - (1 - youngFloor0) * s;
                             const oldFloor = 1 - (1 - oldFloor0) * s;
@@ -311,7 +311,7 @@ export class Standards {
                         const weightStep = 12;
                         const referenceWeight = getAvgWeight(gender, age);
 
-                        const minWeight = referenceWeight - (3 * weightStep);
+                        const minWeight = Math.max(referenceWeight - (3 * weightStep), 1);
                         const maxWeight = referenceWeight + (3 * weightStep);
 
                         const referenceStandard = this

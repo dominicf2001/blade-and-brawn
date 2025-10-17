@@ -5,6 +5,11 @@
   "weights": [
     {
       "gender": "Male",
+      "age": 5,
+      "weight": 21.1
+    },
+    {
+      "gender": "Male",
       "age": 10,
       "weight": 38.7
     },
@@ -47,6 +52,11 @@
       "gender": "Male",
       "age": 80,
       "weight": 79.6
+    },
+    {
+      "gender": "Female",
+      "age": 5,
+      "weight": 21.0
     },
     {
       "gender": "Female",
