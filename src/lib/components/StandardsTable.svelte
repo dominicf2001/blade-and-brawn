@@ -1,12 +1,10 @@
 <script lang="ts">
 	import {
 		Standards,
-		type ActivityStandards,
 		type Metrics,
 		type Standard,
 		type StandardsConfig,
 	} from "$lib/services/calculator/main";
-	import allStandardsRaw from "$lib/data/standards.json" assert { type: "json" };
 	import {
 		Activity,
 		cmToIn,
@@ -26,17 +24,6 @@
 
 	const { selected, allStandards }: Props = $props();
 
-	const allAnchorStandards = $derived.by(() => {
-		const standardsCfg = structuredClone(selected.cfg);
-		for (const activityCfg of Object.values(standardsCfg.activity)) {
-			activityCfg.disableGeneration = true;
-		}
-		return new Standards(
-			allStandardsRaw as ActivityStandards,
-			standardsCfg,
-		);
-	});
-
 	const getLvlValue = (
 		activity: Activity,
 		standard: Standard,
@@ -46,7 +33,8 @@
 		const unit = allStandards.byActivity(activity).getMetadata().unit;
 		switch (unit) {
 			case "ms":
-				return msToTime(rawValue, activity === Activity.ConeDrill);
+				const seconds = (rawValue / 1000).toFixed(1);
+				return `${seconds}`;
 			case "cm": {
 				const totalInches = cmToIn(rawValue);
 				const feet = Math.floor(totalInches / 12);
@@ -65,7 +53,7 @@
 	<div>
 		<div class="flex items-center">
 			<p class="text-xs label">
-				{#if !selected.cfg.activity[selected.activity].disableGeneration && allStandards
+				{#if selected.cfg.activity[selected.activity].enableGeneration && allStandards
 						.byActivity(selected.activity)
 						.getMetadata().generators.length}
 					(Generated data: {allStandards

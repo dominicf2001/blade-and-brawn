@@ -5,10 +5,10 @@ import { Activity, Attribute, Gender, getAvgWeight, kgToLb, lbToKg, type Activit
 //  http://lonkilgore.com/resources/Lon_Kilgore_Strength_Standard_Tables-Copyright-2023.pdf
 // 1 mile run:
 //  https://runninglevel.com/running-times/1-mile-times
-// Dash: 
-//  https://marathonhandbook.com/average-100-meter-time/
 // Broad Jump:
 //  https://nrpt.co.uk/training/tests/power/broad.htm
+// 3 Cone drill:
+// https://nflsavant.com/combine.php?utm_source=chatgpt.com
 
 export type LevelCalculatorOutput = {
     player: number,
@@ -213,11 +213,17 @@ export class Standards {
         // prepare data
         this.activityStandards = structuredClone(activityStandards);
         for (const activity of Object.keys(this.activityStandards) as Activity[]) {
-            // expand/compress
             for (const standard of this.activityStandards[activity].standards) {
-                const expandedLevels = this.expandLevels(standard.levels, 5);
-                const compressedLevels = this.compressLevels(expandedLevels, this.cfg.global.maxLevel);
-                standard.levels = compressedLevels;
+                // expand
+                let i = 1;
+                while (Object.keys(standard.levels).length < this.cfg.global.maxLevel) {
+                    standard.levels = this.expandLevels(standard.levels, i++);
+                }
+
+                // compress
+                if (Object.keys(standard.levels).length > this.cfg.global.maxLevel) {
+                    standard.levels = this.compressLevels(standard.levels, this.cfg.global.maxLevel);
+                }
 
                 // apply skew config
                 for (const level in standard.levels) {
