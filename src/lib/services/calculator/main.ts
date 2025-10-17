@@ -197,7 +197,7 @@ export class Standards {
                         -0.1 :
                         0.1,
                     weightSkew: 0,
-                    ageModifier: 0.1,
+                    ageModifier: 0.5,
                     difficultyModifier: 0
                 },
             ])
@@ -233,16 +233,16 @@ export class Standards {
             const ageGenerators = allGenerators.filter(g => g.metric === "age");
             for (const ageGenerator of ageGenerators) {
                 for (const gender of Object.values(Gender)) {
+                    const peakAge = 27;
                     const ageStep = 10;
-                    const referenceAge = 25;
-                    const medianAge = 50;
 
-                    const minAge = medianAge - (3 * ageStep);
-                    const maxAge = medianAge + (3 * ageStep);
+                    const medianAge = 50;
+                    const minAge = medianAge - (4 * ageStep);
+                    const maxAge = medianAge + (4 * ageStep);
 
                     const referenceStandard = this
                         .byActivity(activity)
-                        .byMetrics({ weight: getAvgWeight(gender, referenceAge), gender, age: referenceAge })
+                        .byMetrics({ weight: getAvgWeight(gender, peakAge), gender, age: peakAge })
                         .getOneInterpolated();
 
                     let currAge = minAge;
@@ -256,13 +256,29 @@ export class Standards {
                             levels: {}
                         };
 
-                        // apply allometric scaling to generate levels
                         for (const lvl in referenceStandard.levels) {
-                            if (!referenceStandard.levels[lvl]) continue;
+                            const base = referenceStandard.levels[lvl];
+                            if (!base) continue;
 
-                            const scalingExponent = this.cfg.activity[activity].ageModifier;
-                            const coefficient = currAge / referenceAge;
-                            newStandard.levels[lvl] = referenceStandard.levels[lvl] * (coefficient ** scalingExponent);
+                            const s = this.cfg.activity[activity].ageModifier;
+
+                            const youngFloor0 = 0.65;
+                            const oldFloor0 = 0.70;
+
+                            const youngFloor = 1 - (1 - youngFloor0) * s;
+                            const oldFloor = 1 - (1 - oldFloor0) * s;
+
+                            const cy = s * (1 - youngFloor0) / Math.pow(peakAge - minAge, 2);
+                            const co = s * (1 - oldFloor0) / Math.pow(maxAge - peakAge, 2);
+
+                            let f = currAge <= peakAge
+                                ? 1 - cy * Math.pow(peakAge - currAge, 2)
+                                : 1 - co * Math.pow(currAge - peakAge, 2);
+
+                            const floor = Math.min(youngFloor, oldFloor);
+                            const fCurr = Math.max(floor, Math.min(1, f));
+
+                            newStandard.levels[lvl] = base * fCurr;
                         }
 
                         // prefer real data over generated data
