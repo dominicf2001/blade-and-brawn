@@ -29,8 +29,9 @@
 					{
 						enableGeneration: true,
 						weightModifier: ".1",
-						weightSkew: "0",
+						// weightSkew: "0",
 						ageModifier: ".1",
+						performanceSkew: "0",
 					},
 				]),
 			),
@@ -55,13 +56,16 @@
 						weightModifier:
 							+inputSelected.cfg.activity[activity]
 								.weightModifier,
-						weightSkew:
-							+inputSelected.cfg.activity[activity].weightSkew,
+						weightSkew: 0,
+						// +inputSelected.cfg.activity[activity].weightSkew,
 						ageModifier:
 							+inputSelected.cfg.activity[activity].ageModifier,
 						disableGeneration:
 							!inputSelected.cfg.activity[activity]
 								.enableGeneration,
+						performanceSkew:
+							+inputSelected.cfg.activity[activity]
+								.performanceSkew,
 					},
 				]),
 			),
@@ -129,11 +133,11 @@
 						/>
 					</label>
 					<label>
-						<span class="label mb-1">Weight modifier</span>
+						<span class="label mb-1">Weight significance</span>
 						<input
 							class="input w-full"
 							type="number"
-							min="0"
+							min="-1"
 							max="1"
 							step=".05"
 							placeholder=".1"
@@ -145,32 +149,46 @@
 								.disableGeneration}
 						/>
 					</label>
+					<!-- <label> -->
+					<!-- 	<span class="label mb-1">Weight skew</span> -->
+					<!-- 	<input -->
+					<!-- 		class="input w-full" -->
+					<!-- 		type="number" -->
+					<!-- 		min="-1" -->
+					<!-- 		max="1" -->
+					<!-- 		step=".05" -->
+					<!-- 		bind:value={ -->
+					<!-- 			inputSelected.cfg.activity[selected.activity] -->
+					<!-- 				.weightSkew -->
+					<!-- 		} -->
+					<!-- 		disabled={selected.cfg.activity[selected.activity] -->
+					<!-- 			.disableGeneration} -->
+					<!-- 	/> -->
+					<!-- </label> -->
 					<label>
-						<span class="label mb-1">Weight skew</span>
+						<span class="label mb-1">Difficulty modifier</span>
 						<input
 							class="input w-full"
 							type="number"
-							min="0"
+							min="-1"
 							max="1"
 							step=".05"
-							placeholder=".1"
 							bind:value={
 								inputSelected.cfg.activity[selected.activity]
-									.weightSkew
+									.performanceSkew
 							}
 							disabled={selected.cfg.activity[selected.activity]
 								.disableGeneration}
 						/>
 					</label>
 					<label>
-						<span class="label mb-1">Age modifier</span>
+						<span class="label mb-1">Age significance</span>
 						<input
 							class="input w-full"
 							type="number"
-							min="0"
+							min="-1"
 							max="1"
 							step=".05"
-							placeholder=".1"
 							bind:value={
 								inputSelected.cfg.activity[selected.activity]
 									.ageModifier

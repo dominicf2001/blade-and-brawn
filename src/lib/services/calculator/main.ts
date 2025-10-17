@@ -185,7 +185,8 @@ export type StandardsConfig = {
         weightModifier: number,
         weightSkew: number,
         ageModifier: number,
-        disableGeneration: boolean
+        disableGeneration: boolean,
+        performanceSkew: number
     }>
 }
 
@@ -202,6 +203,7 @@ export class Standards {
                     weightModifier: 0.1,
                     weightSkew: 0,
                     ageModifier: 0.1,
+                    performanceSkew: 0
                 },
             ])
         ) as Record<Activity, StandardsConfig["activity"][Activity]>;
@@ -221,6 +223,11 @@ export class Standards {
                 const expandedLevels = this.expandLevels(standard.levels, 5);
                 const compressedLevels = this.compressLevels(expandedLevels, this.cfg.global.maxLevel);
                 standard.levels = compressedLevels;
+
+                // apply skew config
+                for (const level in standard.levels) {
+                    standard.levels[level] = standard.levels[level] * (1 + this.cfg.activity[activity].performanceSkew)
+                }
             }
 
             // generate data
