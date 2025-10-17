@@ -46,71 +46,75 @@ const computedPerformances: ActivityPerformance[] = [
     },
 ];
 
+const wOrders = await WebflowService.Orders.getAll();
+
+console.log(wOrders);
+
 // wProduct.product.fieldData.name = "Rogue Title Hoodie [White] / XS";
 //
 // WebflowService.Products.update("68e66dc4633e577c91eda727",);
 
-const printfulProducts = await PrintfulService.Products.getAll();
-const webflowProducts = await WebflowService.Products.getAll();
-
-for (const printfulProduct of printfulProducts) {
-    if (!printfulProduct.name.includes("T-Shirt") || printfulProduct.name.includes("[White]") || printfulProduct.name.includes("[Black]")) {
-        continue;
-    }
-
-    console.log(printfulProduct.name);
-
-    const fullPrintfulProduct = await PrintfulService.Products.get(printfulProduct.id);
-    if (!fullPrintfulProduct) {
-        console.log("Could not get full product, skipped");
-        continue;
-    }
-
-    const existingWebflowProduct = webflowProducts.find(p => fullPrintfulProduct.sync_product.name.includes(p.product.fieldData.name))
-    if (!existingWebflowProduct) {
-        console.log("Could not get associated webflow product, skipped");
-        continue;
-    }
-
-    const newPrintfulVariants: DeepPartial<Printful.Products.SyncVariant>[] = [];
-    for (const printfulVariant of fullPrintfulProduct.sync_variants) {
-        console.log(printfulVariant.name);
-        const associatedWebflowSku = existingWebflowProduct.skus
-            .find(sku => sku.fieldData["sku-values"]?.["color"] === SyncService.findColorInProductName(printfulVariant.name) &&
-                sku.fieldData["sku-values"]?.["size"] === printfulVariant.size);
-        if (associatedWebflowSku) {
-            console.log('Found associated webflow sku: ' + associatedWebflowSku.fieldData.name);
-            newPrintfulVariants.push({
-                "id": printfulVariant.id,                       // printful variant id
-                "external_id": String(associatedWebflowSku.id), // webflow variant id
-            });
-        }
-        else {
-            console.log("Could not get associated webflow sku");
-        }
-    }
-
-    if (!newPrintfulVariants.length) {
-        console.log("No new printful variants, skipped");
-        continue;
-    }
-
-    await sleep(3000);
-    try {
-        await PrintfulService.Products.update(printfulProduct.id, {
-            "sync_product": {
-                "id": printfulProduct.id,
-                "external_id": existingWebflowProduct.product.id + "-" + SyncService.findColorInProductName(printfulProduct.name)
-            },
-            "sync_variants": newPrintfulVariants
-        });
-    } catch (err) {
-        if (err instanceof FetchError) {
-            console.error(err.message, err.payload);
-        }
-    }
-}
-console.log("DONE");
+// const printfulProducts = await PrintfulService.Products.getAll();
+// const webflowProducts = await WebflowService.Products.getAll();
+//
+// for (const printfulProduct of printfulProducts) {
+//     if (!printfulProduct.name.includes("T-Shirt") || printfulProduct.name.includes("[White]") || printfulProduct.name.includes("[Black]")) {
+//         continue;
+//     }
+//
+//     console.log(printfulProduct.name);
+//
+//     const fullPrintfulProduct = await PrintfulService.Products.get(printfulProduct.id);
+//     if (!fullPrintfulProduct) {
+//         console.log("Could not get full product, skipped");
+//         continue;
+//     }
+//
+//     const existingWebflowProduct = webflowProducts.find(p => fullPrintfulProduct.sync_product.name.includes(p.product.fieldData.name))
+//     if (!existingWebflowProduct) {
+//         console.log("Could not get associated webflow product, skipped");
+//         continue;
+//     }
+//
+//     const newPrintfulVariants: DeepPartial<Printful.Products.SyncVariant>[] = [];
+//     for (const printfulVariant of fullPrintfulProduct.sync_variants) {
+//         console.log(printfulVariant.name);
+//         const associatedWebflowSku = existingWebflowProduct.skus
+//             .find(sku => sku.fieldData["sku-values"]?.["color"] === SyncService.findColorInProductName(printfulVariant.name) &&
+//                 sku.fieldData["sku-values"]?.["size"] === printfulVariant.size);
+//         if (associatedWebflowSku) {
+//             console.log('Found associated webflow sku: ' + associatedWebflowSku.fieldData.name);
+//             newPrintfulVariants.push({
+//                 "id": printfulVariant.id,                       // printful variant id
+//                 "external_id": String(associatedWebflowSku.id), // webflow variant id
+//             });
+//         }
+//         else {
+//             console.log("Could not get associated webflow sku");
+//         }
+//     }
+//
+//     if (!newPrintfulVariants.length) {
+//         console.log("No new printful variants, skipped");
+//         continue;
+//     }
+//
+//     await sleep(3000);
+//     try {
+//         await PrintfulService.Products.update(printfulProduct.id, {
+//             "sync_product": {
+//                 "id": printfulProduct.id,
+//                 "external_id": existingWebflowProduct.product.id + "-" + SyncService.findColorInProductName(printfulProduct.name)
+//             },
+//             "sync_variants": newPrintfulVariants
+//         });
+//     } catch (err) {
+//         if (err instanceof FetchError) {
+//             console.error(err.message, err.payload);
+//         }
+//     }
+// }
+// console.log("DONE");
 
 
 // await WebflowService.Products.update(wProduct?.product.id!, wProduct!);

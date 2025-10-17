@@ -82,7 +82,14 @@ export const app = new Elysia({ prefix: "/api" })
 			}
 			case Printful.Webhook.Event.PackageShipped: {
 				const webflowOrderId = payload.data.order.external_id;
-				await WebflowService.Orders.update(webflowOrderId, { status: "fulfilled" });
+				const shipInfo = payload.data.shipment;
+
+				await WebflowService.Orders.update(webflowOrderId, {
+					shippingTrackingURL: shipInfo.tracking_url,
+					shippingTracking: shipInfo.tracking_number,
+					shippingProvider: shipInfo.carrier
+				});
+				await WebflowService.Orders.fulfill(webflowOrderId, { sendOrderFulfilledEmail: true });
 				break;
 			}
 		}
@@ -117,10 +124,6 @@ export const app = new Elysia({ prefix: "/api" })
 						quantity: webflowOrderSku.count
 					}))
 				});
-
-				// set webflow order to pending
-				webflowOrder.status = "pending";
-				await WebflowService.Orders.update(webflowOrder.orderId, webflowOrder);
 
 				console.log("Complete");
 

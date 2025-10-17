@@ -125,18 +125,53 @@ export default class WebflowService {
     }
 
     static Orders = class {
-        static async update(webflowOrderId: string, webflowOrder: DeepPartial<Webflow.Orders.Order>) {
+        static async getAll(opt: { status?: Webflow.Orders.Order["status"] } = {}): Promise<Webflow.Orders.Order[]> {
+            // TODO: pagination
+            const params = new URLSearchParams();
+            if (opt.status !== undefined) {
+                params.set("status", opt.status);
+            }
+
+            const res = await fetch(`${env().API_SITES_URL}/orders?${params.toString()}`, {
+                method: "GET",
+                headers: { ...env().AUTH_HEADER },
+            });
+
+            if (!res.ok) {
+                throw new FetchError("Failed to get all Webflow orders", res);
+            }
+
+            const payload = await res.json();
+            return payload.orders as Webflow.Orders.Order[];
+        }
+
+        static async update(webflowOrderId: string, webflowOrderUpdate: { comment?: string, shippingProvider?: string, shippingTracking?: string, shippingTrackingURL: string }) {
             const res = await fetch(`${env().API_SITES_URL}/orders/${webflowOrderId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
                     ...env().AUTH_HEADER
                 },
-                body: JSON.stringify(webflowOrder)
+                body: JSON.stringify(webflowOrderUpdate)
             });
 
             if (!res.ok) {
                 throw new FetchError("Failed to update Webflow order", res);
+            }
+        }
+
+        static async fulfill(webflowOrderId: string, opt: { sendOrderFulfilledEmail?: boolean } = {}) {
+            const res = await fetch(`${env().API_SITES_URL}/orders/${webflowOrderId}/fulfill`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...env().AUTH_HEADER
+                },
+                body: JSON.stringify(opt)
+            });
+
+            if (!res.ok) {
+                throw new FetchError("Failed to fulfill Webflow order", res);
             }
         }
     }

@@ -52,7 +52,7 @@
 	<div>
 		<div class="flex items-center">
 			<p class="text-xs label">
-				{#if !selected.cfg.disableGeneration && allStandards
+				{#if !selected.cfg.activity[selected.activity].disableGeneration && allStandards
 						.byActivity(selected.activity)
 						.getMetadata().generators.length}
 					(Generated data: {allStandards
@@ -87,7 +87,7 @@
 					? parseFloat(kgToLb(standard.metrics.weight).toFixed(2))
 					: "None"}</th
 			>
-			{#each range(selected.cfg.maxLevel) as lvl}
+			{#each range(selected.cfg.global.maxLevel) as lvl}
 				<td>{getLvlValue(activity, standard, lvl)}</td>
 			{/each}
 		</tr>
@@ -99,7 +99,7 @@
 				<thead>
 					<tr>
 						<th>Body weight</th>
-						{#each range(selected.cfg.maxLevel) as lvl}
+						{#each range(selected.cfg.global.maxLevel) as lvl}
 							<td>{lvl}</td>
 						{/each}
 					</tr>

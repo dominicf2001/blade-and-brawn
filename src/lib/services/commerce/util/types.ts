@@ -148,24 +148,19 @@ export namespace Printful {
         export interface PackageShipped extends MetaData<Event.PackageShipped, {
             shipment: {
                 id: number
-                status: string
-                store_id: number
+                carrier: string,
+                service: string,
                 tracking_number: string
                 tracking_url: string
-                created_at: string
+                created: number
                 ship_date: string
-                shipped_at: string
-                delivered_at: string
+                shipped_at: number
                 reshipment: boolean
             }
             order: {
                 id: number
                 external_id: string
                 status: string
-                store_id: number
-                dashboard_url: string
-                created_at: string
-                updated_at: string
             }
         }> { }
 

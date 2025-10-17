@@ -12,7 +12,7 @@
 
 	let activeTab = $state("standards");
 
-	let input = $state({
+	let inputSelected = $state({
 		activity: Activity.BenchPress,
 		metrics: {
 			gender: Gender.Male,
@@ -28,7 +28,7 @@
 					activity,
 					{
 						enableGeneration: true,
-						weightModfier: ".1",
+						weightModifier: ".1",
 						weightSkew: "0",
 						ageModifier: ".1",
 					},
@@ -38,26 +38,30 @@
 	});
 
 	const selected = $derived({
-		activity: input.activity,
+		activity: inputSelected.activity,
 		metrics: {
-			gender: input.metrics.gender,
-			age: +input.metrics.age,
-			weight: lbToKg(+input.metrics.weight),
+			gender: inputSelected.metrics.gender,
+			age: +inputSelected.metrics.age,
+			weight: lbToKg(+inputSelected.metrics.weight),
 		} as Metrics,
 		cfg: {
 			global: {
-				maxLevel: +input.cfg.global.maxLevel,
+				maxLevel: +inputSelected.cfg.global.maxLevel,
 			},
 			activity: Object.fromEntries(
 				Object.values(Activity).map((activity) => [
 					activity,
 					{
 						weightModifier:
-							+input.cfg.activity[activity].weightModfier,
-						weightSkew: +input.cfg.activity[activity].weightSkew,
-						ageModifier: +input.cfg.activity[activity].ageModifier,
+							+inputSelected.cfg.activity[activity]
+								.weightModifier,
+						weightSkew:
+							+inputSelected.cfg.activity[activity].weightSkew,
+						ageModifier:
+							+inputSelected.cfg.activity[activity].ageModifier,
 						disableGeneration:
-							!input.cfg.activity[activity].enableGeneration,
+							!inputSelected.cfg.activity[activity]
+								.enableGeneration,
 					},
 				]),
 			),
@@ -70,16 +74,16 @@
 
 	$effect(() => {
 		console.log(selected);
-		if (!input.metrics.age) input.metrics.weight = "";
+		if (!inputSelected.metrics.age) inputSelected.metrics.weight = "";
 	});
 
 	$effect(() => {
 		const savedParameters = localStorage.getItem("parameters");
-		if (savedParameters) input = JSON.parse(savedParameters);
+		if (savedParameters) inputSelected = JSON.parse(savedParameters);
 	});
 
 	$effect(() => {
-		localStorage.setItem("parameters", JSON.stringify(input));
+		localStorage.setItem("parameters", JSON.stringify(inputSelected));
 	});
 </script>
 
@@ -102,7 +106,7 @@
 							min="1"
 							max="100"
 							placeholder="5"
-							bind:value={input.cfg.global.maxLevel}
+							bind:value={inputSelected.cfg.global.maxLevel}
 						/>
 					</label>
 				</div>
@@ -118,7 +122,7 @@
 						<input
 							type="checkbox"
 							bind:checked={
-								input.cfg.activity[selected.activity]
+								inputSelected.cfg.activity[selected.activity]
 									.enableGeneration
 							}
 							class="toggle toggle-lg m-auto"
@@ -134,8 +138,8 @@
 							step=".05"
 							placeholder=".1"
 							bind:value={
-								input.cfg.activity[selected.activity]
-									.weightModfier
+								inputSelected.cfg.activity[selected.activity]
+									.weightModifier
 							}
 							disabled={selected.cfg.activity[selected.activity]
 								.disableGeneration}
@@ -151,7 +155,8 @@
 							step=".05"
 							placeholder=".1"
 							bind:value={
-								input.cfg.activity[selected.activity].weightSkew
+								inputSelected.cfg.activity[selected.activity]
+									.weightSkew
 							}
 							disabled={selected.cfg.activity[selected.activity]
 								.disableGeneration}
@@ -167,7 +172,7 @@
 							step=".05"
 							placeholder=".1"
 							bind:value={
-								input.cfg.activity[selected.activity]
+								inputSelected.cfg.activity[selected.activity]
 									.ageModifier
 							}
 							disabled={selected.cfg.activity[selected.activity]
@@ -190,7 +195,7 @@
 					<select
 						class="select w-full"
 						name="activities"
-						bind:value={input.activity}
+						bind:value={inputSelected.activity}
 					>
 						{#each Object.values(Activity) as activity}
 							<option value={activity}>
@@ -206,7 +211,7 @@
 					<select
 						class="select w-full"
 						name="genders"
-						bind:value={input.metrics.gender}
+						bind:value={inputSelected.metrics.gender}
 					>
 						{#each Object.values(Gender) as gender}
 							<option value={gender}>{gender}</option>
@@ -222,7 +227,7 @@
 						min="0"
 						max="100"
 						placeholder="18"
-						bind:value={input.metrics.age}
+						bind:value={inputSelected.metrics.age}
 					/>
 				</label>
 
@@ -236,7 +241,7 @@
 						placeholder={selected.metrics.age
 							? "170"
 							: "Requires age"}
-						bind:value={input.metrics.weight}
+						bind:value={inputSelected.metrics.weight}
 						disabled={!selected.metrics.age}
 					/>
 				</label>
