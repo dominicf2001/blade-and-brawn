@@ -124,6 +124,23 @@ export default class WebflowService {
         }
     }
 
+    static Orders = class {
+        static async update(webflowOrderId: string, webflowOrder: DeepPartial<Webflow.Orders.Order>) {
+            const res = await fetch(`${env().API_SITES_URL}/orders/${webflowOrderId}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...env().AUTH_HEADER
+                },
+                body: JSON.stringify(webflowOrder)
+            });
+
+            if (!res.ok) {
+                throw new FetchError("Failed to update Webflow order", res);
+            }
+        }
+    }
+
     static Util = class {
         static verifyWebflowSignature(request: Request, body: unknown) {
             try {

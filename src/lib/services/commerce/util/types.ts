@@ -121,10 +121,10 @@ export namespace Printful {
 
         export enum Event {
             ProductUpdated = "product_updated",
-            ProductDeleted = "product_deleted"
+            ProductDeleted = "product_deleted",
+            PackageShipped = "package_shipped"
         }
 
-        // product updated
         export interface ProductUpdated extends MetaData<Event.ProductUpdated, {
             sync_product: {
                 id: number;
@@ -137,7 +137,6 @@ export namespace Printful {
             };
         }> { }
 
-        // product deleted
         export interface ProductDeleted extends MetaData<Event.ProductDeleted, {
             sync_product: {
                 id: number;
@@ -146,7 +145,31 @@ export namespace Printful {
             };
         }> { }
 
-        export type EventPayload = ProductUpdated | ProductDeleted
+        export interface PackageShipped extends MetaData<Event.PackageShipped, {
+            shipment: {
+                id: number
+                status: string
+                store_id: number
+                tracking_number: string
+                tracking_url: string
+                created_at: string
+                ship_date: string
+                shipped_at: string
+                delivered_at: string
+                reshipment: boolean
+            }
+            order: {
+                id: number
+                external_id: string
+                status: string
+                store_id: number
+                dashboard_url: string
+                created_at: string
+                updated_at: string
+            }
+        }> { }
+
+        export type EventPayload = ProductUpdated | ProductDeleted | PackageShipped
     }
 }
 
@@ -210,7 +233,7 @@ export namespace Webflow {
     export namespace Orders {
         export type Order = {
             orderId: string
-            status: string
+            status: "pending" | "unfulfilled" | "fulfilled" | "disputed" | "dispute-lost" | "refunded"
             comment: string
             orderComment: string
             acceptedOn: string

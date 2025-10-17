@@ -67,6 +67,9 @@ export const app = new Elysia({ prefix: "/api" })
 	// WEBHOOKS
 	.post("/webhook/printful", async ({ body }) => {
 		const payload = body as Printful.Webhook.EventPayload;
+
+		console.log("Hit webhook", payload.type);
+
 		switch (payload.type) {
 			case Printful.Webhook.Event.ProductUpdated: {
 				const printfulProduct = payload.data.sync_product;
@@ -75,6 +78,11 @@ export const app = new Elysia({ prefix: "/api" })
 			}
 			case Printful.Webhook.Event.ProductDeleted: {
 				await WebflowService.Products.remove(payload.data.sync_product.external_id);
+				break;
+			}
+			case Printful.Webhook.Event.PackageShipped: {
+				const webflowOrderId = payload.data.order.external_id;
+				await WebflowService.Orders.update(webflowOrderId, { status: "fulfilled" });
 				break;
 			}
 		}
@@ -87,12 +95,10 @@ export const app = new Elysia({ prefix: "/api" })
 
 		const payload = body as Webflow.Webhook.EventPayload;
 
-		console.log(payload.triggerType);
 		switch (payload.triggerType) {
 			case Webflow.Webhook.Event.OrderCreated: {
 				const webflowOrder = payload.payload;
 
-				console.log("Creating printful order...");
 				await PrintfulService.Orders.create({
 					external_id: webflowOrder.orderId,
 					// TODO: derive from webflow
@@ -113,16 +119,10 @@ export const app = new Elysia({ prefix: "/api" })
 				});
 
 				// set webflow order to pending
+				webflowOrder.status = "pending";
+				await WebflowService.Orders.update(webflowOrder.orderId, webflowOrder);
 
 				console.log("Complete");
-
-				break;
-			}
-			case Webflow.Webhook.Event.OrderUpdated: {
-
-				// read printful order status
-
-				// set webflow order to fulfulled (if indeed printful order got confirmed)
 
 				break;
 			}
