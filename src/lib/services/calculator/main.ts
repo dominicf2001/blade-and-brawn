@@ -198,7 +198,9 @@ export class Standards {
                         0.1,
                     weightSkew: 0,
                     ageModifier: 0.5,
-                    difficultyModifier: 0
+                    difficultyModifier: activity === Activity.BroadJump ?
+                        0.05 :
+                        0
                 },
             ])
         ) as Record<Activity, StandardsConfig["activity"][Activity]>;

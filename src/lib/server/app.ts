@@ -1,6 +1,6 @@
 import { Elysia, NotFoundError } from "elysia";
 import { cors } from "@elysiajs/cors";
-import { LevelCalculator, Standards, type ActivityStandards } from "$lib/services/calculator/main";
+import { LevelCalculator, Standards, type ActivityStandards, type LevelCalculatorOutput } from "$lib/services/calculator/main";
 import type { ActivityPerformance, Player } from "$lib/services/calculator/util";
 import rawStandards from "$lib/data/standards.json" assert { type: "json" }
 import { Printful, Webflow } from "../services/commerce/util/types";
@@ -9,8 +9,24 @@ import SyncService from "../services/commerce/sync";
 import PrintfulService from "../services/commerce/printful";
 import { FetchError, getStateFromZip } from "../services/commerce/util/misc";
 
+const MAIN_STANDARDS = new Standards(rawStandards as ActivityStandards);
+const levelCalculator = new LevelCalculator(MAIN_STANDARDS);
+
 export const app = new Elysia({ prefix: "/api" })
-	.use(cors({ origin: '*' }))
+	.use(
+		cors({
+			origin: [
+				// bladeandbrawn.com (apex + any subdomain)
+				/^https?:\/\/([a-z0-9-]+\.)?bladeandbrawn\.com$/i,
+				// Webflow preview domains
+				/^https?:\/\/([a-z0-9-]+\.)?bladeandbrawn\.webflow\.io$/i,
+				// Fly app host (this one already works)
+				/^https?:\/\/blade-and-brawn\.fly\.dev$/i,
+				// Local dev
+				"http://localhost:5173",
+			]
+		})
+	)
 
 	.error({
 		FetchError
@@ -24,30 +40,55 @@ export const app = new Elysia({ prefix: "/api" })
 		}
 	})
 
+	.onAfterHandle(({ request, set }) => {
+		console.log(JSON.stringify({
+			lvl: "info",
+			msg: "req",
+			method: request.method,
+			path: new URL(request.url).pathname,
+			status: set.status ?? 200
+		}));
+	})
+
 	.get("/", () => "Hello world")
 
 	// CALCULATOR
 
-	.post("/calculate", async ({ body }) => {
-		const MAIN_STANDARDS = new Standards(rawStandards as ActivityStandards);
+	.post("/calculate", async ({ body, query }) => {
 		interface CalcRequest {
 			player: Player;
 			activityPerformances: ActivityPerformance[];
 		}
 		const { player, activityPerformances } = body as CalcRequest;
-		const levelCalculator = new LevelCalculator(MAIN_STANDARDS);
-		return { levels: levelCalculator.calculate(player, activityPerformances) };
+		const output = { levels: levelCalculator.calculate(player, activityPerformances) };
+
+		console.log({ log: query?.log });
+		if (query?.log === "true") {
+			void fetch("https://kv-logger.xominus.workers.dev", {
+				method: "POST",
+				headers: { "content-type": "application/json" },
+				body: JSON.stringify({ output, player, activityPerformances })
+			}).catch(e => { });
+		}
+
+		return output;
 	})
 
 	// COMMERCE
+	// TODO: protect with api key/token
 	.group("/products", app => app
 		.group("/sync", app => app
 			.get("/", async ({ }) => SyncService.state)
-			.post("/:printfulProductId?", async ({ params }) => {
+			.post("/:printfulProductId?", async ({ params, set }) => {
+				if (SyncService.state.isSyncing) {
+					set.status = 409;
+					return { error: "Sync already in progress" };
+				}
 				const printfulProductId = params.printfulProductId ?
 					+params.printfulProductId :
 					undefined;
 				await SyncService.sync(printfulProductId);
+				return { ok: true };
 			})
 		)
 		.get("/:printfulProductId", async ({ params }) => {
@@ -67,8 +108,6 @@ export const app = new Elysia({ prefix: "/api" })
 	// WEBHOOKS
 	.post("/webhook/printful", async ({ body }) => {
 		const payload = body as Printful.Webhook.EventPayload;
-
-		console.log("Hit webhook", payload.type);
 
 		switch (payload.type) {
 			case Printful.Webhook.Event.ProductUpdated: {
@@ -93,6 +132,8 @@ export const app = new Elysia({ prefix: "/api" })
 				break;
 			}
 		}
+
+		return { ok: true };
 	})
 	.post("/webhook/webflow", async ({ request, body, set }) => {
 		if (!WebflowService.Util.verifyWebflowSignature(request, body)) {
@@ -130,4 +171,6 @@ export const app = new Elysia({ prefix: "/api" })
 				break;
 			}
 		}
+
+		return { ok: true };
 	});

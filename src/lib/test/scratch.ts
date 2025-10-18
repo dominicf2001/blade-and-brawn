@@ -46,9 +46,8 @@ const computedPerformances: ActivityPerformance[] = [
     },
 ];
 
-const wOrders = await WebflowService.Orders.getAll();
-
-console.log(wOrders);
+const pOrders = await PrintfulService.Orders.getAll();
+console.log(pOrders);
 
 // wProduct.product.fieldData.name = "Rogue Title Hoodie [White] / XS";
 //

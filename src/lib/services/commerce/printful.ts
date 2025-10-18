@@ -101,6 +101,35 @@ export default class PrintfulService {
                 throw new FetchError("Failed to create printful order", res);
             }
         }
+
+        static async getAll(offset: number = 0): Promise<Printful.Orders.Order[]> {
+            const allPrintfulOrders: Printful.Orders.Order[] = [];
+
+            while (true) {
+                try {
+                    const res = await fetch(`${env().API_URL}/orders?offset=${offset}`, {
+                        method: "GET",
+                        headers: { ...env().AUTH_HEADERS }
+                    })
+
+                    if (!res.ok) {
+                        throw new FetchError("Failed to get all Printful orders", res);
+                    }
+
+                    const payload: Printful.Products.MetaDataMulti<Printful.Orders.Order> = await res.json();
+
+                    allPrintfulOrders.push(...payload.result);
+                    offset = allPrintfulOrders.length;
+
+                    if (allPrintfulOrders.length >= payload.paging.total)
+                        break;
+                } catch (error) {
+                    throw error;
+                }
+            }
+
+            return allPrintfulOrders;
+        }
     }
 
     static Util = class {
