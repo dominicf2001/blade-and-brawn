@@ -1,14 +1,14 @@
 import { type Metrics } from "$lib/services/calculator/main";
-import avgWeightDataRaw from "$lib/data/avg-weights.json"
+import avgWeightDataRaw from "$lib/data/avg-weights.json";
 
 // -------------------------------------------------------------------------------------------------
-// DATA MODELS 
+// DATA MODELS
 // -------------------------------------------------------------------------------------------------
 
 export type Player = {
     name?: string;
     metrics: Metrics;
-}
+};
 
 export enum Attribute {
     Strength = "Strength",
@@ -33,7 +33,7 @@ export interface ActivityPerformance {
 
 export enum Gender {
     Male = "Male",
-    Female = "Female"
+    Female = "Female",
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -65,23 +65,24 @@ export const msToTime = (ms: number, includeMs = false): string => {
     return formattedTime;
 };
 
-export const range = (length: number) => Array.from({ length: length }, (_, i) => i + 1);
+export const range = (length: number) =>
+    Array.from({ length: length }, (_, i) => i + 1);
 
 export const getAvgWeight = (gender: Gender, age: number) => {
     type AvgWeightData = {
         metadata: {
-            unit: StandardUnit
-        },
-        weights: Metrics[]
-    }
+            unit: StandardUnit;
+        };
+        weights: Metrics[];
+    };
     let avgWeightData = avgWeightDataRaw as AvgWeightData;
 
-    const avgWeights = avgWeightData.weights.filter(a => a.gender === gender);
+    const avgWeights = avgWeightData.weights.filter((a) => a.gender === gender);
     if (!avgWeights.length) throw new Error("No average weights");
 
     const closest = {
         diff: Math.abs(avgWeights[0].age - age),
-        avg: avgWeights[0]
+        avg: avgWeights[0],
     };
     for (const avg of avgWeights) {
         const diff = Math.abs(avg.age - age);
@@ -92,4 +93,4 @@ export const getAvgWeight = (gender: Gender, age: number) => {
     }
 
     return closest.avg.weight;
-}
+};

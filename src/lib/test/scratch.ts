@@ -1,25 +1,37 @@
-import { Activity, ftToCm, Gender, getAvgWeight, inToCm, kgToLb, lbToKg, minToMs, secToMs, type ActivityPerformance, type Player } from "$lib/services/calculator/util";
+import {
+    Activity,
+    ftToCm,
+    Gender,
+    getAvgWeight,
+    inToCm,
+    kgToLb,
+    lbToKg,
+    minToMs,
+    secToMs,
+    type ActivityPerformance,
+    type Player,
+} from "$lib/services/calculator/util";
 import PrintfulService from "$lib/services/commerce/printful";
 import SyncService from "$lib/services/commerce/sync";
 import { FetchError, type DeepPartial } from "$lib/services/commerce/util/misc";
 import type { Printful } from "$lib/services/commerce/util/types";
 import WebflowService from "$lib/services/commerce/webflow";
 
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const player: Player = {
     metrics: {
         age: 25,
         weight: lbToKg(190),
-        gender: Gender.Male
-    }
+        gender: Gender.Male,
+    },
 };
 
 const computedPerformances: ActivityPerformance[] = [
     // STRENGTH
     {
         activity: Activity.BenchPress,
-        performance: lbToKg(225)
+        performance: lbToKg(225),
     },
     {
         activity: Activity.Deadlift,
@@ -114,7 +126,6 @@ console.log(pOrders);
 //     }
 // }
 // console.log("DONE");
-
 
 // await WebflowService.Products.update(wProduct?.product.id!, wProduct!);
 //

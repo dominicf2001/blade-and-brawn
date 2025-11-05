@@ -1,107 +1,107 @@
 {
-  "metadata": {
-    "unit": "kg"
-  },
-  "weights": [
-    {
-      "gender": "Male",
-      "age": 5,
-      "weight": 21.1
+    "metadata": {
+        "unit": "kg"
     },
-    {
-      "gender": "Male",
-      "age": 10,
-      "weight": 38.7
-    },
-    {
-      "gender": "Male",
-      "age": 15,
-      "weight": 66.1
-    },
-    {
-      "gender": "Male",
-      "age": 20,
-      "weight": 81.3
-    },
-    {
-      "gender": "Male",
-      "age": 30,
-      "weight": 89.7
-    },
-    {
-      "gender": "Male",
-      "age": 40,
-      "weight": 90.5
-    },
-    {
-      "gender": "Male",
-      "age": 50,
-      "weight": 89.6
-    },
-    {
-      "gender": "Male",
-      "age": 60,
-      "weight": 89.5
-    },
-    {
-      "gender": "Male",
-      "age": 70,
-      "weight": 89.3
-    },
-    {
-      "gender": "Male",
-      "age": 80,
-      "weight": 79.6
-    },
-    {
-      "gender": "Female",
-      "age": 5,
-      "weight": 21.0
-    },
-    {
-      "gender": "Female",
-      "age": 10,
-      "weight": 39.5
-    },
-    {
-      "gender": "Female",
-      "age": 15,
-      "weight": 58.1
-    },
-    {
-      "gender": "Female",
-      "age": 20,
-      "weight": 69.5
-    },
-    {
-      "gender": "Female",
-      "age": 30,
-      "weight": 73.3
-    },
-    {
-      "gender": "Female",
-      "age": 40,
-      "weight": 75.2
-    },
-    {
-      "gender": "Female",
-      "age": 50,
-      "weight": 74.6
-    },
-    {
-      "gender": "Female",
-      "age": 60,
-      "weight": 75.1
-    },
-    {
-      "gender": "Female",
-      "age": 70,
-      "weight": 73.2
-    },
-    {
-      "gender": "Female",
-      "age": 80,
-      "weight": 66.3
-    }
-  ]
+    "weights": [
+        {
+            "gender": "Male",
+            "age": 5,
+            "weight": 21.1
+        },
+        {
+            "gender": "Male",
+            "age": 10,
+            "weight": 38.7
+        },
+        {
+            "gender": "Male",
+            "age": 15,
+            "weight": 66.1
+        },
+        {
+            "gender": "Male",
+            "age": 20,
+            "weight": 81.3
+        },
+        {
+            "gender": "Male",
+            "age": 30,
+            "weight": 89.7
+        },
+        {
+            "gender": "Male",
+            "age": 40,
+            "weight": 90.5
+        },
+        {
+            "gender": "Male",
+            "age": 50,
+            "weight": 89.6
+        },
+        {
+            "gender": "Male",
+            "age": 60,
+            "weight": 89.5
+        },
+        {
+            "gender": "Male",
+            "age": 70,
+            "weight": 89.3
+        },
+        {
+            "gender": "Male",
+            "age": 80,
+            "weight": 79.6
+        },
+        {
+            "gender": "Female",
+            "age": 5,
+            "weight": 21.0
+        },
+        {
+            "gender": "Female",
+            "age": 10,
+            "weight": 39.5
+        },
+        {
+            "gender": "Female",
+            "age": 15,
+            "weight": 58.1
+        },
+        {
+            "gender": "Female",
+            "age": 20,
+            "weight": 69.5
+        },
+        {
+            "gender": "Female",
+            "age": 30,
+            "weight": 73.3
+        },
+        {
+            "gender": "Female",
+            "age": 40,
+            "weight": 75.2
+        },
+        {
+            "gender": "Female",
+            "age": 50,
+            "weight": 74.6
+        },
+        {
+            "gender": "Female",
+            "age": 60,
+            "weight": 75.1
+        },
+        {
+            "gender": "Female",
+            "age": 70,
+            "weight": 73.2
+        },
+        {
+            "gender": "Female",
+            "age": 80,
+            "weight": 66.3
+        }
+    ]
 }

@@ -11,16 +11,16 @@ export namespace Printful {
             code: number;
             result: T[];
             paging: {
-                total: number,
-                offset: number,
-                limit: number
-            }
+                total: number;
+                offset: number;
+                limit: number;
+            };
         }
 
         type Option = {
             id: string;
             value: string;
-        }
+        };
 
         type File = {
             type: string;
@@ -41,12 +41,12 @@ export namespace Printful {
             visible: boolean;
             is_temporary: boolean;
             stitch_count_tier: string;
-        }
+        };
 
         export type Product = {
-            sync_product: SyncProduct,
-            sync_variants: SyncVariant[]
-        }
+            sync_product: SyncProduct;
+            sync_variants: SyncVariant[];
+        };
 
         export type SyncProduct = {
             id: number;
@@ -56,7 +56,7 @@ export namespace Printful {
             synced: number;
             thumbnail_url: string;
             is_ignored: boolean;
-        }
+        };
 
         export type SyncVariant = {
             id: number;
@@ -83,30 +83,30 @@ export namespace Printful {
             size: string;
             color: string;
             availability_status: string;
-        }
+        };
     }
 
     export namespace Orders {
         export type Order = {
-            external_id: string,
-            shipping: string
+            external_id: string;
+            shipping: string;
             recipient: {
-                name: string
-                company?: string
-                address1: string
-                address2: string
-                city: string
-                state_code: string
-                state_name?: string
-                country_code: string
-                country_name?: string
-                zip: string
-                phone?: string
-                email?: string
-                tax_number?: string
-            }
-            items: Array<{ external_variant_id: string, quantity: number }>
-        }
+                name: string;
+                company?: string;
+                address1: string;
+                address2: string;
+                city: string;
+                state_code: string;
+                state_name?: string;
+                country_code: string;
+                country_name?: string;
+                zip: string;
+                phone?: string;
+                email?: string;
+                tax_number?: string;
+            };
+            items: Array<{ external_variant_id: string; quantity: number }>;
+        };
     }
 
     export namespace Webhook {
@@ -116,55 +116,70 @@ export namespace Printful {
             created: number;
             retries: number;
             store: number;
-            data: D
+            data: D;
         }
 
         export enum Event {
             ProductUpdated = "product_updated",
             ProductDeleted = "product_deleted",
-            PackageShipped = "package_shipped"
+            PackageShipped = "package_shipped",
         }
 
-        export interface ProductUpdated extends MetaData<Event.ProductUpdated, {
-            sync_product: {
-                id: number;
-                external_id: string;
-                name: string;
-                variants: number;
-                synced: number;
-                thumbnail_url: string;
-                is_ignored: boolean;
-            };
-        }> { }
+        export interface ProductUpdated
+            extends MetaData<
+                Event.ProductUpdated,
+                {
+                    sync_product: {
+                        id: number;
+                        external_id: string;
+                        name: string;
+                        variants: number;
+                        synced: number;
+                        thumbnail_url: string;
+                        is_ignored: boolean;
+                    };
+                }
+            > {}
 
-        export interface ProductDeleted extends MetaData<Event.ProductDeleted, {
-            sync_product: {
-                id: number;
-                external_id: string;
-                name: string;
-            };
-        }> { }
+        export interface ProductDeleted
+            extends MetaData<
+                Event.ProductDeleted,
+                {
+                    sync_product: {
+                        id: number;
+                        external_id: string;
+                        name: string;
+                    };
+                }
+            > {}
 
-        export interface PackageShipped extends MetaData<Event.PackageShipped, {
-            shipment: {
-                id: number
-                carrier: string,
-                service: string,
-                tracking_number: string
-                tracking_url: string
-                created: number
-                ship_date: string
-                shipped_at: number
-                reshipment: boolean
-            }
-            order: {
-                id: number
-                external_id: string
-                status: string
-            }
-        }> { }
+        export interface PackageShipped
+            extends MetaData<
+                Event.PackageShipped,
+                {
+                    shipment: {
+                        id: number;
+                        carrier: string;
+                        service: string;
+                        tracking_number: string;
+                        tracking_url: string;
+                        created: number;
+                        ship_date: string;
+                        shipped_at: number;
+                        reshipment: boolean;
+                    };
+                    order: {
+                        id: number;
+                        external_id: string;
+                        status: string;
+                    };
+                }
+            > {}
 
-        export type EventPayload = ProductUpdated | ProductDeleted | PackageShipped
+        export type EventPayload =
+            | ProductUpdated
+            | ProductDeleted
+            | PackageShipped;
     }
 }
 
@@ -172,29 +187,28 @@ export namespace Webflow {
     export namespace Products {
         export namespace Skus {
             export type Sku = {
-                id: string,
+                id: string;
                 fieldData: {
                     name: string;
                     slug: string;
-                    "sku-values"?: Record<string, string>,
+                    "sku-values"?: Record<string, string>;
                     price: {
                         value: number;
                         unit: string;
                         currency: string;
                     };
                     "main-image"?: string;
-                    "more-images"?:
-                    {
-                        fileId?: string,
-                        url: string,
-                        alt?: string,
-                    }[]
-                }
-            }
+                    "more-images"?: {
+                        fileId?: string;
+                        url: string;
+                        alt?: string;
+                    }[];
+                };
+            };
         }
 
         export type Product = {
-            id: string,
+            id: string;
             fieldData: {
                 name: string;
                 slug: string;
@@ -210,12 +224,12 @@ export namespace Webflow {
                         slug: string;
                     }[];
                 }[];
-            }
-        }
+            };
+        };
 
         export interface ProductAndSkus {
-            product: Product
-            skus: Skus.Sku[]
+            product: Product;
+            skus: Skus.Sku[];
         }
 
         export interface ProductAndSku {
@@ -227,85 +241,91 @@ export namespace Webflow {
 
     export namespace Orders {
         export type Order = {
-            orderId: string
-            status: "pending" | "unfulfilled" | "fulfilled" | "disputed" | "dispute-lost" | "refunded"
-            comment: string
-            orderComment: string
-            acceptedOn: string
-            fulfilledOn: string | null
-            refundedOn: string | null
-            disputedOn: string | null
-            disputeUpdatedOn: string | null
-            disputeLastStatus: string | null
+            orderId: string;
+            status:
+                | "pending"
+                | "unfulfilled"
+                | "fulfilled"
+                | "disputed"
+                | "dispute-lost"
+                | "refunded";
+            comment: string;
+            orderComment: string;
+            acceptedOn: string;
+            fulfilledOn: string | null;
+            refundedOn: string | null;
+            disputedOn: string | null;
+            disputeUpdatedOn: string | null;
+            disputeLastStatus: string | null;
             customerPaid: {
-                unit: string
-                value: string
-                string: string
-            }
+                unit: string;
+                value: string;
+                string: string;
+            };
             netAmount: {
-                unit: string
-                value: string
-                string: string
-            }
+                unit: string;
+                value: string;
+                string: string;
+            };
             applicationFee: {
-                unit: string
-                value: string
-                string: string
-            }
+                unit: string;
+                value: string;
+                string: string;
+            };
             allAddresses: Array<{
-                type: string
-                addressee: string
-                line1: string
-                line2: string
-                city: string
-                state: string
-                country: string
-                postalCode: string
-            }>
+                type: string;
+                addressee: string;
+                line1: string;
+                line2: string;
+                city: string;
+                state: string;
+                country: string;
+                postalCode: string;
+            }>;
             shippingAddress: {
-                type: string
-                japanType: string
-                addressee: string
-                line1: string
-                line2: string
-                city: string
-                state: string
-                country: string
-                postalCode: string
-            }
+                type: string;
+                japanType: string;
+                addressee: string;
+                line1: string;
+                line2: string;
+                city: string;
+                state: string;
+                country: string;
+                postalCode: string;
+            };
             billingAddress: {
-                type: string
-                addressee: string
-                line1: string
-                line2: string
-                city: string
-                state: string
-                country: string
-                postalCode: string
-            }
-            shippingProvider: string
-            shippingTracking: string
-            shippingTrackingURL: string
+                type: string;
+                addressee: string;
+                line1: string;
+                line2: string;
+                city: string;
+                state: string;
+                country: string;
+                postalCode: string;
+            };
+            shippingProvider: string;
+            shippingTracking: string;
+            shippingTrackingURL: string;
             customerInfo: {
-                fullName: string
-                email: string
-            }
+                fullName: string;
+                email: string;
+            };
             purchasedItems: Array<{
-                count: number
+                count: number;
                 rowTotal: {
-                    unit: string
-                    value: string
-                    string: string
-                }
-                productId: string
-                productName: string
-                productSlug: string
-                variantId: string
-                variantName: string
-                variantSlug: string
-                variantSKU: string
+                    unit: string;
+                    value: string;
+                    string: string;
+                };
+                productId: string;
+                productName: string;
+                productSlug: string;
+                variantId: string;
+                variantName: string;
+                variantSlug: string;
+                variantSKU: string;
                 variantImage: {
-                    url: string
+                    url: string;
                     file: {
                         size: number;
                         originalFileName: string;
@@ -315,95 +335,97 @@ export namespace Webflow {
                         height: number;
                         variants: {
                             size: number;
-                            url: string,
+                            url: string;
                             originalFileName: string;
                             width: number;
                             height: number;
-                        }[]
-                    }
-                }
+                        }[];
+                    };
+                };
                 variantPrice: {
-                    unit: string
-                    value: string
-                    string: string
-                }
-                weight: number
-                width: number
-                height: number
-                length: number
-            }>
-            purchasedItemsCount: number
+                    unit: string;
+                    value: string;
+                    string: string;
+                };
+                weight: number;
+                width: number;
+                height: number;
+                length: number;
+            }>;
+            purchasedItemsCount: number;
             stripeDetails: {
-                subscriptionId: string | null
-                paymentMethod: string
-                paymentIntentId: string
-                customerId: string
-                chargeId: string
-                disputeId: string | null
-                refundId: string
-                refundReason: string
-            }
+                subscriptionId: string | null;
+                paymentMethod: string;
+                paymentIntentId: string;
+                customerId: string;
+                chargeId: string;
+                disputeId: string | null;
+                refundId: string;
+                refundReason: string;
+            };
             stripeCard: {
-                last4: string
-                brand: string
-                ownerName: string
+                last4: string;
+                brand: string;
+                ownerName: string;
                 expires: {
-                    year: number
-                    month: number
-                }
-            }
-            paypalDetails: Object
-            customData: Array<Object>
+                    year: number;
+                    month: number;
+                };
+            };
+            paypalDetails: Object;
+            customData: Array<Object>;
             metadata: {
-                isBuyNow: boolean
-                hasDownloads: boolean
-                paymentProcessor: string
-            }
-            isCustomerDeleted: boolean
-            isShippingRequired: boolean
+                isBuyNow: boolean;
+                hasDownloads: boolean;
+                paymentProcessor: string;
+            };
+            isCustomerDeleted: boolean;
+            isShippingRequired: boolean;
             totals: {
                 subtotal: {
-                    unit: string
-                    value: string
-                    string: string
-                }
+                    unit: string;
+                    value: string;
+                    string: string;
+                };
                 extras: Array<{
-                    type: string
-                    name: string
-                    description: string
+                    type: string;
+                    name: string;
+                    description: string;
                     price: {
-                        unit: string
-                        value: string
-                        string: string
-                    }
-                }>
+                        unit: string;
+                        value: string;
+                        string: string;
+                    };
+                }>;
                 total: {
-                    unit: string
-                    value: string
-                    string: string
-                }
-            }
+                    unit: string;
+                    value: string;
+                    string: string;
+                };
+            };
             downloadFiles: Array<{
-                id: string
-                name: string
-                url: string
-            }>
-        }
+                id: string;
+                name: string;
+                url: string;
+            }>;
+        };
     }
 
     export namespace Webhook {
         interface MetaData<E extends Event, D> {
             triggerType: E;
-            payload: D
+            payload: D;
         }
 
         export enum Event {
             OrderCreated = "ecomm_new_order",
-            OrderUpdated = "ecomm_order_changed"
+            OrderUpdated = "ecomm_order_changed",
         }
 
-        export interface OrderCreated extends MetaData<Event.OrderCreated, Orders.Order> { }
-        export interface OrderUpdated extends MetaData<Event.OrderUpdated, Orders.Order> { }
+        export interface OrderCreated
+            extends MetaData<Event.OrderCreated, Orders.Order> {}
+        export interface OrderUpdated
+            extends MetaData<Event.OrderUpdated, Orders.Order> {}
 
         export type EventPayload = OrderCreated | OrderUpdated;
     }
