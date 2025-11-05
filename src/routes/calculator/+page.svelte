@@ -47,6 +47,9 @@
                                 defaultStandards.cfg.activity[activity]
                                     .difficultyModifier,
                             ),
+                            peakAge: String(
+                                defaultStandards.cfg.activity[activity].peakAge,
+                            ),
                         },
                     ];
                 }),
@@ -76,6 +79,7 @@
                             input.cfg.activity[activity].enableGeneration,
                         difficultyModifier:
                             +input.cfg.activity[activity].difficultyModifier,
+                        peakAge: +input.cfg.activity[activity].peakAge,
                     },
                 ]),
             ),
@@ -112,6 +116,22 @@
                 </legend>
 
                 <div class="grid grid-cols-1 gap-4">
+                    <label>
+                        <span class="label mb-1">Activity</span>
+                        <select
+                            class="select w-full"
+                            name="activities"
+                            bind:value={input.activity}
+                        >
+                            {#each Object.values(Activity) as activity}
+                                <option value={activity}>
+                                    {allStandards
+                                        .byActivity(activity)
+                                        .getMetadata().name}
+                                </option>
+                            {/each}
+                        </select>
+                    </label>
                     <label>
                         <span class="label mb-1">Max level</span>
                         <input
@@ -207,6 +227,21 @@
                                 .enableGeneration}
                         />
                     </label>
+                    <label>
+                        <span class="label mb-1">Peak age</span>
+                        <input
+                            class="input w-full"
+                            type="number"
+                            min="1"
+                            max="100"
+                            step="1"
+                            bind:value={
+                                input.cfg.activity[selected.activity].peakAge
+                            }
+                            disabled={!selected.cfg.activity[selected.activity]
+                                .enableGeneration}
+                        />
+                    </label>
                 </div>
             </fieldset>
         </div>
@@ -218,22 +253,6 @@
                 Metrics
             </legend>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <label>
-                    <span class="label mb-1">Activity</span>
-                    <select
-                        class="select w-full"
-                        name="activities"
-                        bind:value={input.activity}
-                    >
-                        {#each Object.values(Activity) as activity}
-                            <option value={activity}>
-                                {allStandards.byActivity(activity).getMetadata()
-                                    .name}
-                            </option>
-                        {/each}
-                    </select>
-                </label>
-
                 <label>
                     <span class="label mb-1">Gender</span>
                     <select
