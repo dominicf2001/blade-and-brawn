@@ -1,14 +1,17 @@
 import {
     Activity,
     Attribute,
+    clamp,
     Gender,
     getAvgWeight,
     kgToLb,
     lbToKg,
+    range,
     type ActivityPerformance,
     type Player,
     type StandardUnit,
 } from "./util";
+import { levenbergMarquardt as LM } from "ml-levenberg-marquardt";
 
 // SOURCES
 // Squat, Bench, Dead Lift:
@@ -217,6 +220,7 @@ export type StandardsConfig = {
             enableGeneration: boolean;
             difficultyModifier: number;
             peakAge: number;
+            stretch: number;
         }
     >;
 };
@@ -242,6 +246,7 @@ export class Standards {
                     difficultyModifier:
                         activity === Activity.BroadJump ? 0.05 : 0,
                     peakAge: 27,
+                    stretch: 0,
                 },
             ]),
         ) as Record<Activity, StandardsConfig["activity"][Activity]>;
@@ -255,9 +260,104 @@ export class Standards {
 
         // prepare data
         this.activityStandards = structuredClone(activityStandards);
-        for (const activity of Object.keys(
-            this.activityStandards,
-        ) as Activity[]) {
+
+        // STRETCH
+        for (const activity of Object.values(Activity)) {
+            const BASE_MAX_LEVEL = 5;
+            const newLevelCount = Math.max(
+                Math.round(this.cfg.activity[activity].stretch),
+                0,
+            );
+
+            function expDecayModel([A, B, C]: number[]) {
+                return (i: number) => A * Math.exp(-B * i) + C;
+            }
+
+            for (const gender of Object.values(Gender)) {
+                const standardsByGender = this.activityStandards[
+                    activity
+                ].standards.filter((s) => s["metrics"].gender === gender);
+                const ages = [
+                    ...new Set(standardsByGender.map((s) => s.metrics.age)),
+                ];
+                for (const age of ages) {
+                    const standards = standardsByGender.filter(
+                        (s) => s.metrics.age === age,
+                    );
+
+                    const data = {
+                        x: [] as number[],
+                        y: [] as number[],
+                    };
+
+                    const isIncreasing =
+                        standards[0].levels["2"] > standards[0].levels["1"];
+
+                    for (const i of range(BASE_MAX_LEVEL).slice(0, -1)) {
+                        const level = i + 1;
+                        const progressionRatios: number[] = [];
+                        for (const standard of standards) {
+                            const curr = standard.levels[level];
+                            const next = standard.levels[level + 1];
+                            progressionRatios.push(
+                                isIncreasing ? next / curr : curr / next,
+                            );
+                        }
+
+                        const sum = progressionRatios.reduce(
+                            (p, c) => p + c,
+                            0,
+                        );
+                        const progressionRatioAvg =
+                            sum / progressionRatios.length;
+
+                        data.x.push(i);
+                        data.y.push(progressionRatioAvg);
+                    }
+
+                    const fittedParams = LM(data, expDecayModel, {
+                        initialValues: [0.4, 0.5, 1.1],
+                        minValues: [0.0, 0.0, 1.02],
+                        maxValues: [1.0, 2.0, 1.2],
+                        maxIterations: 200,
+                    });
+                    const getDecayRatio = (i: number) =>
+                        expDecayModel(fittedParams.parameterValues)(i);
+
+                    // UPDATE THE DATA
+                    for (const standard of standards) {
+                        const newLevels: Levels = {};
+
+                        let prev = standard.levels["1"];
+                        for (const i of range(newLevelCount).reverse()) {
+                            const level = i + 1;
+                            const ratio = getDecayRatio(-i);
+                            prev = isIncreasing ? prev / ratio : prev * ratio;
+                            newLevels[level] = Math.round(prev);
+                        }
+
+                        const oldLevels = standard.levels as Levels;
+                        for (const i of range(BASE_MAX_LEVEL)) {
+                            const level = i + 1;
+                            newLevels[level + newLevelCount] = oldLevels[level];
+                        }
+
+                        prev = standard.levels[BASE_MAX_LEVEL];
+                        for (const i of range(newLevelCount)) {
+                            const level =
+                                BASE_MAX_LEVEL + newLevelCount + (i + 1);
+                            const ratio = getDecayRatio(level - 1);
+                            prev = isIncreasing ? prev * ratio : prev / ratio;
+                            newLevels[level] = Math.round(prev);
+                        }
+                        standard.levels = newLevels;
+                    }
+                }
+            }
+        }
+
+        // EXPAND, COMPRESS, SKEW
+        for (const activity of Object.values(Activity)) {
             for (const standard of this.activityStandards[activity].standards) {
                 // expand
                 let i = 1;

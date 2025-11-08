@@ -50,6 +50,9 @@
                             peakAge: String(
                                 defaultStandards.cfg.activity[activity].peakAge,
                             ),
+                            stretch: String(
+                                defaultStandards.cfg.activity[activity].stretch,
+                            ),
                         },
                     ];
                 }),
@@ -80,6 +83,7 @@
                         difficultyModifier:
                             +input.cfg.activity[activity].difficultyModifier,
                         peakAge: +input.cfg.activity[activity].peakAge,
+                        stretch: +input.cfg.activity[activity].stretch,
                     },
                 ]),
             ),
@@ -141,6 +145,22 @@
                             max="100"
                             placeholder="5"
                             bind:value={input.cfg.global.maxLevel}
+                        />
+                    </label>
+
+                    <label>
+                        <span class="label mb-1">Stretch</span>
+                        <input
+                            class="input w-full"
+                            type="number"
+                            min="0"
+                            max="10"
+                            step="1"
+                            bind:value={
+                                input.cfg.activity[selected.activity].stretch
+                            }
+                            disabled={!selected.cfg.activity[selected.activity]
+                                .enableGeneration}
                         />
                     </label>
                 </div>

@@ -66,7 +66,10 @@ export const msToTime = (ms: number, includeMs = false): string => {
 };
 
 export const range = (length: number) =>
-    Array.from({ length: length }, (_, i) => i + 1);
+    Array.from({ length: length }, (_, i) => i);
+
+export const clamp = (x: number, lo: number, hi: number) =>
+    Math.max(lo, Math.min(hi, x));
 
 export const getAvgWeight = (gender: Gender, age: number) => {
     type AvgWeightData = {
