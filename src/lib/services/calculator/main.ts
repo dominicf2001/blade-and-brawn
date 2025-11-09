@@ -220,7 +220,10 @@ export type StandardsConfig = {
             enableGeneration: boolean;
             difficultyModifier: number;
             peakAge: number;
-            stretch: number;
+            stretch: {
+                upper: number;
+                lower: number;
+            };
         }
     >;
 };
@@ -246,7 +249,10 @@ export class Standards {
                     difficultyModifier:
                         activity === Activity.BroadJump ? 0.05 : 0,
                     peakAge: 27,
-                    stretch: 0,
+                    stretch: {
+                        upper: 0,
+                        lower: 0,
+                    },
                 },
             ]),
         ) as Record<Activity, StandardsConfig["activity"][Activity]>;
@@ -264,13 +270,13 @@ export class Standards {
         // STRETCH
         for (const activity of Object.values(Activity)) {
             const BASE_MAX_LEVEL = 5;
-            const newLevelCount = Math.max(
-                Math.round(this.cfg.activity[activity].stretch),
-                0,
-            );
 
             function expDecayModel([A, B, C]: number[]) {
                 return (i: number) => A * Math.exp(-B * i) + C;
+            }
+
+            if (!this.cfg.activity[activity].enableGeneration) {
+                continue;
             }
 
             for (const gender of Object.values(Gender)) {
@@ -327,29 +333,43 @@ export class Standards {
                     // UPDATE THE DATA
                     for (const standard of standards) {
                         const newLevels: Levels = {};
+                        const newLowerLevelCount = Math.max(
+                            Math.round(
+                                this.cfg.activity[activity].stretch.lower,
+                            ),
+                            0,
+                        );
+                        const newUpperLevelCount = Math.max(
+                            Math.round(
+                                this.cfg.activity[activity].stretch.upper,
+                            ),
+                            0,
+                        );
 
-                        let prev = standard.levels["1"];
-                        for (const i of range(newLevelCount).reverse()) {
+                        const oldLevels = standard.levels as Levels;
+                        let prev = oldLevels["1"];
+                        for (const i of range(newLowerLevelCount).reverse()) {
                             const level = i + 1;
-                            const ratio = getDecayRatio(-i);
+                            const ratio = getDecayRatio(-i - 1);
                             prev = isIncreasing ? prev / ratio : prev * ratio;
                             newLevels[level] = Math.round(prev);
                         }
 
-                        const oldLevels = standard.levels as Levels;
                         for (const i of range(BASE_MAX_LEVEL)) {
                             const level = i + 1;
-                            newLevels[level + newLevelCount] = oldLevels[level];
+                            newLevels[level + newLowerLevelCount] =
+                                oldLevels[level];
                         }
 
-                        prev = standard.levels[BASE_MAX_LEVEL];
-                        for (const i of range(newLevelCount)) {
+                        prev = oldLevels[BASE_MAX_LEVEL];
+                        for (const i of range(newUpperLevelCount)) {
                             const level =
-                                BASE_MAX_LEVEL + newLevelCount + (i + 1);
+                                BASE_MAX_LEVEL + newLowerLevelCount + (i + 1);
                             const ratio = getDecayRatio(level - 1);
                             prev = isIncreasing ? prev * ratio : prev / ratio;
                             newLevels[level] = Math.round(prev);
                         }
+
                         standard.levels = newLevels;
                     }
                 }
@@ -796,12 +816,16 @@ export class Standards {
         if (i == 0) {
             return levels;
         }
+        const levelKeys = Object.keys(levels)
+            .map(Number)
+            .sort((a, b) => a - b);
 
         const newLevels: Levels = {};
         let j = 1;
-        for (let k = 0; k < Object.keys(levels).length; ++k) {
-            const currLevel = Object.keys(levels)[k];
-            const nextLevel = Object.keys(levels)[k + 1];
+
+        for (let k = 0; k < levelKeys.length; ++k) {
+            const currLevel = levelKeys[k];
+            const nextLevel = levelKeys[k + 1];
 
             newLevels[j++] = levels[currLevel];
 
@@ -813,28 +837,43 @@ export class Standards {
         return this.expandLevels(newLevels, i - 1);
     }
 
-    private compressLevels(levels: Levels, targetLevel: number): Levels {
-        const levelsAmount = Object.keys(levels).length;
-        if (levelsAmount < targetLevel) {
+    private compressLevels(levels: Levels, targetLvl: number): Levels {
+        const keys = Object.keys(levels)
+            .map(Number)
+            .sort((a, b) => a - b);
+        const lvlCnt = keys.length;
+
+        if (targetLvl <= 0) {
+            throw new Error("Target levels amount must be a positive integer");
+        }
+        if (lvlCnt === 0) {
+            return {};
+        }
+        if (targetLvl === 1) {
+            return { 1: levels[keys[0]] };
+        }
+        if (lvlCnt < targetLvl) {
             throw new Error(
-                "Target levels amount must be greater than or equal to the current levels amount",
+                "Target levels amount must be less than or equal to the current levels amount",
             );
         }
 
-        const ratio = levelsAmount / targetLevel;
+        // Linear resample
         const compressedLevels: Levels = {};
 
-        for (let i = 0; i < targetLevel; ++i) {
-            const ratioIndex = i * ratio;
-            const lowerIndex = Math.floor(ratioIndex);
-            const upperIndex = Math.ceil(ratioIndex);
+        for (let targetIndex = 0; targetIndex < targetLvl; ++targetIndex) {
+            const sourcePos = (targetIndex * (lvlCnt - 1)) / (targetLvl - 1);
 
-            const lowerValue = levels[lowerIndex + 1];
-            const upperValue = levels[upperIndex + 1];
+            const sourceIndexLower = Math.floor(sourcePos);
+            const sourceIndexUpper = Math.min(sourceIndexLower + 1, lvlCnt - 1);
 
-            const weight = ratioIndex - lowerIndex;
-            compressedLevels[i + 1] =
-                lowerValue + (upperValue - lowerValue) * weight;
+            const interpolationWeight = sourcePos - sourceIndexLower;
+
+            const lowerValue = levels[keys[sourceIndexLower]];
+            const upperValue = levels[keys[sourceIndexUpper]];
+
+            compressedLevels[targetIndex + 1] =
+                lowerValue + (upperValue - lowerValue) * interpolationWeight;
         }
 
         return compressedLevels;
