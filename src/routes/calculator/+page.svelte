@@ -105,11 +105,6 @@
     );
 
     $effect(() => {
-        console.log(selected);
-        if (!input.metrics.age) input.metrics.weight = "";
-    });
-
-    $effect(() => {
         const savedParameters = localStorage.getItem("parameters");
         if (savedParameters) input = JSON.parse(savedParameters);
     });
@@ -339,11 +334,8 @@
                         type="number"
                         min="0"
                         max="600"
-                        placeholder={selected.metrics.age
-                            ? "170"
-                            : "Requires age"}
+                        placeholder="170"
                         bind:value={input.metrics.weight}
-                        disabled={!selected.metrics.age}
                     />
                 </label>
             </div>
