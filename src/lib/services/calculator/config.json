@@ -1,0 +1,79 @@
+{
+    "global": {
+        "maxLevel": 100
+    },
+    "activity": {
+        "BackSquat": {
+            "enableGeneration": true,
+            "weightModifier": 0,
+            "weightSkew": 0,
+            "ageModifier": 0,
+            "difficultyModifier": 0.3,
+            "peakAge": 0,
+            "stretch": {
+                "upper": 0,
+                "lower": 1
+            }
+        },
+        "BenchPress": {
+            "enableGeneration": true,
+            "weightModifier": 0,
+            "weightSkew": 0,
+            "ageModifier": 0,
+            "difficultyModifier": 0.05,
+            "peakAge": 0,
+            "stretch": {
+                "upper": 1,
+                "lower": 0
+            }
+        },
+        "Deadlift": {
+            "enableGeneration": true,
+            "weightModifier": 0,
+            "weightSkew": 0,
+            "ageModifier": 0,
+            "difficultyModifier": -0.05,
+            "peakAge": 0,
+            "stretch": {
+                "upper": 1,
+                "lower": 0
+            }
+        },
+        "Run": {
+            "enableGeneration": true,
+            "weightModifier": 0.1,
+            "weightSkew": 0,
+            "ageModifier": 0,
+            "difficultyModifier": 0.35,
+            "peakAge": 0,
+            "stretch": {
+                "upper": 1,
+                "lower": 1
+            }
+        },
+        "BroadJump": {
+            "enableGeneration": true,
+            "weightModifier": -0.1,
+            "weightSkew": 0,
+            "ageModifier": -0.25,
+            "difficultyModifier": -0.15,
+            "peakAge": 23,
+            "stretch": {
+                "upper": 3,
+                "lower": 1
+            }
+        },
+        "ConeDrill": {
+            "enableGeneration": true,
+            "weightModifier": -0.1,
+            "weightSkew": 0,
+            "ageModifier": -0.25,
+            "difficultyModifier": 0.15,
+            "peakAge": 23,
+            "stretch": {
+                "upper": 0,
+                "lower": 2
+            }
+        }
+    }
+}

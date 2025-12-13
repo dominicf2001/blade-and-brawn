@@ -12,6 +12,7 @@ import {
     type StandardUnit,
 } from "./util";
 import { levenbergMarquardt as LM } from "ml-levenberg-marquardt";
+import defaultConfig from "$lib/services/calculator/config.json" assert { type: "json" };
 
 // SOURCES
 // Squat, Bench, Dead Lift:
@@ -59,6 +60,12 @@ export type ActivityStandards = Record<
         standards: Standard[];
     }
 >;
+
+const metricPriority = (m: NumberMetric) => {
+    if (m === "age") return 0;
+    if (m === "weight") return 1;
+    return 2;
+};
 
 export class LevelCalculator {
     standards: Standards;
@@ -236,33 +243,7 @@ export class Standards {
         activityStandards: ActivityStandards,
         cfg?: Partial<StandardsConfig>,
     ) {
-        // TODO: set these somewhere
-        const defaultActivitiesConfig = Object.fromEntries(
-            Object.values(Activity).map((activity) => [
-                activity,
-                {
-                    enableGeneration: true,
-                    weightModifier:
-                        activity === Activity.BroadJump ? -0.1 : 0.1,
-                    weightSkew: 0,
-                    ageModifier: 0.5,
-                    difficultyModifier:
-                        activity === Activity.BroadJump ? 0.05 : 0,
-                    peakAge: 27,
-                    stretch: {
-                        upper: 0,
-                        lower: 0,
-                    },
-                },
-            ]),
-        ) as Record<Activity, StandardsConfig["activity"][Activity]>;
-
-        this.cfg = {
-            global: {
-                maxLevel: cfg?.global?.maxLevel ?? 100,
-            },
-            activity: Object.assign(defaultActivitiesConfig, cfg?.activity),
-        };
+        this.cfg = Object.assign(defaultConfig, cfg);
 
         // prepare data
         this.activityStandards = structuredClone(activityStandards);
@@ -409,7 +390,10 @@ export class Standards {
 
             // generate data
             const allGenerators = this.cfg.activity[activity].enableGeneration
-                ? this.activityStandards[activity].metadata.generators
+                ? this.activityStandards[activity].metadata.generators.sort(
+                      (a, b) =>
+                          metricPriority(a.metric) - metricPriority(b.metric),
+                  )
                 : [];
 
             for (const generator of allGenerators) {
@@ -442,35 +426,39 @@ export class Standards {
 
                             for (const lvl in referenceStandard.levels) {
                                 const base = referenceStandard.levels[lvl];
-                                if (!base) continue;
+                                if (base == null) continue;
 
-                                const s =
+                                const ageModifier =
                                     this.cfg.activity[activity].ageModifier;
 
-                                const youngFloor0 = 0.5;
-                                const oldFloor0 = 0.5;
+                                const leftSpan = peakAge - minAge;
+                                const rightSpan = maxAge - peakAge;
 
-                                const youngFloor = 1 - (1 - youngFloor0) * s;
-                                const oldFloor = 1 - (1 - oldFloor0) * s;
+                                // avoid divide-by-zero
+                                if (leftSpan <= 0 || rightSpan <= 0) {
+                                    newStandard.levels[lvl] = base;
+                                    continue;
+                                }
 
                                 const cy =
-                                    (s * (1 - youngFloor0)) /
-                                    Math.pow(peakAge - minAge, 2);
+                                    (ageModifier * 0.5) / (leftSpan * leftSpan);
                                 const co =
-                                    (s * (1 - oldFloor0)) /
-                                    Math.pow(maxAge - peakAge, 2);
+                                    (ageModifier * 0.5) /
+                                    (rightSpan * rightSpan);
 
-                                let f =
+                                const d =
                                     currAge <= peakAge
-                                        ? 1 -
-                                          cy * Math.pow(peakAge - currAge, 2)
-                                        : 1 -
-                                          co * Math.pow(currAge - peakAge, 2);
+                                        ? peakAge - currAge
+                                        : currAge - peakAge;
+                                const c = currAge <= peakAge ? cy : co;
 
-                                const floor = Math.min(youngFloor, oldFloor);
-                                const fCurr = Math.max(floor, Math.min(1, f));
+                                let f = 1 - c * d * d;
 
-                                newStandard.levels[lvl] = base * fCurr;
+                                const minFactor = 0.2;
+                                const maxFactor = 10.0;
+                                f = Math.min(maxFactor, Math.max(minFactor, f));
+
+                                newStandard.levels[lvl] = base * f;
                             }
 
                             // prefer real data over generated data
@@ -491,7 +479,7 @@ export class Standards {
                     // now that we generated metric data, remove the old data
                     this.activityStandards[activity].standards =
                         this.activityStandards[activity].standards.filter(
-                            (s) => s.metrics.weight,
+                            (s) => s.metrics.age,
                         );
                 } else if (generator.metric === "weight") {
                     for (const gender of Object.values(Gender)) {
